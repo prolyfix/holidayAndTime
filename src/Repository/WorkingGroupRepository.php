@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\WorkingTime;
+use App\Entity\WorkingGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<WorkingTime>
+ * @extends ServiceEntityRepository<WorkingGroup>
  *
- * @method WorkingTime|null find($id, $lockMode = null, $lockVersion = null)
- * @method WorkingTime|null findOneBy(array $criteria, array $orderBy = null)
- * @method WorkingTime[]    findAll()
- * @method WorkingTime[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method WorkingGroup|null find($id, $lockMode = null, $lockVersion = null)
+ * @method WorkingGroup|null findOneBy(array $criteria, array $orderBy = null)
+ * @method WorkingGroup[]    findAll()
+ * @method WorkingGroup[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class WorkingTimeRepository extends ServiceEntityRepository
+class WorkingGroupRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, WorkingTime::class);
+        parent::__construct($registry, WorkingGroup::class);
     }
 
     //    /**
-    //     * @return WorkingTime[] Returns an array of WorkingTime objects
+    //     * @return WorkingGroup[] Returns an array of WorkingGroup objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -36,7 +36,7 @@ class WorkingTimeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?WorkingTime
+    //    public function findOneBySomeField($value): ?WorkingGroup
     //    {
     //        return $this->createQueryBuilder('w')
     //            ->andWhere('w.exampleField = :val')

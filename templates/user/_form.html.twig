@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+    <h2> Allgemein </h2>
+    {{form_row(form.email)}}
+    {{form_row(form.manager)}}
+    <h3> Arbeitszeiten </h3>
+    {{form_row(form.userWeekdayProperties)}}
+    <h3> Urlaubstage </h3>
+    {{form_row(form.userProperties)}}
+
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

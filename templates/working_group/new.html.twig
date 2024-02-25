@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New WorkingGroup{% endblock %}
+
+{% block body %}
+    <h1>Create new WorkingGroup</h1>
+
+    {{ include('working_group/_form.html.twig') }}
+
+    <a href="{{ path('app_working_group_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit WorkingGroup{% endblock %}
+
+{% block body %}
+    <h1>Edit WorkingGroup</h1>
+
+    {{ include('working_group/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_working_group_index') }}">back to list</a>
+
+    {{ include('working_group/_delete_form.html.twig') }}
+{% endblock %}

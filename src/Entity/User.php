@@ -41,16 +41,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'manager')]
     private Collection $users;
 
-    #[ORM\OneToMany(targetEntity: WorkingDay::class, mappedBy: 'relativeUser')]
-    private Collection $workingDays;
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\OneToMany(targetEntity: UserWeekdayProperty::class, mappedBy: 'user')]
+    private Collection $userWeekdayProperties;
+
+    #[ORM\OneToMany(targetEntity: UserProperty::class, mappedBy: 'user')]
+    private Collection $userProperties;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?WorkingGroup $workingGroup = null;
+
+    #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'user')]
+    private Collection $calendars;
+
+    #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'user')]
+    private Collection $timesheets;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->workingDays = new ArrayCollection();
+        $this->userWeekdayProperties = new ArrayCollection();
+        $this->userProperties = new ArrayCollection();
+        $this->calendars = new ArrayCollection();
+        $this->timesheets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,36 +186,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, WorkingDay>
-     */
-    public function getWorkingDays(): Collection
-    {
-        return $this->workingDays;
-    }
-
-    public function addWorkingDay(WorkingDay $workingDay): static
-    {
-        if (!$this->workingDays->contains($workingDay)) {
-            $this->workingDays->add($workingDay);
-            $workingDay->setRelativeUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWorkingDay(WorkingDay $workingDay): static
-    {
-        if ($this->workingDays->removeElement($workingDay)) {
-            // set the owning side to null (unless already changed)
-            if ($workingDay->getRelativeUser() === $this) {
-                $workingDay->setRelativeUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function isVerified(): bool
     {
         return $this->isVerified;
@@ -208,6 +194,138 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserWeekdayProperty>
+     */
+    public function getUserWeekdayProperties(): Collection
+    {
+        return $this->userWeekdayProperties;
+    }
+
+    public function addUserWeekdayProperty(UserWeekdayProperty $userWeekdayProperty): static
+    {
+        if (!$this->userWeekdayProperties->contains($userWeekdayProperty)) {
+            $this->userWeekdayProperties->add($userWeekdayProperty);
+            $userWeekdayProperty->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserWeekdayProperty(UserWeekdayProperty $userWeekdayProperty): static
+    {
+        if ($this->userWeekdayProperties->removeElement($userWeekdayProperty)) {
+            // set the owning side to null (unless already changed)
+            if ($userWeekdayProperty->getUser() === $this) {
+                $userWeekdayProperty->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserProperty>
+     */
+    public function getUserProperties(): Collection
+    {
+        return $this->userProperties;
+    }
+
+    public function addUserProperty(UserProperty $userProperty): static
+    {
+        if (!$this->userProperties->contains($userProperty)) {
+            $this->userProperties->add($userProperty);
+            $userProperty->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserProperty(UserProperty $userProperty): static
+    {
+        if ($this->userProperties->removeElement($userProperty)) {
+            // set the owning side to null (unless already changed)
+            if ($userProperty->getUser() === $this) {
+                $userProperty->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWorkingGroup(): ?WorkingGroup
+    {
+        return $this->workingGroup;
+    }
+
+    public function setWorkingGroup(?WorkingGroup $workingGroup): static
+    {
+        $this->workingGroup = $workingGroup;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Calendar>
+     */
+    public function getCalendars(): Collection
+    {
+        return $this->calendars;
+    }
+
+    public function addCalendar(Calendar $calendar): static
+    {
+        if (!$this->calendars->contains($calendar)) {
+            $this->calendars->add($calendar);
+            $calendar->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCalendar(Calendar $calendar): static
+    {
+        if ($this->calendars->removeElement($calendar)) {
+            // set the owning side to null (unless already changed)
+            if ($calendar->getUser() === $this) {
+                $calendar->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Timesheet>
+     */
+    public function getTimesheets(): Collection
+    {
+        return $this->timesheets;
+    }
+
+    public function addTimesheet(Timesheet $timesheet): static
+    {
+        if (!$this->timesheets->contains($timesheet)) {
+            $this->timesheets->add($timesheet);
+            $timesheet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimesheet(Timesheet $timesheet): static
+    {
+        if ($this->timesheets->removeElement($timesheet)) {
+            // set the owning side to null (unless already changed)
+            if ($timesheet->getUser() === $this) {
+                $timesheet->setUser(null);
+            }
+        }
 
         return $this;
     }

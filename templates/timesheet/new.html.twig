@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Timesheet{% endblock %}
+
+{% block body %}
+    <h1>Create new Timesheet</h1>
+
+    {{ include('timesheet/_form.html.twig') }}
+
+    <a href="{{ path('app_timesheet_index') }}">back to list</a>
+{% endblock %}

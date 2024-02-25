@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Timesheet{% endblock %}
+
+{% block body %}
+    <h1>Timesheet</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ timesheet.id }}</td>
+            </tr>
+            <tr>
+                <th>StartTime</th>
+                <td>{{ timesheet.startTime ? timesheet.startTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>EndTime</th>
+                <td>{{ timesheet.endTime ? timesheet.endTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Break</th>
+                <td>{{ timesheet.break ? timesheet.break|date('H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_timesheet_index') }}">back to list</a>
+
+    <a href="{{ path('app_timesheet_edit', {'id': timesheet.id}) }}">edit</a>
+
+    {{ include('timesheet/_delete_form.html.twig') }}
+{% endblock %}

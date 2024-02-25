@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WorkingGroup index{% endblock %}
+
+{% block body %}
+    <h1>WorkingGroup index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for working_group in working_groups %}
+            <tr>
+                <td>{{ working_group.id }}</td>
+                <td>{{ working_group.name }}</td>
+                <td>
+                    <a href="{{ path('app_working_group_show', {'id': working_group.id}) }}">show</a>
+                    <a href="{{ path('app_working_group_edit', {'id': working_group.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_working_group_new') }}">Create new</a>
+{% endblock %}
