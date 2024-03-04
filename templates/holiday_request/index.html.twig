@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HolidayRequestController!{% endblock %}
+
+{% block body %}
+<h1> Urlaubsgenehmigung </h1>
+<h2> Meine Urlaubsanträge </h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Start</th>
+            <th>Ende</th>
+            <th>Status</th>
+            <th>Erstellt am</th>
+            <th># Arbeitstage</th>
+            <th>{% trans %} Aktion {% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% set holidayRequests2 = app.user.calendars %}
+        {% for holidayRequest in holidayRequests2 %}
+            <tr>
+                <td>{{ holidayRequest.id }}</td>
+                <td>{{ holidayRequest.startDate|date('d.m.Y') }}</td>
+                <td>{{ holidayRequest.endDate|date('d.m.Y') }}</td>
+                <td>{{ holidayRequest.state }}</td>
+                <td>{{ holidayRequest.creationDate|date('d.m.Y H:i') }}</td>
+                <td>{{ holidayRequest.absenceInWorkingDays }}</td>
+                <td>
+                    {% if holidayRequest.state == 'pending' and app.user == holidayRequest.user.manager %}
+                        <a href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
+                        <a href="{{ path('holiday_request_reject', {'id': holidayRequest.id}) }}">{% trans %} Ablehnen {% endtrans %}</a>
+                    {% endif %}
+                    {% if app.user == holidayRequest.user %}
+                     {# TODO: Faire un edit des vacances, sinon non recalcule les jours de vacances #}
+                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Bearbeiten {% endtrans %}</a>
+                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Löschen {% endtrans %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a class="btn btn-primary" href="{{ path('holiday_request_new') }}">Neuen Urlaubsantrag erstellen</a>
+<h2> Urlaube zu genehmigen</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Start</th>
+            <th>Ende</th>
+            <th>Status</th>
+            <th>Erstellt am</th>
+            <th>{% trans %} Aktion {% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for holidayRequest in holidayRequests %}
+            <tr>
+                <td>{{ holidayRequest.id }}</td>
+                <td>{{ holidayRequest.startDate|date('d.m.Y') }}</td>
+                <td>{{ holidayRequest.endDate|date('d.m.Y') }}</td>
+                <td>{{ holidayRequest.state }}</td>
+                <td>{{ holidayRequest.creationDate|date('d.m.Y H:i') }}</td>
+                <td>
+                    {% if holidayRequest.state == 'pending' and app.user == holidayRequest.user.manager %}
+                        <a href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
+                        <a href="{{ path('holiday_request_reject', {'id': holidayRequest.id}) }}">{% trans %} Ablehnen {% endtrans %}</a>
+                    {% endif %}
+                    {% if app.user == holidayRequest.user %}
+                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Bearbeiten {% endtrans %}</a>
+                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Löschen {% endtrans %}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

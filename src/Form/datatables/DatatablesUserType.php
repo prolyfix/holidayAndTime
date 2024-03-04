@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\datatables;
 
-use App\Entity\Timesheet;
 use App\Entity\User;
+use App\Entity\WorkingGroup;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class Timesheet1Type extends AbstractType
+class DatatablesUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startTime')
-            ->add('endTime')
-            ->add('break')
-            ->add('user', EntityType::class, [
+            ->add('email')
+            ->add('manager', EntityType::class, [
                 'class' => User::class,
-'choice_label' => 'id',
+                'choice_label' => 'email',
+            ])
+            ->add('workingGroup', EntityType::class, [
+                'class' => WorkingGroup::class,
+                'choice_label' => 'name',
             ])
         ;
     }
@@ -27,7 +29,7 @@ class Timesheet1Type extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Timesheet::class,
+            'data_class' => User::class,
         ]);
     }
 }

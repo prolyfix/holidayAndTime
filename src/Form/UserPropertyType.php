@@ -14,7 +14,7 @@ class UserPropertyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('holidayPerYear',UserPropertyType::class, ['attr'=>['class'=>'form-control']])
+            ->add('holidayPerYear',null, ['attr'=>['class'=>'form-control']])
         ;
     }
 

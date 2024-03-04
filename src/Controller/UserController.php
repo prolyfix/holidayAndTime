@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Calendar;
+use App\Entity\Timesheet;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Entity\UserWeekdayProperty;
+use App\Form\datatables\DatatablesUserType;
 use App\Form\UserType;
+use App\Manager\HolidayCalculator;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,14 +17,34 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+
 #[Route('/user')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+        $tableParams = [ 
+            'tableId' => 'history', 
+            'targetEntity' => User::class, 
+            'columns' => [ 
+                ['name' =>  'email',    
+                  'label' => 'email',
+                ],  
+                ['name' =>  'manager.email',    
+                'label' => 'manager',
+                ], 
+                ['name' =>  '_action',    
+                'label' => 'actions',
+                ],                 
+            ], 
+            'params' => ['order' => [[1,'desc']]], 
+            'tableTitle' => 'users' ,
+            
+        ];
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'tableParams' => $tableParams,
+            'filter'    => User::class,
         ]);
     }
 
@@ -36,15 +60,17 @@ class UserController extends AbstractController
             $timestamp = strtotime('+1 day', $timestamp);
             $user->addUserWeekdayProperty($userWeekdayProperty);
         }
-        $userProperty = new UserProperty();
-        $user->addUserProperty($userProperty);
 
+        $userProperty = new UserProperty();
+        $userProperty->setUser($user);
+        $userProperty->setHolidayPerYear(25); // default value
+        $user->addUserProperty($userProperty);
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-
+            $user->setPassword('password');
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -58,10 +84,22 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    public function show(User $user, HolidayCalculator $holidayCalculator, EntityManagerInterface $em): Response
     {
+        $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(), date('Y'));
+        $groupHolidaysCount = 0;
+        foreach($groupHolidays as $holiday){
+            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+        }
+        dump($groupHolidaysCount);
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),
+            'pendingForYear'        => $em->getRepository(Calendar::class)->calculatePendingForYear($user, date('Y')),
+            'holidayTakenForYear'   => $em->getRepository(Calendar::class)->retrieveHolidayForYear($user, date('Y')),
+            'overtime'       => $em->getRepository(Timesheet::class)->retrieveOvertimeForUser($user),
+            'groupHolidays' => $groupHolidaysCount,
         ]);
     }
 
@@ -92,5 +130,25 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/monthView/{id}/{month}/{year}', name: 'app_user_month_view', methods: ['GET'])]
+    public function monthView(User $user, EntityManagerInterface $em,$month,$year): Response
+    {
+        $monthBegin = new \DateTime($year.'-'.$month.'-01');
+        $monthEnd = new \DateTime($year.'-'.$month.'-'.cal_days_in_month(CAL_GREGORIAN, $month, $year));
+        $timesheets = $em->getRepository(Timesheet::class)->retrieveOvertimeForUserForPeriod($user, $monthBegin, $monthEnd);
+        $holidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForUser($user, $monthBegin, $monthEnd);
+        $groupHolidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForGroup($user->getWorkingGroup(), $monthBegin, $monthEnd);
+        //$bankHoliday = $em->getRepository(Calendar::class)->retrieveBankHolidaysForUser($user, $monthBegin, $monthEnd);
+        return $this->render('calendar/monthView.html.twig', [
+            'user' => $user,
+            'month' => $month,
+            'year' => $year,
+            'monthBegin' => $monthBegin,
+            'timesheet' => $timesheets,
+            'holidays' => $holidays,
+            'groupHolidays' => $groupHolidays,
+        ]);
     }
 }

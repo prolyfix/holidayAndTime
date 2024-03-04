@@ -1,0 +1,78 @@
+<div class="card gray" style="mt-2 mb-2" id="filter">
+
+    <div class="card-body">
+        <div class="row mb-2 p-1 filters">
+        {% for filter in filters %}
+			{% if filter.type == "text" %}
+            	<div class="col-md-2"><label>{{filter.label | capitalize | trans}}:</label></div>
+                <div class="col-md-4 p-1"> <input type="{{filter.type}}" class="filterTable form-control" data-searchfield="{{filter.searchField}}"></input></div>
+			{% elseif filter.type == "custom" %}
+			{% elseif filter.type == "entity" %}
+				{% set values = generateChoiceFromEntity(filter) %}
+				<div class="col-md-2"><label>{{filter.label | capitalize | trans}}:</label></div>
+				<div class="col-md-4  p-1">
+					<select class="filterTable form-control {% if filter.class is defined %}{{filter.class}}{% endif %}" 
+							data-searchfield="{{filter.searchField}}"
+							{% if filter.id is defined %}id="{{filter.id}}"{% endif %}
+							{% if filter.onchange is defined %}onchange="{{filter.onchange}}"{% endif %}		
+					>
+						<option value=""> Choisissez </option>
+						{% if filter.onTop is defined and filter.onTop is not null %}
+							{% for key,option in filter.onTop %}
+								<option value="{{option}}"> {{key}}</option>
+							{% endfor %}
+						{% endif %}
+
+						{% for key,option in values %}
+						<option value="{{key}}"> {{option}}</option>
+						{% endfor %}
+					</select>
+				</div>				
+			{% elseif filter.type == "date" %}
+				<div class="col-md-2"><label>{{filter.label | capitalize| trans}}:</label></div>
+				<div class="col-md-4  p-1">
+					<input type="date" data-searchfield="{{filter.searchField}}" class=" filterTable form-control">
+				</div>				
+			{% elseif filter.type == "datetimerange" %}
+				<div class="col-md-2"><label>{{filter.label | capitalize| trans}}:</label></div>
+				<div class="col-md-4  p-1">
+					<div class="row"> 
+						<div class="col-6"><input data-searchfield="{{filter.searchField}}_date" type="date" class="filterTable form-control"></div>
+						<div class="col-3"><input data-searchfield="{{filter.searchField}}_time_min" type="time" class="filterTable form-control"></div>
+						<div class="col-3"><input data-searchfield="{{filter.searchField}}_time_max" type="time" class="filterTable form-control"></div>
+					</div>				
+				</div>				
+			{% elseif filter.type == "choice" %}
+				<div class="col-md-2"><label>{{filter.label | capitalize| trans}}:</label></div>
+				<div class="col-md-4  p-1"> 
+					<select class="filterTable form-control" data-searchfield="{{filter.searchField}}">
+						<option value=""> Choisissez </option>
+						
+						{% if filter.default is defined %}
+							{% set default = filter.default %}
+						{% else %}
+							{% set default = "" %}
+						{% endif %}
+						{% for key,option in filter.choices %}
+							{% if option is iterable %}
+								<optgroup label="{{key}}">
+									{% for key2,opt in option %}
+										<option value="{{key2}}" {% if key2 == default %}selected{% endif %}> {{opt}}</option>
+									{% endfor %}
+								</optgroup>
+							{% else %}
+								<option value="{{key}}" {% if key == default %}selected{% endif %}> {{option}}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+			{% endif %}
+        {% endfor %}
+            <div class="col-xl-12 mt-2">
+                <div class="d-flex flex-row-reverse">
+                    <div class="btn btn-primary mr-2" data-action="click->hello#filterDatatables" > {% trans %}Filtrer{% endtrans %} </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>

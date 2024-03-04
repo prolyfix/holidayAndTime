@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="container mt--6" data-controller="hello">
+        <div class="row">
+            {% include 'elements/_title.html.twig' %}
+            <div class="col-xl-12">
+                <div class="d-flex flex-row-reverse">
+                {% include 'elements/_buttonTitle.html.twig' %}
+                </div>
+            </div>
+            <div class="col-xl-12">
+                {% include 'elements/_alert.html.twig' %}
+            </div>
+            <div class="col-xl-12 mt-2">
+                {% if filter is defined and filter is not null %}
+				    {{ generateFilter(filter) | raw }}
+				{% endif %}
+            </div>
+                {% if tableParams is defined and tableParams is not null %}
+				    {{ generateDatatableDOM(tableParams.tableId,tableParams.targetEntity,tableParams.columns,tableParams.params)  |raw }}
+                {% endif %}
+
+		</div>
+	</div>
+{% endblock %}

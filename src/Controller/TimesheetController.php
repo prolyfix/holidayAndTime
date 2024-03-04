@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Timesheet;
-use App\Form\Timesheet1Type;
+use App\Form\TimesheetType;
+use App\Manager\OvertimeCalculator;
 use App\Repository\TimesheetRepository;
+use App\Utility\TimeUtility;
 use Doctrine\ORM\EntityManagerInterface;
+use Prolyfix\SymfonyDatatablesBundle\Controller\DatatablesController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,8 +20,34 @@ class TimesheetController extends AbstractController
     #[Route('/', name: 'app_timesheet_index', methods: ['GET'])]
     public function index(TimesheetRepository $timesheetRepository): Response
     {
-        return $this->render('timesheet/index.html.twig', [
-            'timesheets' => $timesheetRepository->findAll(),
+        $tableParams = [ 
+            'tableId' => 'history', 
+            'targetEntity' => Timesheet::class, 
+            'columns' => [ 
+                ['name' =>  'startTime',    
+                  'label' => 'startDate',
+                ],  
+                ['name' =>  'endTime',    
+                'label' => 'endDate',
+                ], 
+                ['name' =>  'user.email',    
+                'label' => 'user',
+                ],   
+                ['name' =>  'overtime',    
+                'label' => '+/- Minuten',
+                ],                                
+                ['name' =>  '_action',    
+                'label' => 'actions',
+                ],                 
+            ], 
+            'params' => ['order' => [[1,'desc']]], 
+            'tableTitle' => 'users' ,
+            
+        ];
+        return $this->render('gestion.html.twig', [
+            'tableParams' => $tableParams,
+            'filter'    => Timesheet::class,
+            'title' => 'Timesheet'
         ]);
     }
 
@@ -26,13 +55,26 @@ class TimesheetController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $timesheet = new Timesheet();
-        $form = $this->createForm(Timesheet1Type::class, $timesheet);
+        $form = $this->createForm(TimesheetType::class, $timesheet);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // if is not under contract, we add directly the overtime
+            $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
+            $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
+            $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+            if($timesheet->getUser()->getStartDate() > $timesheet->getStartTime() || ($timesheet->getUser()->getEndDate() < $timesheet->getEndTime() && $timesheet->getUser()->getEndDate() !== null)){
+                $timesheet->setOvertime($overTimeMinutes);
+            }
+            //todo: verify if Holiday / Bank Holiday / Sickness
+            else{
+                $hasToWork = OvertimeCalculator::getWorkingHoursForDay($timesheet->getStartTime(), $timesheet->getUser());
+                $hasToWorkMinutes = TimeUtility::getMinutesFromTime($hasToWork);
+                $overTimeMinutes -= $hasToWorkMinutes;
+            }
+            $timesheet->setOvertime($overTimeMinutes);
             $entityManager->persist($timesheet);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_timesheet_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -53,7 +95,7 @@ class TimesheetController extends AbstractController
     #[Route('/{id}/edit', name: 'app_timesheet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Timesheet $timesheet, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(Timesheet1Type::class, $timesheet);
+        $form = $this->createForm(TimesheetType::class, $timesheet);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,4 +120,7 @@ class TimesheetController extends AbstractController
 
         return $this->redirectToRoute('app_timesheet_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
 }

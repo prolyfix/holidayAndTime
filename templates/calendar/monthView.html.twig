@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block body %}
+<h1> {% trans %} Kalender {% endtrans %}</h1>
+<div class="card gray" style="mt-2 mb-2" id="filter">
+
+    <div class="card-body">
+        <div class="row mb-2 p-1 filters">
+                <div class="col-md-2"><label>{% trans %}Monat{% endtrans %}:</label></div>
+                <div class="col-md-4 p-1"> 
+                        <select class="form-control filterTable" id="selectMonth" >
+                            <option value="01"> {% trans %}Januar{% endtrans %}</option>
+                            <option value="02"> {% trans %}Februar{% endtrans %}</option>
+                            <option value="03"> {% trans %}März{% endtrans %}</option>
+                            <option value="04"> {% trans %}April{% endtrans %}</option>
+                            <option value="05"> {% trans %}Mai{% endtrans %}</option>
+                            <option value="06"> {% trans %}Juni{% endtrans %}</option>
+                            <option value="07"> {% trans %}July{% endtrans %}</option>
+                            <option value="08"> {% trans %}August{% endtrans %}</option>
+                            <option value="09"> {% trans %}September{% endtrans %}</option>
+                            <option value="10"> {% trans %}Oktober{% endtrans %}</option>
+                            <option value="11"> {% trans %}November{% endtrans %}</option>
+                            <option value="12"> {% trans %}Dezember{% endtrans %}</option>
+                        </select>
+                </div>
+                <div class="col-md-2"><label>{% trans %}Jahr{%endtrans%}:</label></div>
+                <div class="col-md-4 p-1"> <input type="text" class="filterTable form-control" id="selectYear" data-searchfield="" value="{{"now"|date('Y')}}"></div>
+                <div class="col-xl-12 mt-2">
+                <div class="d-flex flex-row-reverse">
+                    <div class="btn btn-primary mr-2" data-action="click->hello#changeMonth"> Filtrer </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>
+{% set diff = calculateDiff(monthBegin) %}
+<table class="table table-bordered">
+        <thead> 
+            <tr>
+                <th colspan="7">
+                    {{ month }}
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    {% trans %} Montag {% endtrans %}
+                </th>
+                <th>
+                    {% trans %} Dienstag {% endtrans %}
+                </th>
+                <th>
+                    {% trans %} Mittwoch {% endtrans %}
+                </th>
+                <th>
+                    {% trans %} Donnerstag {% endtrans %}
+                </th>
+                <th>
+                    {% trans %} Freitag {% endtrans %}
+                </th>
+                <th>
+                    {% trans %} Samstag {% endtrans %}
+                </th>                
+                <th>
+                    {% trans %} Sonntag {% endtrans %}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in 0..4 %}
+                <tr>
+                    {% for j in 1..7 %}
+                        {% set day = i * 7 + j - diff %}
+                        {% set date = monthBegin|date_modify('+' ~ day ~ ' day') %}
+                        <td>
+                            {% if date|date('m') == month %}
+                                <small>{{ date|date('d') }}</small><br/>
+                                {% if timesheet[date|date('d-m-Y')] is defined %}
+                                    {% trans %} Überstunden {% endtrans %} : {{ timesheet[date|date('d-m-Y')].overtime }} min
+                                {% endif %}
+                                {% if holidays[date|date('d-m-Y')] is defined %}
+                                    {% trans %} Holiday {% endtrans %} : {{holidays[date|date('d-m-Y')].typeOfAbsence.name}}
+                                {% endif %}    
+                                {% if groupHolidays[date|date('d-m-Y')] is defined %}
+                                    {% trans %} groupHolidays {% endtrans %} : {{groupHolidays[date|date('d-m-Y')].typeOfAbsence.name}}
+                                {% endif %}                               
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}       
+</table>
+{% endblock %}

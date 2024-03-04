@@ -11,7 +11,9 @@
                 <th>Id</th>
                 <th>StartTime</th>
                 <th>EndTime</th>
+                <th>OverTime</th>
                 <th>Break</th>
+                <th>User</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,6 +24,8 @@
                 <td>{{ timesheet.startTime ? timesheet.startTime|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ timesheet.endTime ? timesheet.endTime|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ timesheet.break ? timesheet.break|date('H:i:s') : '' }}</td>
+                <td>{{ minutesToTime(timesheet.overtime) }}</td>
+                <td>{{ timesheet.user.email }}</td>
                 <td>
                     <a href="{{ path('app_timesheet_show', {'id': timesheet.id}) }}">show</a>
                     <a href="{{ path('app_timesheet_edit', {'id': timesheet.id}) }}">edit</a>
@@ -35,5 +39,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_timesheet_new') }}">Create new</a>
+    <a href="{{ path('app_timesheet_new') }}">{% trans %} Neu {% endtrans %}</a>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -45,10 +46,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(targetEntity: UserWeekdayProperty::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: UserWeekdayProperty::class, mappedBy: 'user',cascade: ["persist"])]
     private Collection $userWeekdayProperties;
 
-    #[ORM\OneToMany(targetEntity: UserProperty::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: UserProperty::class, mappedBy: 'user',cascade: ["persist"])]
     private Collection $userProperties;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -59,6 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'user')]
     private Collection $timesheets;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable : true)]
+    private ?\DateTimeInterface $startDate = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $endDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $username = null;
 
     public function __construct()
     {
@@ -326,6 +336,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $timesheet->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(\DateTimeInterface $startDate): static
+    {
+        $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?\DateTimeInterface $endDate): static
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): static
+    {
+        $this->username = $username;
 
         return $this;
     }

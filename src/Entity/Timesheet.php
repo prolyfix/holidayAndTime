@@ -27,6 +27,12 @@ class Timesheet
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $shouldHaveWorked = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $overtime = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +82,30 @@ class Timesheet
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getShouldHaveWorked(): ?\DateTimeInterface
+    {
+        return $this->shouldHaveWorked;
+    }
+
+    public function setShouldHaveWorked(?\DateTimeInterface $shouldHaveWorked): static
+    {
+        $this->shouldHaveWorked = $shouldHaveWorked;
+
+        return $this;
+    }
+
+    public function getOvertime(): ?int
+    {
+        return $this->overtime;
+    }
+
+    public function setOvertime(?int $overtime): static
+    {
+        $this->overtime = $overtime;
 
         return $this;
     }

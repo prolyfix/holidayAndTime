@@ -1,0 +1,16 @@
+{% if buttons is defined %}
+{% for button in buttons %}
+<div class="{{button.class}} action_btn" data-action="{{button.action}}" data-url="{{button.url}}" 
+                    {% if button.modalTitle is defined and button.modalTitle is not null %}
+                        data-modalTitle="{{button.modalTitle}}"
+                    {% endif %}
+                    {% if button.removeFooter is defined and button.removeFooter is not null %}
+                        data-removeFooter="{{button.removeFooter}}"
+                    {% endif %}
+    {% if button.icon is defined and button.icon is not null %}
+        <i class="{{button.icon}}"></i>
+    {% endif %}
+    {{button.title}}
+</div>
+{% endfor %}
+{% endif %}

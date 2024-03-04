@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Entity\WorkingGroup;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,22 +17,42 @@ class CalendarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('date')
-            ->add('isAll')
-            ->add('startDate')
-            ->add('endDate')
-            ->add('isAfternoon')
+            ->add('startDate',null,[
+                    'widget'=>'single_text',
+                    'attr'=>['class'=>'form-control','data-action'=>'change->hello#showHalfDay']
+                    ]
+            )
+            ->add('endDate',null,['widget'=>'single_text','attr'=>['class'=>'form-control','data-action'=>'change->hello#showHalfDay']])
+            ->add('startMorning',ChoiceType::class,[ 
+                'choices'=>[
+                    'halbesTag' => '0.5',
+                    'vollesTag' => '0',
+                ],
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('endMorning',ChoiceType::class,[ 
+                'choices'=>[
+                    'halbesTag' => '0.5',
+                    'vollesTag' => '0',
+                ],
+                'attr'=>['class'=>'form-control','style'=>'display:none;']
+            ])
             ->add('workingGroup', EntityType::class, [
                 'class' => WorkingGroup::class,
-'choice_label' => 'id',
+                'required' => false,
+                'choice_label' => 'name',
+                'attr'=>['class'=>'form-control']
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-'choice_label' => 'id',
+                'required' => false,
+                'choice_label' => 'email',
+                'attr'=>['class'=>'form-control']
             ])
             ->add('typeOfAbsence', EntityType::class, [
                 'class' => TypeOfAbsence::class,
-'choice_label' => 'id',
+                'choice_label' => 'name',
+                'attr'=>['class'=>'form-control']
             ])
         ;
     }

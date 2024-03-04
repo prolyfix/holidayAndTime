@@ -4,20 +4,24 @@
 
 {% block body %}
     <h1>Calendar index</h1>
-
+    <a class="btn btn-primary" href="{{path('app_calendar_overview_jahr',{year: "now"|date('Y')})}}">{% trans %} Jahresansicht {% endtrans %}</a>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>actions</th>
+                <th>{% trans %}Id{% endtrans %}</th>
+                <th>{% trans %}From To{% endtrans %}</th>
+                <th>{% trans %}User{% endtrans %}</th>
+                <th>{% trans %}Number Of Working Days{% endtrans %}</th>
+                <th>{% trans %}Actions{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
         {% for calendar in calendars %}
             <tr>
                 <td>{{ calendar.id }}</td>
-                <td>{{ calendar.date ? calendar.date|date('Y-m-d') : '' }}</td>
+                <td>{{ calendar.startDate|date('Y-m-d') }} | {{ calendar.endDate|date('Y-m-d') }}</td>
+                <td>{{ calendar.user ? calendar.user.email : '' }}</td>
+                <td>{{ calendar.absenceInWorkingDays }}</td>
                 <td>
                     <a href="{{ path('app_calendar_show', {'id': calendar.id}) }}">show</a>
                     <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}">edit</a>
@@ -31,5 +35,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_calendar_new') }}">Create new</a>
+    <a href="{{ path('app_calendar_new') }}">{% trans %} Neu {% endtrans %}</a>
 {% endblock %}

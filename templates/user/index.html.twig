@@ -1,41 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}{% trans %} User index {% endtrans %}{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
-                <th>IsVerified</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_user_new') }}">Create new</a>
+    <h1>{% trans %} User index{% endtrans %}</h1>
+    {% if filter is defined and filter is not null %}
+        {{ generateFilter(filter) | raw }}
+    {% endif %}
+    {{ generateDatatableDOM(tableParams.tableId,tableParams.targetEntity,tableParams.columns,tableParams.params)  |raw }}
+    <a href="{{ path('app_user_new') }}" class="btn btn-info">{% trans %} Neu {% endtrans %}</a>
 {% endblock %}

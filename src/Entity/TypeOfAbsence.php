@@ -31,6 +31,12 @@ class TypeOfAbsence
     #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'typeOfAbsence')]
     private Collection $calendars;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasToBeValidated = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isBankHoliday = null;
+
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
@@ -115,6 +121,30 @@ class TypeOfAbsence
                 $calendar->setTypeOfAbsence(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isHasToBeValidated(): ?bool
+    {
+        return $this->hasToBeValidated;
+    }
+
+    public function setHasToBeValidated(?bool $hasToBeValidated): static
+    {
+        $this->hasToBeValidated = $hasToBeValidated;
+
+        return $this;
+    }
+
+    public function isIsBankHoliday(): ?bool
+    {
+        return $this->isBankHoliday;
+    }
+
+    public function setIsBankHoliday(?bool $isBankHoliday): static
+    {
+        $this->isBankHoliday = $isBankHoliday;
 
         return $this;
     }

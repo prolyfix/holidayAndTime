@@ -24,8 +24,8 @@ class UserWeekdayProperty
     #[ORM\Column(nullable: true)]
     private ?float $workingDay = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $workingHours = null;
+    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $workingHours = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creationDate = null;
@@ -71,12 +71,12 @@ class UserWeekdayProperty
         return $this;
     }
 
-    public function getWorkingHours(): ?float
+    public function getWorkingHours(): ?\DateTimeInterface
     {
         return $this->workingHours;
     }
 
-    public function setWorkingHours(?float $workingHours): static
+    public function setWorkingHours(?\DateTimeInterface $workingHours): static
     {
         $this->workingHours = $workingHours;
 

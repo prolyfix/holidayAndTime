@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block body %}
+<h1> {% trans %} Kalender {% endtrans %}</h1>
+<div class="btn-group mtb-2" role="group" aria-label="Basic example">
+  <a type="button" class="btn btn-secondary" href="{{path('app_calendar_overview_jahr',{year:((output|first).date | date('Y') -1)})}}">{{(output|first).date | date('Y') -1 }}</a>
+  <a type="button" class="btn btn-secondary"> {{(output|first).date | date('Y')}}</a>
+  <a type="button" class="btn btn-secondary" href="{{path('app_calendar_overview_jahr',{year:((output|first).date | date('Y') +1)})}}">{{(output|first).date | date('Y') +1 }}</a>
+</div>
+{% set date = null %}
+{% set year = null %}
+{% set month = null %}
+{% set end = null %}
+<table class="table table-bordered">
+{% for outpu in output %}
+    {% if year != outpu.date | date('Y') %}
+        {% set year = outpu.date | date('Y') %}
+        <thead> 
+            <tr>
+                <th colspan="32">
+                    {{ year }}
+                </th>
+            </tr>
+        </thead>       
+    {% endif %}
+    {% if month != outpu.date | date('F') %}
+        {% set month = outpu.date | date('F') %}
+        <tbody>
+            <tr>
+                <th colspan="32">
+                    {{ month }}
+                </th>
+            </tr>
+            <tr>
+                <td></td>
+                {% for i in 1..31 %}
+                <td> {{i}} <br/>{{weekday(i,outpu.date |date('m'),year)}}</td>
+                {% endfor %}
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+                    {% for i in 1..31 %}
+                        {% if i > 9 %}
+                            {% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~ i %}
+                        {% else %}
+                            {% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~'0'~ i %}
+                        {% endif %}
+                        {% if outputUser[user.id][date] is defined %}
+                                <td class="bg-danger">
+                                </td>
+                        {% else %}
+                            {% if isWeekend(date) %}
+                                <td></td>
+
+                            {% elseif outputBankHolidays[date] is defined %}
+                                <td></td>
+                            {% else %}
+                                <td class="bg-success">
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    {% endif %}
+{% endfor %}
+</table>
+{% endblock %}

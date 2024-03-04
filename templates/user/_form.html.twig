@@ -2,11 +2,24 @@
     <h2> Allgemein </h2>
     {{form_row(form.email)}}
     {{form_row(form.manager)}}
+    {{form_row(form.workingGroup)}}
+    {{form_row(form.startDate)}}
+    {{form_row(form.endDate)}}
     <h3> Arbeitszeiten </h3>
-    {{form_row(form.userWeekdayProperties)}}
+    {% for weekday in form.userWeekdayProperties %}
+        <div class="row">
+            <div class="col-md-2">
+                {{weekday.vars.value.weekday}}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(weekday.workingDay) }}
+            </div>
+            <div class="col-md-2">
+                {{ form_row(weekday.workingHours) }}
+            </div>
+        </div>
+    {% endfor %}
     <h3> Urlaubstage </h3>
-    {{form_row(form.userProperties)}}
-
 
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

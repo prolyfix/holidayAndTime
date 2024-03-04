@@ -13,8 +13,12 @@
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{{ calendar.date ? calendar.date|date('Y-m-d') : '' }}</td>
+                <td>{{ calendar.startDate ? calendar.startDate|date('Y-m-d') : '' }}</td>
             </tr>
+            <tr>
+                <th>{% trans %}Absence In Working Day{% endtrans %}</th>
+                <td>{{ calendar.absenceInWorkingDays }}</td>
+            </tr>            
         </tbody>
     </table>
 

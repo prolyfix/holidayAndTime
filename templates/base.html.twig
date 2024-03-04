@@ -5,45 +5,88 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
+
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+
             {{ encore_entry_script_tags('app') }}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
+        <stylesheets href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+
     </head>
-    <body>
+    <body data-controller="hello">
         <div class="container-fluid">
     <div class="row flex-nowrap">
+        {% if app.user is not null %}
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                     <span class="fs-5 d-none d-sm-inline">Menu</span>
                 </a>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a href="{{path('app_user_index')}}" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Benutzer</span>
+                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Benutzer</span>
                         </a>
                     </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
                     <li>
                         <a href="{{path('app_calendar_index')}}" class="nav-link align-middle px-0">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Kalendar</span>
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Kalendar</span>
                         </a>                        
                     </li>
+                    {% endif %}
+                    <li>
+                        <a  href="{{path('app_calendar_overview_jahr',{year: "now"|date('Y')})}}" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Übersicht Jahr</span>
+                        </a>                        
+                    </li>                    
+                    {% if is_granted('ROLE_ADMIN') %}
+                     <li>
+                        <a href="{{path('app_type_of_absence_index')}}" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-airplane"></i> <span class="ms-1 d-none d-sm-inline">Abwesenheitstypen</span>
+                        </a>                        
+                    </li>
+                    
+                    <li>
+                        <a href="{{path('app_working_group_index')}}" class="nav-link align-middle px-0">
+                            <i class="fs-4 bi-bullseye"></i> <span class="ms-1 d-none d-sm-inline">Gruppern</span>
+                        </a>                        
+                    </li>
+                    {% endif %}
                     <li>
                         <a href="{{path('app_timesheet_index')}}" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Timesheet</span></a>
+                            <i class="fs-4 bi-clock"></i> <span class="ms-1 d-none d-sm-inline">Timesheet</span></a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Urlaubsgenehmigung</span> </a>
+                        <a href="{{path('app_holiday_request')}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-mailbox"></i> <span class="ms-1 d-none d-sm-inline">Urlaubsgenehmigung</span> </a>
                     </li>
+                    <li>
+                        <hr/>
+                        <a href="{{path('app_logout')}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-arrow-right"></i> <span class="ms-1 d-none d-sm-inline">ausloggen</span> </a>
+                    </li>
+                    <li>
+                        <a href="{{path('app_user_show',{id:app.user.id})}}" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-mailbox"></i> <span class="ms-1 d-none d-sm-inline">mein profil</span> </a>
+                    </li>                    
+
                 </ul>
             </div>
         </div>
+        {% endif %}
         <div class="col py-3">
+                {% for message in app.flashes %}
+            <div class="alert alert-success">
+                {{ message[0] }}
+            </div>
+        {% endfor %}
     {% block body %}{% endblock %}
         </div>
     </div>

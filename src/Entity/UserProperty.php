@@ -9,6 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: UserPropertyRepository::class)]
 class UserProperty
 {
+    public function __construct()
+    {
+        $this->creationDate = new \DateTime();
+    }
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

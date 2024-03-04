@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,12 +19,13 @@ class UserWeekdayPropertyType extends AbstractType
         $builder
             ->add('workingDay',ChoiceType::class,[
                 'choices'=>[
+                    'arbeitet nicht' => '0',
                     'volle Arbeitstag' => '1',  
                     'halbe Arbeitstag' => '0.5',
                 ],
                 'attr'=>['class'=>'form-control']
             ])
-            ->add('workingHours', NumberType::class, ['attr'=>['class'=>'form-control']])
+            ->add('workingHours', TimeType::class, ['attr'=>['class'=>'form-control'],'widget'=>'single_text','required'=>false])
         ;
     }
 

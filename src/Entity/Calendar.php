@@ -9,13 +9,22 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CalendarRepository::class)]
 class Calendar
 {
+    const STATE_PENDING = 'pending';
+    const STATE_APPROVED = 'approved';
+    const STATE_REFUSED = 'refused';
+    
+    public function __construct()
+    {
+        $this->creationDate = new \DateTime();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isAll = null;
@@ -39,19 +48,31 @@ class Calendar
     #[ORM\JoinColumn(nullable: false)]
     private ?TypeOfAbsence $typeOfAbsence = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $startMorning = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $endMorning = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $state = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $absenceInWorkingDays = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->creationDate;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setCreationDate(\DateTimeInterface $date): static
     {
-        $this->date = $date;
+        $this->creationDate = $date;
 
         return $this;
     }
@@ -136,6 +157,54 @@ class Calendar
     public function setTypeOfAbsence(?TypeOfAbsence $typeOfAbsence): static
     {
         $this->typeOfAbsence = $typeOfAbsence;
+
+        return $this;
+    }
+
+    public function getStartMorning(): ?string
+    {
+        return $this->startMorning;
+    }
+
+    public function setStartMorning(string $startMorning): static
+    {
+        $this->startMorning = $startMorning;
+
+        return $this;
+    }
+
+    public function getEndMorning(): ?string
+    {
+        return $this->endMorning;
+    }
+
+    public function setEndMorning(string $endMorning): static
+    {
+        $this->endMorning = $endMorning;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(?string $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    public function getAbsenceInWorkingDays(): ?float
+    {
+        return $this->absenceInWorkingDays;
+    }
+
+    public function setAbsenceInWorkingDays(?float $absenceInWorkingDays): static
+    {
+        $this->absenceInWorkingDays = $absenceInWorkingDays;
 
         return $this;
     }

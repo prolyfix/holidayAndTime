@@ -8,28 +8,45 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
                 <th>Email</th>
                 <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
 
+    <h2> Zeitstempel </h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{% trans %}Actual overtime{% endtrans %}</th>
+                <td>{{ overtime }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ path('app_user_month_view',{id:user.id,month:"now"|date('m'),year:"now"|date('Y')}) }}">{% trans %} Monatsansicht {% endtrans %}</a>
+    <h2> Urlaubs </h2>
+    <p> Urlaube sind bis spätestens 31 März für das vorheriges Jahr zu nehmen. Die Resturlaube verfallen. </p>
+    <p> im Jahr {{"now"|date('Y')}}</p>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Urlaubsansprüche</th>
+                <td>{{ holidayForYear | number_format(1,",",".")}}</td>
+            </tr>
+            <tr>
+                <th>geplant</th>
+                <td>{{ holidayTakenForYear| number_format(1,",",".") }}</td>
+            </tr> 
+            <tr>
+                <th>gruppenUrlaub</th>
+                <td>{{ groupHolidays | number_format(1,",",".") }}</td>
+            </tr>                 
+            <tr>
+                <th>davon in genehmigung</th>
+                <td>{{ pendingForYear | number_format(1,",",".")}}</td>
+            </tr>                     
+        </tbody>
+    </table>    
     <a href="{{ path('app_user_index') }}">back to list</a>
 
     <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
