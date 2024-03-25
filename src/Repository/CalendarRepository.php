@@ -91,14 +91,12 @@ class CalendarRepository extends ServiceEntityRepository
                 $start2->add($di);
             }
         }
-        dump($output);
         return $output;
     }
 
 
     public function retrieveHolidaysForGroup($group,$start,$end)
     {
-        dump($group,$start,$end);
         $query = $this->createQueryBuilder('c')
             ->select('c')
             ->where('c.workingGroup = :group')
@@ -110,9 +108,7 @@ class CalendarRepository extends ServiceEntityRepository
             ->getResult();
         $output = [];
         $di = new \DateInterval('P1D');
-        dump($query);
         foreach($query as $result){
-            dump("ici");
             $start2 = clone $result->getStartDate();
             while($start2 <= $result->getEndDate()){
                 $output[$start2->format('d-m-Y')] = $result;

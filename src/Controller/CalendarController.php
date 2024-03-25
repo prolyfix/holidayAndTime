@@ -101,17 +101,30 @@ class CalendarController extends AbstractController
                 
             }
         }
-        dump($outputUser);
         $bankHolidays = $em->getRepository(Calendar::class)->getBankHolidays(new \DateTime($year.'-01-01'), new \DateTime($year.'-12-31'));
 
         foreach($bankHolidays as $bankHoliday){
             $outputBankHolidays[$bankHoliday->getStartDate()->format('Y-m-d')][] = $bankHoliday;
         }
 
-        $users = in_array('ROLE_ADMIN', $this->getUser()->getRoles())?$em->getRepository(User::class)->findAll():[$this->getUser()];
+        $users = in_array('ROLE_ADMIN', $this->getUser()->getRoles())?$em->getRepository(User::class)->findBy([],['workingGroup'=>'ASC']):[$this->getUser()];
+        $groupCount = [];
+        foreach($users as $user){
+            if($user->getWorkingGroup() == null){
+                $groupCount['other'][] = $user;
+            }
+            elseif(!array_key_exists($user->getWorkingGroup()->getName(), $groupCount)){
+                $groupCount[$user->getWorkingGroup()->getName()] = array($user);
+            }else{
+                $groupCount[$user->getWorkingGroup()->getName()][] = $user;
+            }
+            
+        }
+        foreach($users as $user) 
         return $this->render('calendar/yearView.html.twig', [
             'output' => $output,
             'users' => $users,
+            'groupCount' => $groupCount,
             'outputUser' => $outputUser,
             'outputBankHolidays' => $outputBankHolidays
         ]);

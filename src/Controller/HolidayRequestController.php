@@ -24,7 +24,6 @@ class HolidayRequestController extends AbstractController
             return $calendar->getState() === Calendar::STATE_PENDING;
         });
         $myTeam = $this->getUser()->getUsers();
-        dump($myTeam);
         $openRequestOfMyTeam = $em->getRepository(Calendar::class)->findOpenRequests($myTeam);
 
         return $this->render('holiday_request/index.html.twig', [

@@ -56,7 +56,6 @@ class TimesheetRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('r');
         $relation = [];
         foreach ($params as $key => $value) {
-            dump($key);
             switch ($key) {
                 case 'user':
                     if(!in_array('ROLE_ADMIN', $value->getRoles())){

@@ -23,9 +23,10 @@ class UserWeekdayPropertyType extends AbstractType
                     'volle Arbeitstag' => '1',  
                     'halbe Arbeitstag' => '0.5',
                 ],
+                'label'=>'workingDay',
                 'attr'=>['class'=>'form-control']
             ])
-            ->add('workingHours', TimeType::class, ['attr'=>['class'=>'form-control'],'widget'=>'single_text','required'=>false])
+            ->add('workingHours', TimeType::class, ['attr'=>['class'=>'form-control'],'widget'=>'single_text','required'=>false,'label'=>'workingHours'])
         ;
     }
 

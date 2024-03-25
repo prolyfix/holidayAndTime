@@ -45,6 +45,7 @@ class UserType extends AbstractType
                 ],
                 'multiple' => true,
             ])
+            ->add('name',null,['attr'=>['class'=>'form-control']])
             ->add('endDate', null, [
                 'widget' => 'single_text',
                 'attr' => ['class' => 'form-control'],

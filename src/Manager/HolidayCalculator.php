@@ -18,7 +18,6 @@ class HolidayCalculator{
         foreach($workingDays as $workingDay){
             $workingDaysArray[$workingDay->getWeekday()] = $workingDay->getWorkingDay()??0;
         }
-        dump($workingDaysArray);
         $output = 0;
         $interval = new \DateInterval('P1D');
         while($cloneStartDate <= $endDate){
@@ -29,20 +28,16 @@ class HolidayCalculator{
             
             $cloneStartDate->add($interval);
         }
-        dump($output);
         return $output;
     }
 
     public function calculateEffectiveWorkingDays(\DateTime $startDate, \DateTime $endDate, User $user, $excludeGroup = false): float
     {
         $totalDays = HolidayCalculator::calculateWorkingDays( $startDate,$endDate,$user);            
-        dump($totalDays);
-            
         $bankHolidays = $this->entityManager->getRepository(Calendar::class)->getBankHolidays( $startDate,$endDate);
         foreach($bankHolidays as $bankHoliday){
             $totalDays -= HolidayCalculator::calculateWorkingDays($bankHoliday->getStartDate(),$bankHoliday->getEndDate(),$user);            
         }
-        dump($totalDays);
         if($excludeGroup){
             return $totalDays;
         }
@@ -51,8 +46,6 @@ class HolidayCalculator{
             $totalDays -= HolidayCalculator::calculateWorkingDays($bankHoliday->getStartDate(),$bankHoliday->getEndDate(),$user);            
         }
          return $totalDays;
-
-
     }
 
 
@@ -72,7 +65,7 @@ class HolidayCalculator{
         }
         $totalDays = $startToConsider->diff($endToConsider)->days;
         $totalYearDays = $startYear->diff($endYear)->days;
-        $holidayPerYear = $user->getUserProperties()[0]->getHolidayPerYear();
+        $holidayPerYear = isset($user->getUserProperties()[0])?$user->getUserProperties()[0]->getHolidayPerYear():0;
         return $holidayPerYear * $totalDays / $totalYearDays;
 
     }

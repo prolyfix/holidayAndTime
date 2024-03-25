@@ -19,7 +19,7 @@
         {% set year = outpu.date | date('Y') %}
         <thead> 
             <tr>
-                <th colspan="32">
+                <th colspan="33">
                     {{ year }}
                 </th>
             </tr>
@@ -29,7 +29,7 @@
         {% set month = outpu.date | date('F') %}
         <tbody>
             <tr>
-                <th colspan="32">
+                <th colspan="33">
                     {{ month }}
                 </th>
             </tr>
@@ -38,9 +38,16 @@
                 {% for i in 1..31 %}
                 <td> {{i}} <br/>{{weekday(i,outpu.date |date('m'),year)}}</td>
                 {% endfor %}
-            {% for user in users %}
+            {% for key,users in groupCount %}
+                {% set rowspan = users | length %}
+                {% for user in users %}
                 <tr>
-                    <td>{{ user.email }}</td>
+                    {% if rowspan > 0 %}
+                    <td rowspan="{{rowspan}}">
+                        {{ key }}   
+                    </td>
+                    {% endif %}
+                    <td>{{ user.name }}</td>
                     {% for i in 1..31 %}
                         {% if i > 9 %}
                             {% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~ i %}
@@ -64,6 +71,9 @@
                     {% endfor %}
 
                 </tr>
+                {% set rowspan = 0 %}
+                {% endfor %}
+
             {% endfor %}
         </tbody>
     {% endif %}

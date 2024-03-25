@@ -74,7 +74,7 @@
                         {% set day = i * 7 + j - diff %}
                         {% set date = monthBegin|date_modify('+' ~ day ~ ' day') %}
                         <td>
-                            {% if date|date('m') == month %}
+                            {% if date|date('m') == month and day >= 0 %}
                                 <small>{{ date|date('d') }}</small><br/>
                                 {% if timesheet[date|date('d-m-Y')] is defined %}
                                     {% trans %} Überstunden {% endtrans %} : {{ timesheet[date|date('d-m-Y')].overtime }} min

@@ -91,7 +91,6 @@ class UserController extends AbstractController
         foreach($groupHolidays as $holiday){
             $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
         }
-        dump($groupHolidaysCount);
 
         return $this->render('user/show.html.twig', [
             'user' => $user,
@@ -131,6 +130,8 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 
     #[Route('/monthView/{id}/{month}/{year}', name: 'app_user_month_view', methods: ['GET'])]
     public function monthView(User $user, EntityManagerInterface $em,$month,$year): Response
