@@ -125,7 +125,6 @@ class CalendarController extends AbstractController
             }
             
         }
-        dump($outputUser);
         return $this->render('calendar/yearView.html.twig', [
             'output' => $output,
             'users' => $users,
