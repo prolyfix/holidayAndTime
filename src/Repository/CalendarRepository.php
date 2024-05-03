@@ -53,7 +53,7 @@ class CalendarRepository extends ServiceEntityRepository
 
         return $query->getSingleScalarResult();
     }
-    public function retrieveHolidaysForGroupForYear($group, $year)
+    public function retrieveHolidaysForGroupForYear( $group, $year)
     {
         $query = $this->createQueryBuilder('c')
             ->where('c.workingGroup = :group')
@@ -67,7 +67,20 @@ class CalendarRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+    public function retrieveHolidaysForFirmForYear($year)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.workingGroup IS NULL')
+            ->andWhere('c.user IS NULL')
+            ->andWhere('c.startDate BETWEEN :start AND :end')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isHoliday = 1')
+            ->setParameter('start', $year . '-01-01')
+            ->setParameter('end', $year . '-12-31')
+            ->getQuery();
 
+        return $query->getResult();
+    }
     public function retrieveHolidaysForUser($user,$start,$end)
     {
         $query = $this->createQueryBuilder('c')

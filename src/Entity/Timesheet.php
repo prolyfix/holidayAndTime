@@ -33,6 +33,14 @@ class Timesheet
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $overtime = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $alreadyCalculatedOnDay = null;
+
+    public function __construct()
+    {
+        $this->break = new \DateTime('00:00:00');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +114,18 @@ class Timesheet
     public function setOvertime(?int $overtime): static
     {
         $this->overtime = $overtime;
+
+        return $this;
+    }
+
+    public function isAlreadyCalculatedOnDay(): ?bool
+    {
+        return $this->alreadyCalculatedOnDay;
+    }
+
+    public function setAlreadyCalculatedOnDay(?bool $alreadyCalculatedOnDay): static
+    {
+        $this->alreadyCalculatedOnDay = $alreadyCalculatedOnDay;
 
         return $this;
     }

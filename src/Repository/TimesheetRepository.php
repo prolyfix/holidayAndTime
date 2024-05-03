@@ -51,7 +51,26 @@ class TimesheetRepository extends ServiceEntityRepository
             $output[$result->getStartTime()->format('d-m-Y')] = $result;
         }
         return $output;
-    }    
+    } 
+    
+    public function getAlreadyWorkedToday(Timesheet $timesheet)
+    {
+        $start = $timesheet->getStartTime();
+        $start->setTime(0, 0, 0);
+        $end = $timesheet->getEndTime();
+        $end->setTime(23, 59, 59);
+        $qb = $this->createQueryBuilder('t')
+            ->select('Count(t.id) as total')
+            ->where('t.user = :user')
+            ->andWhere('t.startTime >= :start')
+            ->andWhere('t.endTime <= :end')
+            ->setParameter('user', $timesheet->getUser())
+            ->setParameter('start',$start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getSingleScalarResult();
+        return $qb??0;
+    }
     public function findDatatables(array $params): array {
         $qb = $this->createQueryBuilder('r');
         $relation = [];

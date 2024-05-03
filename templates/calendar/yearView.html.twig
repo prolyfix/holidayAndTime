@@ -63,9 +63,11 @@
 
                             {% elseif outputBankHolidays[date] is defined %}
                                 <td></td>
-                            {% else %}
+                            {% elseif isWorkday(user,date) %}
                                 <td class="bg-success">
                                 </td>
+                            {% else %}
+                                <td></td>
                             {% endif %}
                         {% endif %}
                     {% endfor %}

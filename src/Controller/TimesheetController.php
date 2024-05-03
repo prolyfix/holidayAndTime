@@ -44,10 +44,20 @@ class TimesheetController extends AbstractController
             'tableTitle' => 'users' ,
             
         ];
+        $buttons = [
+            'new' => [
+                'class' => 'btn btn-primary',
+                'icon' => 'bi bi-plus',
+                'title' => 'New',
+                'action' => 'click->hello#link',
+                'url' =>  $this->generateUrl('app_timesheet_new')
+            ]
+        ];
         return $this->render('gestion.html.twig', [
             'tableParams' => $tableParams,
             'filter'    => Timesheet::class,
-            'title' => 'Timesheet'
+            'title' => 'Timesheet',
+            'buttons' => $buttons
         ]);
     }
 
@@ -56,6 +66,10 @@ class TimesheetController extends AbstractController
     {
         $timesheet = new Timesheet();
         $form = $this->createForm(TimesheetType::class, $timesheet);
+        if(!in_array('ROLE_ADMIN', $this->getUser()->getRoles())){
+            $timesheet->setUser($this->getUser());
+            $form->remove('user');
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,7 +83,8 @@ class TimesheetController extends AbstractController
             //todo: verify if Holiday / Bank Holiday / Sickness
             else{
                 $hasToWork = OvertimeCalculator::getWorkingHoursForDay($timesheet->getStartTime(), $timesheet->getUser());
-                $hasToWorkMinutes = TimeUtility::getMinutesFromTime($hasToWork);
+                $hasAlreadyWorkedToday = $entityManager->getRepository(Timesheet::class)->getAlreadyWorkedToday($timesheet);
+                $hasToWorkMinutes = TimeUtility::getMinutesFromTime($hasAlreadyWorkedToday>0?new \DateTime('00:00:00'):$hasToWork);
                 $overTimeMinutes -= $hasToWorkMinutes;
             }
             $timesheet->setOvertime($overTimeMinutes);
@@ -99,6 +114,21 @@ class TimesheetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
+            $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
+            $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+            if($timesheet->getUser()->getStartDate() > $timesheet->getStartTime() || ($timesheet->getUser()->getEndDate() < $timesheet->getEndTime() && $timesheet->getUser()->getEndDate() !== null)){
+                $timesheet->setOvertime($overTimeMinutes);
+            }
+            //todo: verify if Holiday / Bank Holiday / Sickness
+            else{
+                $hasToWork = OvertimeCalculator::getWorkingHoursForDay($timesheet->getStartTime(), $timesheet->getUser());
+                $hasAlreadyWorkedToday = $entityManager->getRepository(Timesheet::class)->getAlreadyWorkedToday($timesheet);
+                $hasToWorkMinutes = TimeUtility::getMinutesFromTime($hasAlreadyWorkedToday>0?new \DateTime('00:00:00'):$hasToWork);                
+                $overTimeMinutes -= $hasToWorkMinutes;
+            }
+            $timesheet->setOvertime($overTimeMinutes);
+            $entityManager->persist($timesheet);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_timesheet_index', [], Response::HTTP_SEE_OTHER);

@@ -91,7 +91,11 @@ class UserController extends AbstractController
         foreach($groupHolidays as $holiday){
             $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
         }
-
+        $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
+        $groupHolidaysCount = 0;
+        foreach($groupHolidays as $holiday){
+            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+        }
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),

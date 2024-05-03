@@ -37,8 +37,8 @@ class CalendarController extends AbstractController
                 ['name' =>  'user.email',    
                 'label' => 'user',
                 ],       
-                ['name' =>  'absenceInWorkingDays',    
-                'label' => 'inWorkingDays',
+                ['name' =>  'typeOfAbsence.name',    
+                'label' => 'TypOfHoliday',
                 ],  
        
                 ['name' =>  'state',    
@@ -75,6 +75,7 @@ class CalendarController extends AbstractController
         $dateStart = new \DateTime($year.'-01-01');
         $dateEnd = new \DateTime($year.'-12-31');
         $interval = new \DateInterval('P1M');
+        $users = $em->getRepository(User::class)->findBy([],['workingGroup'=>'ASC']);
         $outputUser = [];
         $outputBankHolidays = [];
         while($dateStart <= $dateEnd){
@@ -91,8 +92,12 @@ class CalendarController extends AbstractController
                     if($calendar->getUser() !== null){
                         $outputUser[$calendar->getUser()->getId()][$cloneStartDate->format('Y-m-d')][] = $calendar;
                     }
-                    else{
+                    elseif($calendar->getWorkingGroup()!==null){
                         foreach($calendar->getWorkingGroup()->getUsers() as $user){
+                            $outputUser[$user->getId()][$cloneStartDate->format('Y-m-d')][] = $calendar;
+                        }
+                    }else{
+                        foreach($users as $user){
                             $outputUser[$user->getId()][$cloneStartDate->format('Y-m-d')][] = $calendar;
                         }
                     }
@@ -120,7 +125,7 @@ class CalendarController extends AbstractController
             }
             
         }
-        foreach($users as $user) 
+        dump($outputUser);
         return $this->render('calendar/yearView.html.twig', [
             'output' => $output,
             'users' => $users,

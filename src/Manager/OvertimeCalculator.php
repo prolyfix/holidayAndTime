@@ -15,7 +15,7 @@ class OvertimeCalculator{
         $weekday = $date->format('l');
         foreach($user->getUserWeekdayProperties() as $userWeekdayProperty){
             if($userWeekdayProperty->getWeekday() === $weekday){
-                return $userWeekdayProperty->getWorkingHours();
+                return $userWeekdayProperty->getWorkingHours()??new \DateTime('00:00:00');
             }
         }
         return new \DateTime('00:00:00');

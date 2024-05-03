@@ -51,6 +51,7 @@
             <th>Start</th>
             <th>Ende</th>
             <th>Status</th>
+            <th>Von</th>
             <th>Erstellt am</th>
             <th>{% trans %} Aktion {% endtrans %}</th>
         </tr>
@@ -63,6 +64,7 @@
                 <td>{{ holidayRequest.endDate|date('d.m.Y') }}</td>
                 <td>{{ holidayRequest.state }}</td>
                 <td>{{ holidayRequest.creationDate|date('d.m.Y H:i') }}</td>
+                <td>{{ holidayRequest.user.email }}</td>
                 <td>
                     {% if holidayRequest.state == 'pending' and app.user == holidayRequest.user.manager %}
                         <a href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
