@@ -1,11 +1,7 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}New Calendar{% endblock %}
-
-{% block body %}
-    <h1>{% trans %} Neu {% endtrans %} Calendar</h1>
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
+    <h1>{% trans %} Neu Calendar{% endtrans %}: {{user.name}} </h1>
 
     {{ include('calendar/_form.html.twig') }}
 
-    <a href="{{ path('app_calendar_index') }}">back to list</a>
 {% endblock %}

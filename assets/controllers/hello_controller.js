@@ -1,4 +1,4 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller, StringMapObserver } from '@hotwired/stimulus';
 import jquery from 'jquery';
 
 var test2 = {};
@@ -120,10 +120,16 @@ export default class extends Controller {
     changeMonth(e){
       var month = jquery('#selectMonth').val()
       var year = jquery('#selectYear').val()
-      var finalString = month + '/' + year
+      
       var actualUrl = window.location.href
-      var beginString= actualUrl.substring(0, actualUrl.length - 7);
-      window.location.href = beginString + finalString
+      if(actualUrl.includes('month')){
+        var beginString= actualUrl.substring(0, actualUrl.length - 7);
+        window.location.href = beginString + '/' + year + '/' + month
+      }else{
+        window.location.href = actual
+      }
+      //var beginString= actualUrl.substring(0, actualUrl.length - 7);
+      //window.location.href = beginString + finalString
 
     }
 }

@@ -16,6 +16,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_MANAGER = 'ROLE_MANAGER';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -73,6 +76,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[ORM\OneToMany(targetEntity: Issue::class, mappedBy: 'user')]
+    private Collection $issues;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -80,6 +86,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userProperties = new ArrayCollection();
         $this->calendars = new ArrayCollection();
         $this->timesheets = new ArrayCollection();
+        $this->issues = new ArrayCollection();
+        $timestamp = strtotime('next Monday');
+        for ($i = 0; $i < 7; $i++) {
+            $userWeekdayProperty = new UserWeekdayProperty();
+            $userWeekdayProperty->setUser($this);
+            $userWeekdayProperty->setWeekday(strftime('%A', $timestamp));
+            $timestamp = strtotime('+1 day', $timestamp);
+            $this->addUserWeekdayProperty($userWeekdayProperty);
+        }
+        $userProperty = new UserProperty();
+        $this->addUserProperty($userProperty);
     }
 
     public function getId(): ?int
@@ -381,7 +398,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name??"NO NAME";
     }
 
     public function setName(?string $name): static
@@ -389,5 +406,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Issue>
+     */
+    public function getIssues(): Collection
+    {
+        return $this->issues;
+    }
+
+    public function addIssue(Issue $issue): static
+    {
+        if (!$this->issues->contains($issue)) {
+            $this->issues->add($issue);
+            $issue->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssue(Issue $issue): static
+    {
+        if ($this->issues->removeElement($issue)) {
+            // set the owning side to null (unless already changed)
+            if ($issue->getUser() === $this) {
+                $issue->setUser(null);
+            }
+        }
+
+        return $this;
+
+    }
+
+    public function hasRole($role): bool
+    {
+        return in_array($role, $this->roles);
+    }
+
+    public function __toString() {
+        // Assuming the User class has a 'name' property
+        return $this->name??$this->email??"";
     }
 }

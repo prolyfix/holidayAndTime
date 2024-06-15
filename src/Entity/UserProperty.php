@@ -67,4 +67,7 @@ class UserProperty
 
         return $this;
     }
+    public function __toString() {
+        return (string) $this->holidayPerYear;
+    }
 }

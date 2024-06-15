@@ -32,50 +32,6 @@ class HolidayRequestController extends AbstractController
         ]);
     }
 
-    #[Route('/holiday/request/new', name: 'holiday_request_new')]
-    public function new(Request $request, EntityManagerInterface $em, MailerInterface $mailer, HolidayCalculator $holidayCalculator): Response
-    {
-        $calendar = new Calendar();
-        $calendar->setUser($this->getUser());
-
-        $form = $this->createForm(CalendarType::class, $calendar);
-        $form->remove('user');
-        $form->remove('workingGroup');
-        $form->handleRequest($request);
-        if($form->isSubmitted() and $form->isValid()){
-            $hasAlreadyHolidayBookedDuringPeriod = $em->getRepository(Calendar::class)->hasAlreadyHolidayBookedDuringPeriod($calendar);
-            if($hasAlreadyHolidayBookedDuringPeriod){
-                $this->addFlash('danger', 'You already have booked holiday during this period');
-                return $this->redirectToRoute('app_calendar_index');
-            }
-            $totalDays = $holidayCalculator->calculateEffectiveWorkingDays($calendar->getStartDate(),$calendar->getEndDate(),$calendar->getUser());
-            if($calendar->getTypeOfAbsence()->isHasToBeValidated()){
-                $calendar->setState(Calendar::STATE_PENDING);
-            }
-            $calendar->setAbsenceInWorkingDays($totalDays);
-
-            $em->persist($calendar);
-            $em->flush();
-            if($this->getUser()->getManager() !== null){
-                $email = (new TemplatedEmail())
-                            ->from('personnal@frauengesundheit-am-see.de')
-                            ->to($this->getUser()->getManager()->getEmail())
-                            ->subject('Urlaubsantrag')
-                            ->htmlTemplate('email/holiday_request.html.twig')
-                            ->context([
-                                'calendar' => $calendar,
-                            ]);
-                $mailer->send($email);
-            }
-
-
-            return $this->redirectToRoute('app_calendar_index');
-        }
-        
-        return $this->render('calendar/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
 
 
     #[Route('/holiday/request/{id}/validate', name: 'holiday_request_approve')]
@@ -83,7 +39,8 @@ class HolidayRequestController extends AbstractController
     {
         $calendar->setState(Calendar::STATE_APPROVED);
         $entityManager->flush();
-        return $this->redirectToRoute('app_calendar_index');
+        $this->addFlash('success', 'Request approved');
+        return $this->redirectToRoute('admin');
     }
 
     #[Route('/holiday/request/{id}/reject', name: 'holiday_request_reject')]
@@ -91,7 +48,8 @@ class HolidayRequestController extends AbstractController
     {
         $calendar->setState(Calendar::STATE_REFUSED);
         $entityManager->flush();
-        return $this->redirectToRoute('app_calendar_index');
+        $this->addFlash('success', 'Request rejected');
+        return $this->redirectToRoute('admin');
     }
 
 

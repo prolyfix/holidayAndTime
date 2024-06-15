@@ -137,23 +137,5 @@ class UserController extends AbstractController
 
 
 
-    #[Route('/monthView/{id}/{month}/{year}', name: 'app_user_month_view', methods: ['GET'])]
-    public function monthView(User $user, EntityManagerInterface $em,$month,$year): Response
-    {
-        $monthBegin = new \DateTime($year.'-'.$month.'-01');
-        $monthEnd = new \DateTime($year.'-'.$month.'-'.cal_days_in_month(CAL_GREGORIAN, $month, $year));
-        $timesheets = $em->getRepository(Timesheet::class)->retrieveOvertimeForUserForPeriod($user, $monthBegin, $monthEnd);
-        $holidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForUser($user, $monthBegin, $monthEnd);
-        $groupHolidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForGroup($user->getWorkingGroup(), $monthBegin, $monthEnd);
-        //$bankHoliday = $em->getRepository(Calendar::class)->retrieveBankHolidaysForUser($user, $monthBegin, $monthEnd);
-        return $this->render('calendar/monthView.html.twig', [
-            'user' => $user,
-            'month' => $month,
-            'year' => $year,
-            'monthBegin' => $monthBegin,
-            'timesheet' => $timesheets,
-            'holidays' => $holidays,
-            'groupHolidays' => $groupHolidays,
-        ]);
-    }
+
 }

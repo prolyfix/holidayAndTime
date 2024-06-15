@@ -1,8 +1,5 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}User{% endblock %}
-
-{% block body %}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
     <h1>User</h1>
 
     <table class="table">
@@ -23,7 +20,36 @@
             </tr>
         </tbody>
     </table>
-    <a href="{{ path('app_user_month_view',{id:user.id,month:"now"|date('m'),year:"now"|date('Y')}) }}">{% trans %} Monatsansicht {% endtrans %}</a>
+     
+    <a 
+        href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'crudAction': 'monthView' })) }}"
+        class="btn btn-primary"
+    >
+        {% trans %} Monatsansicht {% endtrans %}
+    </a>
+    {% if is_granted('ROLE_ADMIN') %}
+    <a 
+        href="{{ path('admin',{'routeName':'admin_timesheet_add_time','entityId':user.id} ) }}"
+        class="btn btn-primary"
+    >
+        {% trans %} ConsumeTime {% endtrans %}
+    </a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') or user.id == app.user.id %}
+    <a 
+        href="{{ path('admin',{'routeName':'holiday_request_new', 'entityId' : user.id } ) }}"
+        class="btn btn-primary"
+    >
+        {% trans %} Add urlaub {% endtrans %}
+    </a>
+    {% endif %}    
+    <a 
+        href="{{ path('admin',{'routeName':'admin_timesheet_consume_time','entityId':user.id} ) }}"
+        class="btn btn-primary"
+    >
+        {% trans %} AddTimesheet {% endtrans %}
+    </a>
+    <div class="mb-2"></div>
     <h2> Urlaubs </h2>
     <p> Urlaube sind bis spätestens 31 März für das vorheriges Jahr zu nehmen. Die Resturlaube verfallen. </p>
     <p> im Jahr {{"now"|date('Y')}}</p>
@@ -47,9 +73,5 @@
             </tr>                     
         </tbody>
     </table>    
-    <a href="{{ path('app_user_index') }}">back to list</a>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

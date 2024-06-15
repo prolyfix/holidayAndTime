@@ -1,8 +1,5 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Calendar{% endblock %}
-
-{% block body %}
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
 <h1> {% trans %} Kalender {% endtrans %}</h1>
 <div class="card gray" style="mt-2 mb-2" id="filter">
 
@@ -29,7 +26,7 @@
                 <div class="col-md-4 p-1"> <input type="text" class="filterTable form-control" id="selectYear" data-searchfield="" value="{{"now"|date('Y')}}"></div>
                 <div class="col-xl-12 mt-2">
                 <div class="d-flex flex-row-reverse">
-                    <div class="btn btn-primary mr-2" data-action="click->hello#changeMonth"> Filtrer </div>
+                    <div class="btn btn-primary mr-2" onclick="changeMonth()"> Filtrer </div>
                 </div>
             </div>        
         </div>
@@ -91,4 +88,16 @@
                 </tr>
             {% endfor %}       
 </table>
+<script> 
+    function changeMonth(){
+        var month = document.getElementById("selectMonth").value;
+        var year = document.getElementById("selectYear").value;
+        const queryString = window.location.href;
+        var href = new URL(queryString);
+        href.searchParams.set('month', month);
+        href.searchParams.set('year', year);
+        window.location = href.toString();
+        console.log(queryString);
+    }
+</script>
 {% endblock %}

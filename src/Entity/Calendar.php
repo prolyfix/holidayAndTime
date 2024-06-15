@@ -16,6 +16,7 @@ class Calendar
     public function __construct()
     {
         $this->creationDate = new \DateTime();
+        $this->state = self::STATE_PENDING;
     }
 
     #[ORM\Id]
@@ -48,11 +49,11 @@ class Calendar
     #[ORM\JoinColumn(nullable: false)]
     private ?TypeOfAbsence $typeOfAbsence = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $startMorning = null;
+    #[ORM\Column(nullable: true)]
+    private ?bool $startMorning = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $endMorning = null;
+    #[ORM\Column(nullable: true)]
+    private ?bool $endMorning = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $state = null;
@@ -161,24 +162,24 @@ class Calendar
         return $this;
     }
 
-    public function getStartMorning(): ?string
+    public function getStartMorning(): ?bool
     {
         return $this->startMorning;
     }
 
-    public function setStartMorning(string $startMorning): static
+    public function setStartMorning(bool $startMorning): static
     {
         $this->startMorning = $startMorning;
 
         return $this;
     }
 
-    public function getEndMorning(): ?string
+    public function getEndMorning(): ?bool
     {
         return $this->endMorning;
     }
 
-    public function setEndMorning(string $endMorning): static
+    public function setEndMorning(bool $endMorning): static
     {
         $this->endMorning = $endMorning;
 

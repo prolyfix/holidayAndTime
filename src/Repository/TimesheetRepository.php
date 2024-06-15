@@ -53,11 +53,20 @@ class TimesheetRepository extends ServiceEntityRepository
         return $output;
     } 
     
+    public function hasUserWorkedOn($user, $date)
+    {
+        $timesheet = (new Timesheet())
+            ->setUser($user)
+            ->setStartTime($date->setTime(0, 0, 0))
+            ->setEndTime($date->setTime(23, 59, 59));
+        return $this->getAlreadyWorkedToday($timesheet);
+    }
+
     public function getAlreadyWorkedToday(Timesheet $timesheet)
     {
-        $start = $timesheet->getStartTime();
+        $start = clone($timesheet->getStartTime());
         $start->setTime(0, 0, 0);
-        $end = $timesheet->getEndTime();
+        $end = clone($timesheet->getEndTime());
         $end->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('t')
             ->select('Count(t.id) as total')

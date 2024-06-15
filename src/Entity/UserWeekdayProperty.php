@@ -47,6 +47,10 @@ class UserWeekdayProperty
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->getWeekday();
+    }
     public function getWeekday(): ?string
     {
         return $this->weekday;
@@ -94,4 +98,6 @@ class UserWeekdayProperty
 
         return $this;
     }
+
+
 }

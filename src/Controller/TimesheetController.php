@@ -99,6 +99,9 @@ class TimesheetController extends AbstractController
         ]);
     }
 
+
+
+
     #[Route('/{id}', name: 'app_timesheet_show', methods: ['GET'])]
     public function show(Timesheet $timesheet): Response
     {
@@ -107,9 +110,9 @@ class TimesheetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_timesheet_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Timesheet $timesheet, EntityManagerInterface $entityManager): Response
     {
+        dump("tralala");
         $form = $this->createForm(TimesheetType::class, $timesheet);
         $form->handleRequest($request);
 

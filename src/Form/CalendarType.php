@@ -25,17 +25,17 @@ class CalendarType extends AbstractType
             ->add('endDate',null,['widget'=>'single_text','attr'=>['class'=>'form-control','data-action'=>'change->hello#showHalfDay']])
             ->add('startMorning',ChoiceType::class,[ 
                 'choices'=>[
-                    'halbesTag' => '0.5',
-                    'vollesTag' => '0',
+                    'halbesTag' => 1,
+                    'vollesTag' => 0,
                 ],
                 'attr'=>['class'=>'form-control']
             ])
             ->add('endMorning',ChoiceType::class,[ 
                 'choices'=>[
-                    'halbesTag' => '0.5',
-                    'vollesTag' => '0',
+                    'halbesTag' => 1,
+                    'vollesTag' => 0,
                 ],
-                'attr'=>['class'=>'form-control','style'=>'display:none;']
+                'attr'=>['class'=>'form-control']
             ])
             ->add('workingGroup', EntityType::class, [
                 'class' => WorkingGroup::class,

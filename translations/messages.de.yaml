@@ -26,3 +26,55 @@ Sunday: Sonntag
 workingDay: Arbeitstag
 workingHours: Arbeitsstunden
 holidayPerYear: Urlaubstage pro Jahr
+Users: Benutzer
+Dashboard: Dashboard
+Calendar: Kalender
+Issues: Anfragen
+Type of Absence: Abwesenheitstypen
+Working Group: Team
+Timesheet: Arbeitszeiten
+ID: ID
+Name: Name
+Creation Date: Erstellungsdatum
+Is Holiday: Urlaub
+Is Time Holiday: ArbeitszeitskontoTag
+Has To Be Validated: Muss genehmigt werden
+Is Bank Holiday: Feiertag
+User.Name: Benutzer
+Start time: Startzeit
+Overtime: Überstunden
+End time: Endzeit
+WorkingGroup: Gruppen
+TypeOfAbsence: Abwesenheitstypen
+Holiday Requests: Abwesenheitsanfragen
+User: Mitarbeiter
+Monatsansicht: Monatsansicht
+ConsumeTime: Arbeitszeitauszahlung
+Add urlaub: Urlaub hinzufügen
+AddTimesheet: Arbeitszeit hinzufügen
+View Year: Jahresansicht
+Start Date: Startdatum
+End Date: Enddatum
+Start Morning: halbes Tag
+End Morning: halbes Tag
+Is All: Alle Mitarbeiter
+Type Of Absence: Abwesenheitstypen
+State: Status
+Absence In Working Days: Anzahl Arbeitstage
+Approved: Genehmigt
+Pending: Ausstehend
+Aktion: Aktion
+Bearbeiten: Bearbeiten
+Genehmigen: Genehmigen
+Ablehnen: Ablehnen
+Löschen: Löschen
+Start Time: Startzeit
+End Time: Endzeit
+Break: Pause
+Email: Email
+Manager: Manager
+User Weekday Properties: Wochenarbeitstage
+User Properties: Urlaubstage im Jahr
+show: Anzeigen
+
+

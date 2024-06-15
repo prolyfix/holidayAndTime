@@ -37,6 +37,104 @@ class CalendarRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    public function retrieveToilDaysAfter(\DateTime $date)
+    {
+        $now = new \DateTime();
+        $query = $this->createQueryBuilder('c')
+            ->where('c.startDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isTimeHoliday = 1')
+            ->setParameter('date', $date)
+            ->andWhere('c.startDate <= :now')
+            ->setParameter('now', $now)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+    public function hasHoliday($user, $date)
+    {
+        dump("1");
+        $date->setTime(0, 0, 0);
+        if(($user->getStartDate() > $date || ($user->getEndDate()!==null && $user->getEndDate() < $date))&&$user->getStartDate()!== null) return false;
+        dump("1");
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.user = :user')
+            ->andWhere('c.startDate <= :date AND c.endDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isHoliday = 1')
+            ->setParameter('user', $user)
+            ->setParameter('date', $date)
+            ->getQuery();
+
+        if ($query->getSingleScalarResult() > 0) return true;
+        dump("1");
+
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.user = :user')
+            ->andWhere('c.startDate <= :date AND c.endDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isBankHoliday = 1')
+            ->setParameter('user', $user)
+            ->setParameter('date', $date)
+            ->getQuery();
+        
+        if ($query->getSingleScalarResult() > 0) return true;
+        dump("3");
+
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.workingGroup = :group')
+            ->andWhere('c.startDate <= :date AND c.endDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isHoliday = 1')
+            ->setParameter('group', $user->getWorkingGroup())
+            ->setParameter('date', $date)
+            ->getQuery();
+        
+        if ($query->getSingleScalarResult() > 0) return true;
+        dump("1");
+
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.workingGroup = :group')
+            ->andWhere('c.startDate <= :date AND c.endDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isBankHoliday = 1')
+            ->setParameter('group', $user->getWorkingGroup())
+            ->setParameter('date', $date)
+            ->getQuery();
+        
+        if ($query->getSingleScalarResult() > 0) return true;
+        dump("1");
+
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->andWhere('c.startDate <= :date AND c.endDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isBankHoliday = 1')
+            ->setParameter('date', $date)
+            ->getQuery();
+        
+        if ($query->getSingleScalarResult() > 0) return true;
+        dump("6");
+
+        $query = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->andWhere('c.startDate <= :date AND c.endDate >= :date')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isHoliday = 1')
+            ->setParameter('date', $date)
+            ->getQuery();
+        
+        if ($query->getSingleScalarResult() > 0) return true;
+        dump("7");
+
+        return false;
+
+    }
 
     public function retrieveHolidayForYear($user, $year)
     {
@@ -155,8 +253,9 @@ class CalendarRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
-    public function getGroupHolidays(\DateTime $start, \DateTime $end, WorkingGroup $group)
+    public function getGroupHolidays(\DateTime $start, \DateTime $end, ?WorkingGroup $group)
     {
+        if($group == null) return [];
         $query = $this->createQueryBuilder('c')
             ->select('c')
             ->where('c.startDate BETWEEN :start AND :end')

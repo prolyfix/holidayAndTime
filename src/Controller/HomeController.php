@@ -16,25 +16,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_user_me');
+        return $this->redirectToRoute('admin');
     }
-    #[Route('/me', name: 'app_user_me', methods: ['GET'])]
-    public function me( HolidayCalculator $holidayCalculator,EntityManagerInterface $em): Response
-    {
-        $user = $this->getUser();
-        $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(), date('Y'));
-        $groupHolidaysCount = 0;
-        foreach($groupHolidays as $holiday){
-            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
-        }
 
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-            'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),
-            'pendingForYear'        => $em->getRepository(Calendar::class)->calculatePendingForYear($user, date('Y')),
-            'holidayTakenForYear'   => $em->getRepository(Calendar::class)->retrieveHolidayForYear($user, date('Y')),
-            'overtime'       => $em->getRepository(Timesheet::class)->retrieveOvertimeForUser($user),
-            'groupHolidays' => $groupHolidaysCount,
-        ]);
-    }
 }

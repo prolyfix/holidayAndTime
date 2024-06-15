@@ -1,9 +1,5 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello HolidayRequestController!{% endblock %}
-
-{% block body %}
-<h1> Urlaubsgenehmigung </h1>
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}<h1> Urlaubsgenehmigung </h1>
 <h2> Meine Urlaubsanträge </h2>
 <table class="table">
     <thead>
@@ -29,20 +25,28 @@
                 <td>{{ holidayRequest.absenceInWorkingDays }}</td>
                 <td>
                     {% if holidayRequest.state == 'pending' and app.user == holidayRequest.user.manager %}
-                        <a href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
-                        <a href="{{ path('holiday_request_reject', {'id': holidayRequest.id}) }}">{% trans %} Ablehnen {% endtrans %}</a>
+                        <a class="btn btn-xs btn-success" href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path('holiday_request_reject', {'id': holidayRequest.id}) }}">{% trans %} Ablehnen {% endtrans %}</a>
                     {% endif %}
                     {% if app.user == holidayRequest.user %}
                      {# TODO: Faire un edit des vacances, sinon non recalcule les jours de vacances #}
-                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Bearbeiten {% endtrans %}</a>
-                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Löschen {% endtrans %}</a>
+                        <a class="btn btn-xs btn-info"  href="{{ path('admin', 
+                            {
+                                'routeName': 'admin_holiday_request_edit',
+                                'entityId': holidayRequest.id
+                            } )}}"
+                            >{% trans %} Bearbeiten {% endtrans %}</a>
                     {% endif %}
                 </td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
-<a class="btn btn-primary" href="{{ path('holiday_request_new') }}">Neuen Urlaubsantrag erstellen</a>
+<a class="btn btn-primary" href="{{ path('admin',{
+    'routeName': 'holiday_request_new',
+    'entityId': user.id
+}) }}">Neuen Urlaubsantrag erstellen</a>
+
 <h2> Urlaube zu genehmigen</h2>
 <table class="table">
     <thead>
@@ -67,12 +71,12 @@
                 <td>{{ holidayRequest.user.email }}</td>
                 <td>
                     {% if holidayRequest.state == 'pending' and app.user == holidayRequest.user.manager %}
-                        <a href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
-                        <a href="{{ path('holiday_request_reject', {'id': holidayRequest.id}) }}">{% trans %} Ablehnen {% endtrans %}</a>
+                        <a class="btn btn-xs btn-success" href="{{ path('holiday_request_approve', {'id': holidayRequest.id}) }}">{% trans %} Genehmigen {% endtrans %}</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path('holiday_request_reject', {'id': holidayRequest.id}) }}">{% trans %} Ablehnen {% endtrans %}</a>
                     {% endif %}
                     {% if app.user == holidayRequest.user %}
-                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Bearbeiten {% endtrans %}</a>
-                        <a href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Löschen {% endtrans %}</a>
+                        <a  class="btn btn-xs btn-info" href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Bearbeiten {% endtrans %}</a>
+                        <a class="btn btn-xs btn-danger" href="{{ path('app_calendar_edit', {'id': holidayRequest.id})}}">{% trans %} Löschen {% endtrans %}</a>
                     {% endif %}
                 </td>
             </tr>
