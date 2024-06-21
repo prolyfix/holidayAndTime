@@ -23,6 +23,8 @@ final class CalendarListener
 
     public function prePersist(Calendar $calendar, PrePersistEventArgs $event): void
     {
+        if($calendar->getUser() == null)
+            return;
         $totalDays = $this->holidayCalculator->calculateEffectiveWorkingDays($calendar->getStartDate(),$calendar->getEndDate(),$calendar->getUser());
             
         $minus  = (float)$calendar->getStartMorning()*0.5 + (float)(($calendar->getStartDate() !== $calendar->getEndDate())?$calendar->getEndMorning()*0.5:0);
@@ -36,6 +38,8 @@ final class CalendarListener
     }
     public function preUpdate(Calendar $calendar, PreUpdateEventArgs $event): void
     {
+        if($calendar->getUser() == null)
+        return;
         $totalDays = $this->holidayCalculator->calculateEffectiveWorkingDays($calendar->getStartDate(),$calendar->getEndDate(),$calendar->getUser());
         $minus  = (float)$calendar->getStartMorning()*0.5 + (float)(($calendar->getStartDate() !== $calendar->getEndDate())?$calendar->getEndMorning()*0.5:0);
         $user = $this->security->getUser();

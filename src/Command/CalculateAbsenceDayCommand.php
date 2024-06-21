@@ -35,9 +35,10 @@ class CalculateAbsenceDayCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $date = new \DateTime();
-        $date->modify('-1 month');
+        $date->modify('-6 month');
 
         $toilDays = $this->em->getRepository(Calendar::class)->retrieveToilDaysAfter($date);
+        dump($toilDays);
         foreach($toilDays as $toilDay) {
             if($toilDay->getUser() !== null)
             {

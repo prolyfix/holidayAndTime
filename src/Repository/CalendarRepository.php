@@ -39,11 +39,12 @@ class CalendarRepository extends ServiceEntityRepository
 
     public function retrieveToilDaysAfter(\DateTime $date)
     {
+        dump($date);
         $now = new \DateTime();
         $query = $this->createQueryBuilder('c')
-            ->where('c.startDate >= :date')
             ->join('c.typeOfAbsence', 't')
             ->andWhere('t.isTimeHoliday = 1')
+            ->where('c.startDate >= :date')
             ->setParameter('date', $date)
             ->andWhere('c.startDate <= :now')
             ->setParameter('now', $now)
@@ -165,20 +166,39 @@ class CalendarRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
     public function retrieveHolidaysForFirmForYear($year)
     {
         $query = $this->createQueryBuilder('c')
             ->where('c.workingGroup IS NULL')
             ->andWhere('c.user IS NULL')
             ->andWhere('c.startDate BETWEEN :start AND :end')
-            ->join('c.typeOfAbsence', 't')
-            ->andWhere('t.isHoliday = 1')
             ->setParameter('start', $year . '-01-01')
             ->setParameter('end', $year . '-12-31')
             ->getQuery();
 
         return $query->getResult();
     }
+    public function retrieveBankHolidaysForYear($year)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.workingGroup IS NULL')
+            ->andWhere('c.user IS NULL')
+            ->andWhere('c.startDate BETWEEN :start AND :end')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isBankHoliday = 1')
+            ->setParameter('start', $year . '-01-01')
+            ->setParameter('end', $year . '-12-31')
+            ->getQuery();
+        $output = array();
+        foreach($query->getResult() as $result){
+            $output[$result->getStartDate()->format('d-m-Y')] = $result;
+        }
+
+        return $output;
+    }
+
+
     public function retrieveHolidaysForUser($user,$start,$end)
     {
         $query = $this->createQueryBuilder('c')
@@ -212,6 +232,7 @@ class CalendarRepository extends ServiceEntityRepository
             ->select('c')
             ->where('c.workingGroup = :group')
             ->andWhere('c.startDate <= :end AND c.endDate >= :start')
+            ->andWhere('c.user IS NULL')
             ->setParameter('group', $group)
             ->setParameter('start', $start)
             ->setParameter('end', $end)

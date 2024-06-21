@@ -110,15 +110,25 @@ class UserCrudController extends AbstractCrudController
         $timesheets = $em->getRepository(Timesheet::class)->retrieveOvertimeForUserForPeriod($user, $monthBegin, $monthEnd);
         $holidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForUser($user, $monthBegin, $monthEnd);
         $groupHolidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForGroup($user->getWorkingGroup(), $monthBegin, $monthEnd);
-        //$bankHoliday = $em->getRepository(Calendar::class)->retrieveBankHolidaysForUser($user, $monthBegin, $monthEnd);
+        $firmHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear($year);
+        $bankHolidays = $em->getRepository(Calendar::class)->retrieveBankHolidaysForYear($year);
+        $workingDays = array();
+        foreach($user->getUserWeekdayProperties() as $weekday){
+            if($weekday->getWorkingDay())
+                $workingDays[] = $weekday->getWeekday();
+        }
         return $this->render('calendar/monthView.html.twig', [
             'user' => $user,
             'month' => $month,
+            'monthName' => date('F', strtotime($year.'-'.$month.'-01')),
             'year' => $year,
             'monthBegin' => $monthBegin,
             'timesheet' => $timesheets,
             'holidays' => $holidays,
             'groupHolidays' => $groupHolidays,
+            'bankHolidays' => $bankHolidays,
+            'workingDays' => $workingDays,
+            'companyHolidays' => $firmHolidays
         ]);
     }
     public function createIndexQueryBuilder($searchDto,  $entityDto, $fields, $filters): QueryBuilder

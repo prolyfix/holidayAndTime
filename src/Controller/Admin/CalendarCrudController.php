@@ -233,7 +233,7 @@ class CalendarCrudController extends AbstractCrudController
                 $calendar->setState(Calendar::STATE_PENDING);
             }
             $calendar->setAbsenceInWorkingDays($totalDays);
-
+            
             $em->persist($calendar);
             $em->flush();
             if($this->getUser()->getManager() !== null){

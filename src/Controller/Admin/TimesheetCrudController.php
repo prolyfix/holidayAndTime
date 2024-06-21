@@ -55,10 +55,18 @@ class TimesheetCrudController extends AbstractCrudController
     {
         return [
             AssociationField::new('user'),
-            DateTimeField::new('startTime')->setFormat('dd.MM.YYYY HH:mm'),
-            DateTimeField::new('endTime')->setFormat('dd.MM.YYYY HH:mm'),
+            DateTimeField::new('startTime')->setFormat('EEE, dd.MM.YYYY HH:mm'),
+            DateTimeField::new('endTime')->setFormat(' HH:mm'),
             TimeField::new('break')->setFormat('HH:mm'),
-            NumberField::new('overtime')->hideOnForm(),
+            NumberField::new('overtime')->hideOnForm()
+            ->formatValue(function ($value, $entity) {
+                if ($value !== null) {
+                    $hours = floor($value / 60);
+                    $minutes = ($value % 60);
+                    return sprintf('%02d:%02d', $hours, $minutes);
+                }
+                return '';
+            })    
         ];
     }
     #[Route('/admin/timesheet/add', name: 'admin_timesheet_add_time')]
@@ -103,8 +111,14 @@ class TimesheetCrudController extends AbstractCrudController
     public function consumeTime(Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator)
     {   
         $userId = $request->get('entityId');
-        $user = $this->em->getRepository(User::class)->find($userId);
+        $date = $request->get('start');
         $ts = new Timesheet();
+        if($date!== null){
+            $date = \DateTime::createFromFormat('Y-m-d', $date);
+            $ts->setStartTime(clone($date->setTime(0, 0, 0)));
+            $ts->setEndTime($date->setTime(0, 0, 0));
+        }
+        $user = $this->em->getRepository(User::class)->find($userId);
         $ts->setUser($user);
         $form = $this->createForm(TimesheetType::class, $ts);
         $form->remove('user');
