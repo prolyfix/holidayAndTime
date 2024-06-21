@@ -71,6 +71,8 @@ class TimesheetRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t')
             ->select('Count(t.id) as total')
             ->where('t.user = :user')
+            ->andWhere('t.id != :id')
+            ->setParameter('id', $timesheet->getId()??0)
             ->andWhere('t.startTime >= :start')
             ->andWhere('t.endTime <= :end')
             ->setParameter('user', $timesheet->getUser())

@@ -49,6 +49,7 @@ final class TimesheetListener
         }
         //todo: verify if Holiday / Bank Holiday / Sickness
         else{
+            
             $hasToWork = OvertimeCalculator::getWorkingHoursForDay($timesheet->getStartTime(), $timesheet->getUser());
             $hasAlreadyWorkedToday = $this->entityManager->getRepository(Timesheet::class)->getAlreadyWorkedToday($timesheet);
             $hasToWorkMinutes = TimeUtility::getMinutesFromTime($hasAlreadyWorkedToday>0?new \DateTime('00:00:00'):$hasToWork);

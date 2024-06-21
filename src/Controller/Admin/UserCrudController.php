@@ -125,8 +125,6 @@ class UserCrudController extends AbstractCrudController
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        dump("ici");
-
         $queryBuilder = parent::createIndexQueryBuilder( $searchDto,  $entityDto,  $fields,  $filters);
         if ($user->hasRole('ROLE_ADMIN')) {
             // Admin can see all users

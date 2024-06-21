@@ -73,7 +73,7 @@ class TimesheetCrudController extends AbstractCrudController
         if($form->isSubmitted() and $form->isValid())
         {
             $time = $request->get('consume_time')['overTimeAsTime'];
-            $ts->setOverTime(-($time['hour']*60 + $time['minute']));
+            $ts->setOverTime(-($time['hours']*60 + $time['days']*24*60));
             $em = $this->em;
             $em->persist($ts);
             $em->flush();
