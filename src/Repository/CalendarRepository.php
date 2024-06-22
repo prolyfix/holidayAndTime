@@ -190,7 +190,12 @@ class CalendarRepository extends ServiceEntityRepository
 
             $output = array();
             foreach($query->getResult() as $result){
-                $output[$result->getStartDate()->format('d-m-Y')] = $result;
+                $dateRef = clone($result->getStartDate());
+                while($dateRef <= $result->getEndDate()){
+                    $output[$dateRef->format('d-m-Y')] = $result;
+                    $dateRef->add(new \DateInterval('P1D'));
+                }
+                
             }
             return $output;
     }
