@@ -165,7 +165,6 @@ class UserCrudController extends AbstractCrudController
             $groupHolidaysCount += $days;
             $holiday->setAbsenceInWorkingDays($days);
         }
-        dump($groupHolidays);
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),
