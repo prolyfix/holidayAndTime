@@ -144,6 +144,23 @@ class CalendarRepository extends ServiceEntityRepository
 
         return $query->getSingleScalarResult();
     }
+    public function retrieveListHolidayForYear($user, $year)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.user = :user')
+            ->andWhere('c.startDate BETWEEN :start AND :end')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isHoliday = 1')
+            ->setParameter('user', $user)
+            ->setParameter('start', $year . '-01-01')
+            ->setParameter('end', $year . '-12-31')
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
+
+
     public function retrieveHolidaysForGroupForYear( $group, $year)
     {
         $query = $this->createQueryBuilder('c')
@@ -160,6 +177,24 @@ class CalendarRepository extends ServiceEntityRepository
     }
 
     public function retrieveHolidaysForFirmForYear($year)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.workingGroup IS NULL')
+            ->andWhere('c.user IS NULL')
+            ->join('c.typeOfAbsence', 't')
+            ->andWhere('t.isHoliday = 1')
+            ->andWhere('c.startDate BETWEEN :start AND :end')
+            ->setParameter('start', $year . '-01-01')
+            ->setParameter('end', $year . '-12-31')
+            ->getQuery();
+
+            $output = array();
+            foreach($query->getResult() as $result){
+                $output[$result->getStartDate()->format('d-m-Y')] = $result;
+            }
+            return $output;
+    }
+    public function retrieveAllHolidaysForFirmForYear($year)
     {
         $query = $this->createQueryBuilder('c')
             ->where('c.workingGroup IS NULL')
@@ -297,6 +332,9 @@ class CalendarRepository extends ServiceEntityRepository
 
         return $query->getSingleScalarResult();
     }
+
+
+
     public function hasAlreadyHolidayBookedDuringPeriod(Calendar $calendar)
     {
         $query = $this->createQueryBuilder('c')

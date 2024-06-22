@@ -67,7 +67,6 @@ class HolidayCalculator{
         $totalYearDays = $startYear->diff($endYear)->days;
         $holidayPerYear = isset($user->getUserProperties()[0])?$user->getUserProperties()[0]->getHolidayPerYear():0;
         return $holidayPerYear * $totalDays / $totalYearDays;
-
     }
 
 }

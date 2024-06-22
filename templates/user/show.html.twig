@@ -64,9 +64,66 @@
                 <td>{{ holidayTakenForYear| number_format(1,",",".") }}</td>
             </tr> 
             <tr>
+                <td colspan = "">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Urlaub</th>
+                                <th>von</th>
+                                <th>bis</th>
+                                <th>genehmigt</th>
+                            </tr>
+                        </thead>
+                        {% for holiday in userHoliday %}
+                        <tr>
+                            <td>{{ holiday.typeOfAbsence.name  }}: {{holiday.absenceInWorkingDays}}</td>
+                            <td>{{ holiday.startDate | date('d.m.Y') }}</td>
+                            <td>{{ holiday.endDate | date('d.m.Y') }}</td>
+                            <td>{{ holiday.state | trans() }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
+                <td></td>
+            </tr>             
+            <tr>
                 <th>gruppenUrlaub</th>
                 <td>{{ groupHolidays | number_format(1,",",".") }}</td>
             </tr>                 
+            <tr>
+                <td colspan = "">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Urlaub</th>
+                                <th>von</th>
+                                <th>bis</th>
+                                <th>genehmigt</th>
+                            </tr>
+                        </thead>
+                        {% for holiday in groupHolidaysList %}
+                        <tr>
+                            <td>{{ holiday.typeOfAbsence.name  }}: {{holiday.absenceInWorkingDays}}</td>
+                            <td>{{ holiday.startDate | date('d.m.Y') }}</td>
+                            <td>{{ holiday.endDate | date('d.m.Y') }}</td>
+                            <td>{{ holiday.state | trans() }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% for holiday in groupHolidaysList2 %}
+                        {% if holiday.absenceInWorkingDays > 0 %}
+                        <tr>
+                            <td>{{ holiday.typeOfAbsence.name  }}: {{holiday.absenceInWorkingDays}}</td>
+                            <td>{{ holiday.startDate | date('d.m.Y') }}</td>
+                            <td>{{ holiday.endDate | date('d.m.Y') }}</td>
+                            <td>{{ holiday.state | trans() }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}                        
+                    </table>
+                </td>
+                <td></td>
+            </tr>             
+
             <tr>
                 <th>davon in genehmigung</th>
                 <td>{{ pendingForYear | number_format(1,",",".")}}</td>

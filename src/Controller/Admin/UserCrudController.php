@@ -110,7 +110,7 @@ class UserCrudController extends AbstractCrudController
         $timesheets = $em->getRepository(Timesheet::class)->retrieveOvertimeForUserForPeriod($user, $monthBegin, $monthEnd);
         $holidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForUser($user, $monthBegin, $monthEnd);
         $groupHolidays   = $em->getRepository(Calendar::class)->retrieveHolidaysForGroup($user->getWorkingGroup(), $monthBegin, $monthEnd);
-        $firmHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear($year);
+        $firmHolidays = $em->getRepository(Calendar::class)->retrieveAllHolidaysForFirmForYear($year);
         $bankHolidays = $em->getRepository(Calendar::class)->retrieveBankHolidaysForYear($year);
         $workingDays = array();
         foreach($user->getUserWeekdayProperties() as $weekday){
@@ -157,11 +157,13 @@ class UserCrudController extends AbstractCrudController
         foreach($groupHolidays as $holiday){
             $days = $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
             $groupHolidaysCount += $days;
+            $holiday->setAbsenceInWorkingDays($days);
         }
-        $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
-        foreach($groupHolidays as $holiday){
+        $groupHolidays2 = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
+        foreach($groupHolidays2 as $holiday){
             $days = $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
             $groupHolidaysCount += $days;
+            $holiday->setAbsenceInWorkingDays($days);
         }
         dump($groupHolidays);
         return $this->render('user/show.html.twig', [
@@ -171,6 +173,10 @@ class UserCrudController extends AbstractCrudController
             'holidayTakenForYear'   => $em->getRepository(Calendar::class)->retrieveHolidayForYear($user, date('Y')),
             'overtime'       => $em->getRepository(Timesheet::class)->retrieveOvertimeForUser($user),
             'groupHolidays' => $groupHolidaysCount,
+            'groupHolidaysList' => $groupHolidays,
+            'groupHolidaysList2' => $groupHolidays2,
+            'userHoliday' => $em->getRepository(Calendar::class)->retrieveListHolidayForYear($user, date('Y')),
+
         ]);
     }
     
