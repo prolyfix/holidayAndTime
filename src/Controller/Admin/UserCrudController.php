@@ -117,7 +117,6 @@ class UserCrudController extends AbstractCrudController
             if($weekday->getWorkingDay())
                 $workingDays[] = $weekday->getWeekday();
         }
-        dump($firmHolidays);
         return $this->render('calendar/monthView.html.twig', [
             'user' => $user,
             'month' => $month,
@@ -156,13 +155,15 @@ class UserCrudController extends AbstractCrudController
         $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(), date('Y'));
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
-            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $days = $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $groupHolidaysCount += $days;
         }
         $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
-        $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
-            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $days = $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $groupHolidaysCount += $days;
         }
+        dump($groupHolidays);
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),

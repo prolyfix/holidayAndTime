@@ -41,8 +41,6 @@ class CalculateAbsenceDayCommand extends Command
         foreach($toilDays as $toilDay) {
             if(!$toilDay->getTypeOfAbsence()->isIsTimeHoliday() ) continue;
 
-            dump($toilDay->getStartDate());
-            dump($toilDay->getTypeOfAbsence()->isIsTimeHoliday());
 
             if($toilDay->getUser() !== null)
             {
@@ -70,9 +68,7 @@ class CalculateAbsenceDayCommand extends Command
                 $users = $this->em->getRepository(User::class)->findAll();
                 foreach($users as $user)
                 {
-                    dump("la");
                     $timesheet = $this->createTimesheet($toilDay, $user);
-                    dump($timesheet->getOvertime());
                     if($timesheet !== null && $timesheet->getOvertime() !== 0)
                     {
                         $this->em->persist($timesheet);

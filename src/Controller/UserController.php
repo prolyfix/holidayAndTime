@@ -93,6 +93,7 @@ class UserController extends AbstractController
         }
         $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
         $groupHolidaysCount = 0;
+        dump($groupHolidays);
         foreach($groupHolidays as $holiday){
             $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
         }

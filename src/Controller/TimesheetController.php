@@ -112,7 +112,6 @@ class TimesheetController extends AbstractController
 
     public function edit(Request $request, Timesheet $timesheet, EntityManagerInterface $entityManager): Response
     {
-        dump("tralala");
         $form = $this->createForm(TimesheetType::class, $timesheet);
         $form->handleRequest($request);
 

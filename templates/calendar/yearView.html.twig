@@ -53,7 +53,10 @@
                             {% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~'0'~ i %}
                         {% endif %}
                         {% if outputUser[user.id][date] is defined %}
+                                {% if outputUser[user.id][date][0].typeOfAbsence == 'Urlaub' %}
+                                {% endif %}
                                 <td class="bg-danger">
+                                {{ outputUser[user.id][date][0].typeOfAbsence | slice (0,1)}}
                                 </td>
                         {% else %}
                             {% if isWeekend(date) %}
