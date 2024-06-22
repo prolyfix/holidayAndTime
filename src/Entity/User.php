@@ -79,6 +79,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Issue::class, mappedBy: 'user')]
     private Collection $issues;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isDeactivated = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $hasTimesheet = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -447,5 +453,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString() {
         // Assuming the User class has a 'name' property
         return $this->name??$this->email??"";
+    }
+
+    public function isIsDeactivated(): ?bool
+    {
+        return $this->isDeactivated;
+    }
+
+    public function setIsDeactivated(?bool $isDeactivated): static
+    {
+        $this->isDeactivated = $isDeactivated;
+
+        return $this;
+    }
+
+    public function isHasTimesheet(): ?bool
+    {
+        return $this->hasTimesheet;
+    }
+
+    public function setHasTimesheet(?bool $hasTimesheet): static
+    {
+        $this->hasTimesheet = $hasTimesheet;
+
+        return $this;
+    }
+
+    public function isCustomWorkday($date ): bool
+    {
+        foreach($this->getCalendars() as $calendar){
+            if($calendar->getTypeOfAbsence()->isIsWorkingDay() && $calendar->getStartDate() <= $date && $calendar->getEndDate() >= $date){
+                return true;
+            }
+
+        }
+        return false;
     }
 }

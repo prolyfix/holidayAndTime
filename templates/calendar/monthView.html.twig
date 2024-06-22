@@ -111,7 +111,8 @@
                                     <div style="border:1px solid lightgray;border-radius:5px;;width:100%;text-align:center;">{{bankHolidays[date|date('d-m-Y')].typeOfAbsence.name}}</div>
                                 {% endif %}    
                             #}
-
+                                <a href="{{ path('admin',{'routeName':'holiday_request_new', 'entityId' : user.id, 'date':date|date('d-m-Y') } ) }}" class="btn btn-info"> +
+                                </a>
                                 </div> 
                             {% endif %}
                         </td>

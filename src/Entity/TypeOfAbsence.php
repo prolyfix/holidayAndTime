@@ -37,6 +37,9 @@ class TypeOfAbsence
     #[ORM\Column(nullable: true)]
     private ?bool $isBankHoliday = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isWorkingDay = null;
+
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
@@ -150,6 +153,18 @@ class TypeOfAbsence
     public function setIsBankHoliday(?bool $isBankHoliday): static
     {
         $this->isBankHoliday = $isBankHoliday;
+
+        return $this;
+    }
+
+    public function isIsWorkingDay(): ?bool
+    {
+        return $this->isWorkingDay;
+    }
+
+    public function setIsWorkingDay(?bool $isWOrkingDay): static
+    {
+        $this->isWorkingDay = $isWOrkingDay;
 
         return $this;
     }

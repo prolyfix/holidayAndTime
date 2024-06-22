@@ -1,5 +1,21 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 {% block page_content %}
+<style>
+.button_calendar{
+    background-color:#ddd;
+    min-width:20px;
+    max-height:20px;
+    border:2px solid blue; 
+    border-radius:50%;
+    text-align:center;
+    color:blue;
+    opacity:0;
+    transition:0.5s;
+    &:hover{
+        opacity:1;
+    }
+}
+</style>
                                                 </h1>
 <h1> {% trans %} Kalender {% endtrans %}</h1>
 <div class="btn-group mtb-2" role="group" aria-label="Basic example">
@@ -53,10 +69,10 @@
                             {% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~'0'~ i %}
                         {% endif %}
                         {% if outputUser[user.id][date] is defined %}
-                                {% if outputUser[user.id][date][0].typeOfAbsence == 'Urlaub' %}
-                                {% endif %}
                                 <td class="bg-danger">
-                                {{ outputUser[user.id][date][0].typeOfAbsence | slice (0,1)}}
+                                {% for abs in outputUser[user.id][date] %}
+                                    {{ abs.typeOfAbsence | slice(0,1)}}<br/>
+                                {% endfor %}
                                 </td>
                         {% else %}
                             {% if isWeekend(date) %}
@@ -64,11 +80,16 @@
 
                             {% elseif outputBankHolidays[date] is defined %}
                                 <td></td>
-                            {% elseif isWorkday(user,date) %}
+                            {% elseif isWorkday(user,date) and (user.startDate | date('Ymd')) < (date | date('Ymd'))%}
                                 <td class="bg-success">
                                 </td>
+                            {% elseif outputWorkingDays[user.id] is defined and outputWorkingDays[user.id][date] is defined   and outputWorkingDays[user.id][date]  %}
+                                <td class="bg-success">
+                                </td>                                
                             {% else %}
-                                <td></td>
+                                <td>
+                                <a href="{{ path('admin',{'routeName':'holiday_request_new', 'entityId' : user.id, 'date':date|date('d-m-Y') } ) }}"  class="button_calendar" >+</a>
+                                </td>
                             {% endif %}
                         {% endif %}
                     {% endfor %}

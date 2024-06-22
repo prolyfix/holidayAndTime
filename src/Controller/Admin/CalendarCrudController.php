@@ -65,6 +65,7 @@ class CalendarCrudController extends AbstractCrudController
             ->add('startDate')
             ->add('endDate')
             ->add('typeOfAbsence')
+            
             ->add('workingGroup')
         ;
     }
@@ -157,7 +158,7 @@ class CalendarCrudController extends AbstractCrudController
         }
         $calendars = $em->getRepository(Calendar::class)->getCalendarsForYear($year);
         foreach($calendars as $calendar){
-            if(in_array('ROLE_ADMIN', $this->getUser()->getRoles()) || $calendar->getUser() == $this->getUser() || $calendar->getWorkingGroup() == $this->getUser()->getWorkingGroup() )
+            if(!$calendar->getTypeOfAbsence()->isIsWorkingDay() && (in_array('ROLE_ADMIN', $this->getUser()->getRoles()) || $calendar->getUser() == $this->getUser() || $calendar->getWorkingGroup() == $this->getUser()->getWorkingGroup()) )
             {
                 $cloneStartDate = clone($calendar->getStartDate());
                 $di = new \DateInterval('P1D');
@@ -179,6 +180,30 @@ class CalendarCrudController extends AbstractCrudController
                 
             }
         }
+        $outputWorkingDays = [];
+        foreach($calendars as $calendar){
+            if($calendar->getTypeOfAbsence()->isIsWorkingDay() && (in_array('ROLE_ADMIN', $this->getUser()->getRoles()) || $calendar->getUser() == $this->getUser() || $calendar->getWorkingGroup() == $this->getUser()->getWorkingGroup() ))
+            {
+                $cloneStartDate = clone($calendar->getStartDate());
+                $di = new \DateInterval('P1D');
+                while($cloneStartDate <= $calendar->getEndDate()){
+                    if($calendar->getUser() !== null){
+                        $outputWorkingDays[$calendar->getUser()->getId()][$cloneStartDate->format('Y-m-d')][] = $calendar;
+                    }
+                    elseif($calendar->getWorkingGroup()!==null){
+                        foreach($calendar->getWorkingGroup()->getUsers() as $user){
+                            $outputWorkingDays[$user->getId()][$cloneStartDate->format('Y-m-d')][] = $calendar;
+                        }
+                    }else{
+                        foreach($users as $user){
+                            $outputWorkingDays[$user->getId()][$cloneStartDate->format('Y-m-d')][] = $calendar;
+                        }
+                    }
+                    $cloneStartDate->add($di);
+                }
+                
+            }
+        }
         $bankHolidays = $em->getRepository(Calendar::class)->getBankHolidays(new \DateTime($year.'-01-01'), new \DateTime($year.'-12-31'));
 
         foreach($bankHolidays as $bankHoliday){
@@ -188,6 +213,7 @@ class CalendarCrudController extends AbstractCrudController
         $users = in_array('ROLE_ADMIN', $this->getUser()->getRoles())?$em->getRepository(User::class)->findBy([],['workingGroup'=>'ASC']):[$this->getUser()];
         $groupCount = [];
         foreach($users as $user){
+            if($user->isIsDeactivated()) continue;
             if($user->getWorkingGroup() == null){
                 $groupCount['other'][] = $user;
             }
@@ -203,7 +229,8 @@ class CalendarCrudController extends AbstractCrudController
             'users' => $users,
             'groupCount' => $groupCount,
             'outputUser' => $outputUser,
-            'outputBankHolidays' => $outputBankHolidays
+            'outputBankHolidays' => $outputBankHolidays,
+            'outputWorkingDays' => $outputWorkingDays
         ]);
     }
 
@@ -214,6 +241,12 @@ class CalendarCrudController extends AbstractCrudController
         $user = $em->getRepository(User::class)->find($userId);
         $calendar = new Calendar();
         $calendar->setUser($user);
+        $dateS = $request->get('date');
+        if($dateS !== null){
+            $date = \DateTime::createFromFormat('d-m-Y',$dateS);
+            $calendar->setStartDate($date);
+            $calendar->setEndDate($date);
+        }
 
         $this->denyAccessUnlessGranted('POST_EDIT', $calendar, 'You are not allowed to create a holiday request for this user');
 
@@ -251,7 +284,7 @@ class CalendarCrudController extends AbstractCrudController
 
             return $this->redirectToRoute('admin',[
                 'crudAction' => 'show',
-                'entityId' => $user->getId(),
+                'entityId' => $calendar->getUser()->getId(),
                 'crudController' => 'UserCrudController'
             ]);
         }

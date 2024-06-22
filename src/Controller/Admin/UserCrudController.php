@@ -6,6 +6,7 @@ use App\Entity\Calendar;
 use App\Entity\Timesheet;
 use App\Entity\User;
 use App\Entity\UserWeekdayProperty;
+use App\Form\UserPropertyType;
 use App\Form\UserType;
 use App\Form\UserWeekdayPropertyType;
 use App\Manager\HolidayCalculator;
@@ -29,7 +30,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -89,7 +93,9 @@ class UserCrudController extends AbstractCrudController
             DateField::new('startDate'),
             DateField::new('endDate'),
             CollectionField::new('userWeekdayProperties')->setEntryType(UserWeekdayPropertyType::class),
-            CollectionField::new('userProperties'),
+            CollectionField::new('userProperties')->setEntryType(UserPropertyType::class),
+            BooleanField::new('hasTimesheet'),
+            BooleanField::new('isDeactivated') 
 
         ];
     }
