@@ -39,11 +39,11 @@ class CalendarRepository extends ServiceEntityRepository
 
     public function retrieveToilDaysAfter(\DateTime $date)
     {
-        dump($date);
         $now = new \DateTime();
         $query = $this->createQueryBuilder('c')
             ->join('c.typeOfAbsence', 't')
             ->andWhere('t.isTimeHoliday = 1')
+            ->andWhere('t.isTimeHoliday IS NOT NULL')
             ->where('c.startDate >= :date')
             ->setParameter('date', $date)
             ->andWhere('c.startDate <= :now')
@@ -55,10 +55,8 @@ class CalendarRepository extends ServiceEntityRepository
 
     public function hasHoliday($user, $date)
     {
-        dump("1");
         $date->setTime(0, 0, 0);
         if(($user->getStartDate() > $date || ($user->getEndDate()!==null && $user->getEndDate() < $date))&&$user->getStartDate()!== null) return false;
-        dump("1");
         $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
             ->where('c.user = :user')
@@ -70,7 +68,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getQuery();
 
         if ($query->getSingleScalarResult() > 0) return true;
-        dump("1");
 
         $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
@@ -83,7 +80,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getQuery();
         
         if ($query->getSingleScalarResult() > 0) return true;
-        dump("3");
 
         $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
@@ -96,7 +92,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getQuery();
         
         if ($query->getSingleScalarResult() > 0) return true;
-        dump("1");
 
         $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
@@ -109,7 +104,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getQuery();
         
         if ($query->getSingleScalarResult() > 0) return true;
-        dump("1");
 
         $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
@@ -120,7 +114,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getQuery();
         
         if ($query->getSingleScalarResult() > 0) return true;
-        dump("6");
 
         $query = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)')
@@ -131,7 +124,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getQuery();
         
         if ($query->getSingleScalarResult() > 0) return true;
-        dump("7");
 
         return false;
 
@@ -177,7 +169,11 @@ class CalendarRepository extends ServiceEntityRepository
             ->setParameter('end', $year . '-12-31')
             ->getQuery();
 
-        return $query->getResult();
+            $output = array();
+            foreach($query->getResult() as $result){
+                $output[$result->getStartDate()->format('d-m-Y')] = $result;
+            }
+            return $output;
     }
     public function retrieveBankHolidaysForYear($year)
     {
@@ -214,7 +210,6 @@ class CalendarRepository extends ServiceEntityRepository
             ->getResult();
         $output = [];
         $di = new \DateInterval('P1D');
-        
         foreach($query as $result){
             $start2 = clone $result->getStartDate();
             while($start2 <= $result->getEndDate()){

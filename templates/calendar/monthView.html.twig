@@ -87,7 +87,8 @@
                                             absence[date|date('d-m-Y')] is not defined and 
                                             holidays[date|date('d-m-Y')] is not defined and
                                             groupHolidays[date|date('d-m-Y')] is not defined and 
-                                             bankHolidays[date|date('d-m-Y')] is not defined and 
+                                            bankHolidays[date|date('d-m-Y')] is not defined and 
+                                            companyHolidays[date|date('d-m-Y')] is not defined  and
                                              (date|date('Y-m-d') <= "now"|date('Y-m-d'))
                                 %}
                                     <a href="{{ path('admin',{'routeName':'admin_timesheet_consume_time','entityId':user.id,'start':date|date('Y-m-d')} ) }}" class="btn btn-danger btn-xs" style="text-align:center">
@@ -97,9 +98,6 @@
                                 {% if absence[date|date('d-m-Y')] is defined %}
                                     <div style="border:1px solid red;border-radius:5px;;width:100%;text-align:center;">{{absence[date|date('d-m-Y')].typeOfAbsence.name}}</div>
                                 {% endif %}
-                                {% if absence[date|date('d-m-Y')] is not defined and date|date('N') < 6 %}
-                                    <div style="border:1px solid lightgray;border-radius:5px;;width:100%;text-align:center;">
-                                {% endif %}
                                 {% if holidays[date|date('d-m-Y')] is defined %}
                                    <div style="border:1px solid purple;border-radius:5px;;width:100%;text-align:center;">{{holidays[date|date('d-m-Y')].typeOfAbsence.name}}</div>
                                 {% endif %}    
@@ -107,12 +105,12 @@
                                     <div style="border:1px solid pink;border-radius:5px;;width:100%;text-align:center;">{% trans %} group {% endtrans %} : {{groupHolidays[date|date('d-m-Y')].typeOfAbsence.name}}</div>
                                 {% endif %}    
                                 {% if companyHolidays[date|date('d-m-Y')] is defined %}
-                                    <div style="border:1px solid pink;border-radius:5px;;width:100%;text-align:center;">{% trans %} group {% endtrans %} : {{groupHolidays[date|date('d-m-Y')].typeOfAbsence.name}}</div>
+                                    <div style="border:1px solid pink;border-radius:5px;;width:100%;text-align:center;">{% trans %} Company {% endtrans %} : {{companyHolidays[date|date('d-m-Y')].typeOfAbsence.name}}</div>
                                 {% endif %}                                      
-                                {% if bankHolidays[date|date('d-m-Y')] is defined %}
+                              {#  {% if bankHolidays[date|date('d-m-Y')] is defined %}
                                     <div style="border:1px solid lightgray;border-radius:5px;;width:100%;text-align:center;">{{bankHolidays[date|date('d-m-Y')].typeOfAbsence.name}}</div>
                                 {% endif %}    
-
+#}
 
                                 </div> 
                             {% endif %}

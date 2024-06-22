@@ -38,12 +38,16 @@ class CalculateAbsenceDayCommand extends Command
         $date->modify('-6 month');
 
         $toilDays = $this->em->getRepository(Calendar::class)->retrieveToilDaysAfter($date);
-        dump($toilDays);
         foreach($toilDays as $toilDay) {
+            if(!$toilDay->getTypeOfAbsence()->isIsTimeHoliday() ) continue;
+
+            dump($toilDay->getStartDate());
+            dump($toilDay->getTypeOfAbsence()->isIsTimeHoliday());
+
             if($toilDay->getUser() !== null)
             {
                 $timesheet = $this->createTimesheet($toilDay, $toilDay->getUser());
-                if($timesheet !== null)
+                if($timesheet !== null && $timesheet->getOvertime() !== 0)
                 {
                     $this->em->persist($timesheet);
                     $this->em->flush();
@@ -54,7 +58,7 @@ class CalculateAbsenceDayCommand extends Command
                 foreach($toilDay->getWorkingGroup()->getUsers() as $user)
                 {
                     $timesheet = $this->createTimesheet($toilDay, $user);
-                    if($timesheet !== null)
+                    if($timesheet !== null && $timesheet->getOvertime() !== 0)
                     {
                         $this->em->persist($timesheet);
                         $this->em->flush();
@@ -66,8 +70,10 @@ class CalculateAbsenceDayCommand extends Command
                 $users = $this->em->getRepository(User::class)->findAll();
                 foreach($users as $user)
                 {
+                    dump("la");
                     $timesheet = $this->createTimesheet($toilDay, $user);
-                    if($timesheet !== null)
+                    dump($timesheet->getOvertime());
+                    if($timesheet !== null && $timesheet->getOvertime() !== 0)
                     {
                         $this->em->persist($timesheet);
                         $this->em->flush();
@@ -82,7 +88,7 @@ class CalculateAbsenceDayCommand extends Command
     }
     function createTimesheet($toilDay, $user):?Timesheet
     {
-        $toilDayDate = $toilDay->getDate();
+        $toilDayDate = $toilDay->getStartDate();
         $timesheet = (new Timesheet())->setUser($user)->setStartTime($toilDayDate->setTime(0,0,0))->setEndTime($toilDayDate->setTime(00,00,00));
         if($user->getStartDate() > $timesheet->getStartTime() || ($user->getEndDate() < $timesheet->getEndTime() && $user->getEndDate() !== null)){
             $timesheet->setOvertime(0);
@@ -93,7 +99,8 @@ class CalculateAbsenceDayCommand extends Command
             $hasAlreadyWorkedToday = $this->em->getRepository(Timesheet::class)->getAlreadyWorkedToday($timesheet);
             $hasToWorkMinutes = TimeUtility::getMinutesFromTime($hasAlreadyWorkedToday>0?new \DateTime('00:00:00'):$hasToWork);                
             $timesheet->setOvertime(-$hasToWorkMinutes);
-            return $timesheet;
         }
+        return $timesheet;
+
     }
 }

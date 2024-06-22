@@ -117,6 +117,7 @@ class UserCrudController extends AbstractCrudController
             if($weekday->getWorkingDay())
                 $workingDays[] = $weekday->getWeekday();
         }
+        dump($firmHolidays);
         return $this->render('calendar/monthView.html.twig', [
             'user' => $user,
             'month' => $month,
