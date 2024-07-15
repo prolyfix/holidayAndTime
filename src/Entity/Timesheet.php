@@ -36,6 +36,15 @@ class Timesheet
     #[ORM\Column(nullable: true)]
     private ?bool $alreadyCalculatedOnDay = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $workingMinutes = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updateDatetime = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isBreak = null;
+
     public function __construct()
     {
         $this->break = new \DateTime('00:00:00');
@@ -126,6 +135,41 @@ class Timesheet
     public function setAlreadyCalculatedOnDay(?bool $alreadyCalculatedOnDay): static
     {
         $this->alreadyCalculatedOnDay = $alreadyCalculatedOnDay;
+
+        return $this;
+    }
+
+    public function getWorkingMinutes(): ?int
+    {
+        return $this->workingMinutes;
+    }
+
+    public function setWorkingMinutes(?int $workingMinutes): static
+    {
+        $this->workingMinutes = $workingMinutes;
+
+        return $this;
+    }
+
+    public function getUpdateDatetime(): ?\DateTimeInterface
+    {
+        return $this->updateDatetime;
+    }
+
+    public function setUpdateDatetime(?\DateTimeInterface $updateDatetime): static
+    {
+        $this->updateDatetime = $updateDatetime;
+
+        return $this;
+    }
+
+    public function isBreak(): ?bool
+    {
+        return $this->isBreak;
+    }
+    public function setIsBreak(?bool $isBreak): static
+    {
+        $this->isBreak = $isBreak;
 
         return $this;
     }

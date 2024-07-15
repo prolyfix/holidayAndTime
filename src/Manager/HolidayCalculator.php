@@ -30,6 +30,56 @@ class HolidayCalculator{
         }
         return $output;
     }
+    public static function calculateWorkingDays2(Calendar $calendar): float
+    {
+        $cloneStartDate = clone $calendar->getStartDate();
+        $workingDaysArray = HolidayCalculator::getUserWorkingDays($calendar->getUser());
+        $output = 0;
+        $interval = new \DateInterval('P1D');
+        while($cloneStartDate <= $calendar->getEndDate()){
+            if(array_key_exists($cloneStartDate->format('l'), $workingDaysArray) )
+            {
+                $output += $workingDaysArray[$cloneStartDate->format('l')];
+            }
+            
+            $cloneStartDate->add($interval);
+        }
+        return $output;
+    }
+
+    public static function getUserWorkingDays($user): array{
+        $workingDays = $user->getUserWeekdayProperties();
+        $workingDaysArray = [];
+        foreach($workingDays as $workingDay){
+            $workingDaysArray[$workingDay->getWeekday()] = $workingDay->getWorkingDay()??0;
+        }
+        
+
+        return $workingDaysArray;
+    }
+    public function handleHalfDay(Calendar $calendar): float
+    {
+        $workingDaysArray = HolidayCalculator::getUserWorkingDays($calendar->getUser());
+
+        if($calendar->getStartDate() == $calendar->getEndDate()){
+            $calendar->setEndMorning(0);
+        }
+        if($calendar->getStartMorning() == 0 && $calendar->getEndMorning() == 0){
+            return 0;
+        }
+        $output = 0;
+        if(array_key_exists($calendar->getStartDate()->format('l'), $workingDaysArray) )
+        {
+            $output += $calendar->getStartMorning()*0.5;
+        }
+        if(array_key_exists($calendar->getEndDate()->format('l'), $workingDaysArray) )
+        {
+            $output += $calendar->getEndMorning()*0.5;
+        }
+        
+        return $output;
+    }
+
 
     public function calculateEffectiveWorkingDays(\DateTime $startDate, \DateTime $endDate, User $user, $excludeGroup = false): float
     {
@@ -45,9 +95,27 @@ class HolidayCalculator{
         foreach($groupHolidays as $bankHoliday){
             $totalDays -= HolidayCalculator::calculateWorkingDays($bankHoliday->getStartDate(),$bankHoliday->getEndDate(),$user);            
         }
+
+        return $totalDays;
+    }
+    public function calculateEffectiveWorkingDays2(Calendar $calendar, $excludeGroup = false): float
+    {
+        $totalDays = HolidayCalculator::calculateWorkingDays2( $calendar);            
+        $bankHolidays = $this->entityManager->getRepository(Calendar::class)->getBankHolidays( $calendar->getStartDate(),$calendar->getEndDate());
+        foreach($bankHolidays as $bankHoliday){
+            $totalDays -= HolidayCalculator::calculateWorkingDays2($bankHoliday);            
+        }
+        $minus = $this->handleHalfDay($calendar);
+        $totalDays -= $minus;
+        if($excludeGroup){
+            return $totalDays;
+        }
+        $groupHolidays = $this->entityManager->getRepository(Calendar::class)->getGroupHolidays2( $calendar);
+        foreach($groupHolidays as $bankHoliday){
+            $totalDays -= HolidayCalculator::calculateWorkingDays2($bankHoliday);            
+        }
          return $totalDays;
     }
-
 
     public function calculateHolidayForYear(User $user, int $year): float
     {

@@ -86,23 +86,29 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user, HolidayCalculator $holidayCalculator, EntityManagerInterface $em): Response
     {
+        $this->denyAccessUnlessGranted('POST_VIEW', $user);
         $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(), date('Y'));
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
-            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $holiday->setUser($user);
+            dump("ici");
+
+            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
         }
         $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
-            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $holiday->setUser($user);
+            dump("ici");
+            $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
         }
         return $this->render('user/show.html.twig', [
-            'user' => $user,
+            'user'                  => $user,
             'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),
             'pendingForYear'        => $em->getRepository(Calendar::class)->calculatePendingForYear($user, date('Y')),
             'holidayTakenForYear'   => $em->getRepository(Calendar::class)->retrieveHolidayForYear($user, date('Y')),
-            'overtime'       => $em->getRepository(Timesheet::class)->retrieveOvertimeForUser($user),
-            'groupHolidays' => $groupHolidaysCount,
+            'overtime'              => $em->getRepository(Timesheet::class)->retrieveOvertimeForUser($user),
+            'groupHolidays'         => $groupHolidaysCount,
         ]);
     }
 

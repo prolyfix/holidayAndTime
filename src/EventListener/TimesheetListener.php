@@ -22,9 +22,16 @@ final class TimesheetListener
     {
         if($timesheet->getOvertime() !== null)
             return;
-        $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
-        $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
-        $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+        if($timesheet->getEndTime() == null)
+            return;
+        if($timesheet->getWorkingMinutes() !== null){
+            $overTimeMinutes = $timesheet->getWorkingMinutes();
+        }else{
+            $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
+            $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
+            $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+        }
+
         if($timesheet->getUser()->getStartDate() > $timesheet->getStartTime() || ($timesheet->getUser()->getEndDate() < $timesheet->getEndTime() && $timesheet->getUser()->getEndDate() !== null)){
             $timesheet->setOvertime($overTimeMinutes);
         }
@@ -41,9 +48,15 @@ final class TimesheetListener
     {
         if($timesheet->getStartTime() == null)
             return;
-        $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
-        $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
-        $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+        if($timesheet->getEndTime() == null)
+            return;        
+        if($timesheet->getWorkingMinutes() !== null){
+            $overTimeMinutes = $timesheet->getWorkingMinutes();
+        }else{
+            $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
+            $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
+            $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+        }
         if($timesheet->getUser()->getStartDate() > $timesheet->getStartTime() || ($timesheet->getUser()->getEndDate() < $timesheet->getEndTime() && $timesheet->getUser()->getEndDate() !== null)){
             $timesheet->setOvertime($overTimeMinutes);
         }

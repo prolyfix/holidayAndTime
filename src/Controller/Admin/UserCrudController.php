@@ -161,13 +161,15 @@ class UserCrudController extends AbstractCrudController
         $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(), date('Y'));
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
-            $days = $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $holiday->setUser($user);
+            $days = $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
             $groupHolidaysCount += $days;
             $holiday->setAbsenceInWorkingDays($days);
         }
         $groupHolidays2 = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
         foreach($groupHolidays2 as $holiday){
-            $days = $holidayCalculator->calculateEffectiveWorkingDays($holiday->getStartDate(),$holiday->getEndDate(),$user, true);
+            $holiday->setUser($user);
+            $days = $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
             $groupHolidaysCount += $days;
             $holiday->setAbsenceInWorkingDays($days);
         }

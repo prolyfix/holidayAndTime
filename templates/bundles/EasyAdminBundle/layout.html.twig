@@ -1,0 +1,17 @@
+
+{% extends '@!EasyAdmin/layout.html.twig' %}
+{% block search_wrapper %}
+<div class="content-search">
+    <span id="timer"> 00:00
+    </span>
+    <i class="user-avatar-icon-foreground fa fa-play fa-inverse" id="start"></i>
+    <i class="user-avatar-icon-foreground fa fa-pause fa-inverse" id="break" style="display:none"></i>
+    <i class="user-avatar-icon-foreground fa fa-stop fa-inverse" id="stop"></i>
+</div>
+{% endblock %}
+    {% block configured_javascripts %}
+        {{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea.assets.jsAssets ?? [] }, with_context = false) }}
+        {{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea.assets.webpackEncoreAssets ?? [] }, with_context = false) }}
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script type="module" src="/js/holidayAndTime.js"></script>
+    {% endblock %}
