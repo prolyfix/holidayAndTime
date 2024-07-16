@@ -17,10 +17,15 @@ class AppExtension extends AbstractExtension
             new TwigFunction('weekday', [$this, 'weekday']),
             new TwigFunction('toTime', [$this, 'toTime']),
             new TwigFunction('calculateDiff', [$this, 'calculateDiff']),
-            new TwigFunction('isWorkday', [$this, 'isWorkday'])
+            new TwigFunction('isWorkday', [$this, 'isWorkday']),
+            new TwigFunction('hasCommentInTime', [$this, 'hasCommentInTime'])
         ];
     }
 
+    public function hasCommentInTime():bool
+    {
+        return true;
+    }
     public function isWorkday(User $user, string $date)
     {
         $trans = [1=>'Monday', 2=>'Tuesday', 3=>'Wednesday', 4=>'Thursday', 5=>'Friday', 6=>'Saturday', 7=>'Sunday'];

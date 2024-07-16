@@ -55,7 +55,7 @@ class AjaxController extends AbstractController
             $actualWorkingMinutes = TimeUtility::getMinutesFromDateInterval($overTime);
         }
         if(!$timesheet->isBreak()){
-            $timeAfterLastUpdate = (new \DateTime())->diff($timesheet->getUpdateDatetime());
+            $timeAfterLastUpdate = (new \DateTime())->diff($timesheet->getUpdateDatetime()??new \DateTime());
             $actualWorkingMinutes += TimeUtility::getMinutesFromDateInterval($timeAfterLastUpdate);
         }
         return new JsonResponse(['statut' => 'ok', 'message' => 'Data retrieved', 'elapsedTime' => $actualWorkingMinutes, 'isBreak' => $timesheet->isBreak()]);

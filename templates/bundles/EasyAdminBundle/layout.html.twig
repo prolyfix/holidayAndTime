@@ -7,6 +7,10 @@
     <i class="user-avatar-icon-foreground fa fa-play fa-inverse" id="start"></i>
     <i class="user-avatar-icon-foreground fa fa-pause fa-inverse" id="break" style="display:none"></i>
     <i class="user-avatar-icon-foreground fa fa-stop fa-inverse" id="stop"></i>
+    {% if hasCommentInTime() %}
+        <input type="text" id="comment">
+        <input type="text" id="relation" >
+    {% endif %}
 </div>
 {% endblock %}
     {% block configured_javascripts %}

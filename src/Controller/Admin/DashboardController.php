@@ -3,11 +3,16 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Calendar;
+use App\Entity\Company;
+use App\Entity\Configuration;
 use App\Entity\Issue;
+use App\Entity\Project;
+use App\Entity\Task;
 use App\Entity\Timesheet;
 use App\Entity\TypeOfAbsence;
 use App\Entity\User;
 use App\Entity\WorkingGroup;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -44,6 +49,8 @@ class DashboardController extends AbstractDashboardController
         //
         // return $this->render('some/path/my-dashboard.html.twig');
     }
+    public function __construct(private EntityManagerInterface $em){
+    }
 
     public function configureDashboard(): Dashboard
     {
@@ -61,6 +68,19 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
             yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
+            yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class);
+        }
+        $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCompany']);
+        if($companyRight && $companyRight->getValue() == 1){
+            yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
+        }
+        $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject']);
+        if($projectRight && $projectRight->getValue() == 1){
+            yield MenuItem::linkToCrud('Projects', 'fas fa-house', Project::class);
+        }
+        $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask']);
+        if($projectRight && $projectRight->getValue() == 1){
+            yield MenuItem::linkToCrud('Task', 'fas fa-house', Task::class);
         }
     }
 }
