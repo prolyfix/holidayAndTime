@@ -67,7 +67,6 @@ class AjaxController extends AbstractController
         $timesheet = $em->getRepository(Timesheet::class)->findOneBy(['user' => $this->getUser(), 'endTime' => null]);
         $times = json_decode($request->getContent(), true);
         //$times = $request->get('elapsedTime');
-        dump($times);
         $timesheet->setWorkingMinutes($times['elapsedTime'] / 60 / 1000);
         $timesheet->setUpdateDatetime(new \DateTime('now'));
         $timesheet->setIsBreak($times['isBreak']);

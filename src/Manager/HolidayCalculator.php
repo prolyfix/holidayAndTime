@@ -175,12 +175,10 @@ class HolidayCalculator{
 
             if((float)$startDate->format('d')!== 1){
                 $diff = $this->calculateSubMonth($startDate, 1);
-                dump($diff);
                 $numberOfMonths += -1 + $diff;
             }
             if($endDate->format('d')!== HolidayCalculator::DAYS_IN_MONTHS[(float)$endDate->format('m')]){
                 $diff = $this->calculateSubMonth($endDate);
-                dump($diff);
                 $numberOfMonths += - $diff;
 
             }
@@ -196,8 +194,6 @@ class HolidayCalculator{
         $output = 0;
         $numberOfDaysInMonth = HolidayCalculator::DAYS_IN_MONTHS[(float)$startDate->format('m')];
         $output += $numberOfDaysInMonth - $startDate->format('d') + $offset ;
-        dump($output);
-        dump($numberOfDaysInMonth);
         return $output/$numberOfDaysInMonth;
     }
 
