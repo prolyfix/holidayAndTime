@@ -63,7 +63,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class);
         yield MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
-        yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
+        if($this->getUser()->isHasTimesheet()){
+            yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
+
+        }
+        
+        
+        
         if($this->isGranted('ROLE_ADMIN')) {
             yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);

@@ -10,7 +10,7 @@
             </tr>
         </tbody>
     </table>
-
+    {% if user.hasTimesheet %}
     <h2> Zeitstempel </h2>
     <table class="table">
         <tbody>
@@ -27,6 +27,7 @@
     >
         {% trans %} Monatsansicht {% endtrans %}
     </a>
+    {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
     <a 
         href="{{ path('admin',{'routeName':'admin_timesheet_add_time','entityId':user.id} ) }}"
