@@ -6,6 +6,22 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class HolidayCalculator{
+
+    const DAYS_IN_MONTHS = [
+        1 => 31,
+        2 => 28,
+        3 => 31,
+        4 => 30,
+        5 => 31,
+        6 => 30,
+        7 => 31,
+        8 => 31,
+        9 => 30,
+        10 => 31,
+        11 => 30,
+        12 => 31,
+    ];
+
     public function __construct(private EntityManagerInterface $entityManager)
     {
     }
@@ -135,6 +151,54 @@ class HolidayCalculator{
         $totalYearDays = $startYear->diff($endYear)->days;
         $holidayPerYear = isset($user->getUserProperties()[0])?$user->getUserProperties()[0]->getHolidayPerYear():0;
         return $holidayPerYear * $totalDays / $totalYearDays;
+    }
+
+    public function calculateHolidayFromRequest($data)
+    {
+        $urlaubsAnsprüche = $data['restUrlaub']??0;
+        foreach($data['periode'] as $period)
+        {
+            $startDate = $period['startDate'];
+            $endDate = $period['endDate'];
+            $numberHolidayForYear = $period['numberHolidayForYear'];
+            $actualWorkingDays = $period['actualWorkingDays'];
+            if($startDate->format('Y') < $data['yearToReview']){
+                $startDate->setDate($data['yearToReview'],1,1);
+            }
+            if($startDate>=$endDate || $startDate->format('Y') > $data['yearToReview']){
+                continue;
+            }
+            if($endDate->format('Y') > $data['yearToReview']){
+                $endDate->setDate($data['yearToReview'],12,31);
+            }
+            $numberOfMonths = $startDate->diff($endDate)->m + 1;
+
+            if((float)$startDate->format('d')!== 1){
+                $diff = $this->calculateSubMonth($startDate, 1);
+                dump($diff);
+                $numberOfMonths += -1 + $diff;
+            }
+            if($endDate->format('d')!== HolidayCalculator::DAYS_IN_MONTHS[(float)$endDate->format('m')]){
+                $diff = $this->calculateSubMonth($endDate);
+                dump($diff);
+                $numberOfMonths += - $diff;
+
+            }
+
+
+            $urlaubsAnsprüche += $numberHolidayForYear * $numberOfMonths / 12 * $actualWorkingDays / 5;
+        }
+        return $urlaubsAnsprüche;
+    }
+
+    public function calculateSubMonth(\DateTime $startDate, float $offset = 0): float
+    {
+        $output = 0;
+        $numberOfDaysInMonth = HolidayCalculator::DAYS_IN_MONTHS[(float)$startDate->format('m')];
+        $output += $numberOfDaysInMonth - $startDate->format('d') + $offset ;
+        dump($output);
+        dump($numberOfDaysInMonth);
+        return $output/$numberOfDaysInMonth;
     }
 
 }

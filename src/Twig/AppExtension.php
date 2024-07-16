@@ -2,13 +2,20 @@
 // src/AppBundle/Twig/AppExtension.php
 namespace App\Twig;
 
+use App\Entity\Configuration;
+use App\Entity\Project;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Polyfill\Intl\Icu\DateFormat\MonthTransformer;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
+    public function __construct(private EntityManagerInterface $em)
+    {
+
+    }
     public function getFunctions()
     {
         return [
@@ -24,7 +31,11 @@ class AppExtension extends AbstractExtension
 
     public function hasCommentInTime():bool
     {
-        return true;
+        $conf = $this->em->getRepository(Configuration::class)->findOneByName('commentInTime');
+        if($conf == null)
+            return false;
+        return($conf->getValue() == 1);
+        
     }
     public function isWorkday(User $user, string $date)
     {

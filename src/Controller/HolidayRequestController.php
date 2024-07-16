@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Calendar;
 use App\Form\CalendarType;
 use App\Entity\User;
+use App\Form\HolidayCalculatorType;
 use App\Manager\HolidayCalculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -52,5 +53,20 @@ class HolidayRequestController extends AbstractController
         return $this->redirectToRoute('admin');
     }
 
+    #[Route('/holiday/calculator', name: 'app_holiday_calculator')]
+    public function holidayCalculator(HolidayCalculator $holidayCalculator, Request $request): Response
+    {
+        $form = $this->createForm(HolidayCalculatorType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() and $form->isValid()){
+            $data = $form->getData();
+            $result = $holidayCalculator->calculateHolidayFromRequest($data);
+            $this->addFlash('success', 'Sie haben Anspruch auf  '.$result.' Urlaubstage');
+        
+        }
+        return $this->render('holiday_request/calculator.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
 }

@@ -1,0 +1,29 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
+<h1>{% trans %}Holiday Request Calculator{% endtrans %}</h1>
+{{form_start(form)}}
+    <div class="row mb-2">
+        <div class="col-md-3">
+            {{form_label(form.restUrlaub)}}
+        </div>
+        <div class="col-md-3">
+            {{form_widget(form.restUrlaub)}}
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            {{form_label(form.yearToReview)}}
+        </div>
+        <div class="col-md-3">
+            {{form_widget(form.yearToReview)}}
+        </div>        
+    </div>    
+    <ul class="periode"
+    data-index="{{ form.periode|length > 0 ? form.periode|last.vars.name + 1 : 0 }}"
+    data-prototype="{{ form_widget(form.periode.vars.prototype)|e('html_attr') }}"
+    ></ul>  
+    <div type=" " class="add_item_link btn btn-info" data-collection-holder-class="periode">{% trans %} Add a Periode {% endtrans %}</div>
+
+{{form_end(form)}}
+
+{% endblock %}

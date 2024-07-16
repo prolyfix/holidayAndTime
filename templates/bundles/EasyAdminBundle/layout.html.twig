@@ -1,17 +1,19 @@
 
 {% extends '@!EasyAdmin/layout.html.twig' %}
 {% block search_wrapper %}
+{% if app.user.hasTimesheet %}
 <div class="content-search">
     <span id="timer"> 00:00
     </span>
-    <i class="user-avatar-icon-foreground fa fa-play fa-inverse" id="start"></i>
-    <i class="user-avatar-icon-foreground fa fa-pause fa-inverse" id="break" style="display:none"></i>
-    <i class="user-avatar-icon-foreground fa fa-stop fa-inverse" id="stop"></i>
+    <i class="user-avatar-icon-foreground fa fa-play fa-inverse" id="start" style="color:lightgray"></i>
+    <i class="user-avatar-icon-foreground fa fa-pause fa-inverse" id="break" style="display:none; color:lightgray"></i>
+    <i class="user-avatar-icon-foreground fa fa-stop fa-inverse" id="stop"  style="color:lightgray"></i>
     {% if hasCommentInTime() %}
         <input type="text" id="comment">
         <input type="text" id="relation" >
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}
     {% block configured_javascripts %}
         {{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea.assets.jsAssets ?? [] }, with_context = false) }}

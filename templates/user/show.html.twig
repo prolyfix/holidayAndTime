@@ -49,6 +49,12 @@
     >
         {% trans %} AddTimesheet {% endtrans %}
     </a>
+    <a 
+        href="{{ path('admin',{'routeName':'app_holiday_calculator','entityId':user.id} ) }}"
+        class="btn btn-info"
+    >
+        {% trans %} Urlaubsrechner {% endtrans %}
+    </a>    
     <div class="mb-2"></div>
     <h2> Urlaubs </h2>
     <p> Urlaube sind bis spätestens 31 März für das vorheriges Jahr zu nehmen. Die Resturlaube verfallen. </p>
