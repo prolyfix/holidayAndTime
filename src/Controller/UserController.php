@@ -91,7 +91,6 @@ class UserController extends AbstractController
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
             $holiday->setUser($user);
-            dump("ici");
 
             $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
         }
@@ -99,7 +98,6 @@ class UserController extends AbstractController
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
             $holiday->setUser($user);
-            dump("ici");
             $groupHolidaysCount += $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
         }
         return $this->render('user/show.html.twig', [
