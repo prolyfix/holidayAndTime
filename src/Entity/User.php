@@ -85,6 +85,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?bool $hasTimesheet = null;
 
+    /**
+     * @var Collection<int, Weekplan>
+     */
+    #[ORM\OneToMany(targetEntity: Weekplan::class, mappedBy: 'user')]
+    private Collection $weekplans;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -103,6 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
         $userProperty = new UserProperty();
         $this->addUserProperty($userProperty);
+        $this->weekplans = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -488,5 +495,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         }
         return false;
+    }
+
+    /**
+     * @return Collection<int, Weekplan>
+     */
+    public function getWeekplans(): Collection
+    {
+        return $this->weekplans;
+    }
+
+    public function addWeekplan(Weekplan $weekplan): static
+    {
+        if (!$this->weekplans->contains($weekplan)) {
+            $this->weekplans->add($weekplan);
+            $weekplan->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWeekplan(Weekplan $weekplan): static
+    {
+        if ($this->weekplans->removeElement($weekplan)) {
+            // set the owning side to null (unless already changed)
+            if ($weekplan->getUser() === $this) {
+                $weekplan->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

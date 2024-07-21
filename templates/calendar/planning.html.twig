@@ -1,0 +1,48 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
+
+    <table class="table table-bordered">
+        <thead> 
+            <tr>
+                <th> Time </th>
+                <th colspan ="{{rooms | length }}"> Monday </th>
+                <th colspan ="{{rooms | length }}"> Tuesday </th>
+                <th colspan ="{{rooms | length }}"> Wednesday </th>
+                <th colspan ="{{rooms | length }}"> Thursday </th>
+                <th colspan ="{{rooms | length }}"> Friday </th>
+            </tr>
+            <tr>
+                <th> </th>
+                {% for room in rooms %}
+                    <th> {{ room.name }} </th>
+                {% endfor %}
+                {% for room in rooms %}
+                    <th> {{ room.name }} </th>
+                {% endfor %}
+                {% for room in rooms %}
+                    <th> {{ room.name }} </th>
+                {% endfor %}
+                {% for room in rooms %}
+                    <th> {{ room.name }} </th>
+                {% endfor %}
+                {% for room in rooms %}
+                    <th> {{ room.name }} </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody> 
+            <tr>
+                <td> 08:00 </td>
+                {% for i in 1..5 %}
+                    {% for i in 1..rooms | length %}
+                        <td> </td>
+                    {% endfor %}
+                {% endfor %}
+            </tr>   
+        </tbody>
+    </table>
+
+
+
+                    
+{% endblock %}

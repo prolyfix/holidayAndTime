@@ -7,10 +7,12 @@ use App\Entity\Company;
 use App\Entity\Configuration;
 use App\Entity\Issue;
 use App\Entity\Project;
+use App\Entity\Room;
 use App\Entity\Task;
 use App\Entity\Timesheet;
 use App\Entity\TypeOfAbsence;
 use App\Entity\User;
+use App\Entity\Weekplan;
 use App\Entity\WorkingGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -67,9 +69,6 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
 
         }
-        
-        
-        
         if($this->isGranted('ROLE_ADMIN')) {
             yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
@@ -87,6 +86,11 @@ class DashboardController extends AbstractDashboardController
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask']);
         if($projectRight && $projectRight->getValue() == 1){
             yield MenuItem::linkToCrud('Task', 'fas fa-house', Task::class);
+        }
+        $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekPlan']);
+        if($weekPlanningRight && $weekPlanningRight->getValue() == 1){
+            yield MenuItem::linkToCrud('Room', 'fas fa-house', Room::class);
+            yield MenuItem::linkToCrud('Week Planning', 'fas fa-house', Weekplan::class);
         }
     }
 }
