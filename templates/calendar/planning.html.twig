@@ -31,16 +31,24 @@
             </tr>
         </thead>
         <tbody> 
+                {% for slot in slots %}
             <tr>
-                <td> 08:00 </td>
+
+                <td> {{slot}} </td>
                 {% for i in 1..5 %}
                     {% for i in 1..rooms | length %}
                         <td> </td>
                     {% endfor %}
                 {% endfor %}
             </tr>   
+                {% endfor %}
+
         </tbody>
     </table>
+    <div class="event">
+        <div class="event-title">Event 1</div>
+        <div class="event-time">10:00 - 12:00</div>
+    </div>
 
 
 

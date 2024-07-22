@@ -27,6 +27,9 @@ class UserProperty
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $creationDate = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $year = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,5 +72,17 @@ class UserProperty
     }
     public function __toString() {
         return (string) $this->holidayPerYear;
+    }
+
+    public function getYear(): ?float
+    {
+        return $this->year;
+    }
+
+    public function setYear(?float $year): static
+    {
+        $this->year = $year;
+
+        return $this;
     }
 }

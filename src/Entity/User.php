@@ -107,7 +107,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $timestamp = strtotime('+1 day', $timestamp);
             $this->addUserWeekdayProperty($userWeekdayProperty);
         }
-        $userProperty = new UserProperty();
+        $userProperty = (new UserProperty())->setHolidayPerYear(0);
         $this->addUserProperty($userProperty);
         $this->weekplans = new ArrayCollection();
     }

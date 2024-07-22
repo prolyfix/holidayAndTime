@@ -44,8 +44,16 @@ class WeekplanCrudController extends AbstractCrudController
     function showPlanning( EntityManagerInterface $em)
     {
         $rooms = $em->getRepository(Room::class)->findAll();
-
-        return $this->render('calendar/planning.html.twig', ['rooms' => $rooms]);
+        $interval = 30;
+        $start = new \DateTime('08:00:00');
+        $end = new \DateTime('20:00:00');
+        $slots = [];
+        $slot = $start;
+        while ($slot < $end) {
+            $slots[] = $slot->format('H:i');
+            $slot->add(new \DateInterval('PT' . $interval . 'M'));
+        }
+        return $this->render('calendar/planning.html.twig', ['rooms' => $rooms, 'slots' => $slots]);
     }
 
 }
