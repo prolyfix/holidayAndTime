@@ -1,0 +1,51 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block content_title %}
+    {% trans %} Konfiguration {% endtrans %}
+{% endblock %}
+{% block main %}
+    <h2> Allgemeine Firmen Informationen </h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th> Name </th>
+                    <td> {{ app.user.company.name }} </td>
+                </tr>
+                <tr>
+                    <th colspan="2"> Adresse </th>
+                </tr>
+                <tr>
+                    <th> Straße </th>
+                    <td> {{ app.user.company.location.street }} </td>
+                </tr>
+                <tr>
+                    <th> Plz </th>
+                    <td> {{ app.user.company.location.zipCode }} </td>
+                </tr>
+                <tr>
+                    <th> Stadt </th>
+                    <td> {{ app.user.company.location.city }} </td>
+                </tr>
+                <tr>
+                    <th> Logo </th>
+                    <td> {{ app.user.company.location.city }} </td>
+                </tr>
+            </tbody>
+        </table>
+    <h2> Module & Darstellung </h2>
+        <div class="row">
+            {% for configuration in app.user.company.configurations %}
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ configuration.name | trans()}}</h3>
+                        </div>  
+                        <div class="card-body">
+                            <div class="row">
+                                {{ include('admin/configuration/components/' ~ configuration.type ~ '.html.twig', {configuration: configuration}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+{% endblock %}

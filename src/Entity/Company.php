@@ -8,13 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
-class Company
+class Company extends Commentable
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
@@ -30,16 +25,32 @@ class Company
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'company')]
     private Collection $tasks;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'company')]
+    private Collection $users;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isTutorialDone = null;
+
+    #[ORM\OneToOne(inversedBy: 'company', cascade: ['persist', 'remove'])]
+    private ?Location $location = null;
+
+    /**
+     * @var Collection<int, Configuration>
+     */
+    #[ORM\OneToMany(targetEntity: Configuration::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Collection $configurations;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->configurations = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getName(): ?string
     {
@@ -107,6 +118,90 @@ class Company
             // set the owning side to null (unless already changed)
             if ($task->getCompany() === $this) {
                 $task->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getCompany() === $this) {
+                $user->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isTutorialDone(): ?bool
+    {
+        return $this->isTutorialDone;
+    }
+
+    public function setTutorialDone(?bool $isTutorialDone): static
+    {
+        $this->isTutorialDone = $isTutorialDone;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Configuration>
+     */
+    public function getConfigurations(): Collection
+    {
+        return $this->configurations;
+    }
+
+    public function addConfiguration(Configuration $configuration): static
+    {
+        if (!$this->configurations->contains($configuration)) {
+            $this->configurations->add($configuration);
+            $configuration->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConfiguration(Configuration $configuration): static
+    {
+        if ($this->configurations->removeElement($configuration)) {
+            // set the owning side to null (unless already changed)
+            if ($configuration->getCompany() === $this) {
+                $configuration->setCompany(null);
             }
         }
 

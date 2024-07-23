@@ -23,6 +23,9 @@ class Configuration
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
+    #[ORM\ManyToOne(inversedBy: 'configurations')]
+    private ?Company $company = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Configuration
     public function setType(string $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

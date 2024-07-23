@@ -3,3 +3,9 @@
 table .text-light{
     color: darkgray!important;
 }
+.component_bool{
+    text-align:center;
+    &.success{
+        color: green;
+    }
+}

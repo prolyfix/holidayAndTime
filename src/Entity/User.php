@@ -14,15 +14,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User extends Commentable implements UserInterface, PasswordAuthenticatedUserInterface
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_MANAGER = 'ROLE_MANAGER';
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -91,6 +86,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Weekplan::class, mappedBy: 'user')]
     private Collection $weekplans;
 
+    #[ORM\ManyToOne(inversedBy: 'users', cascade: ["persist"])]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -112,10 +110,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->weekplans = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getEmail(): ?string
     {
@@ -523,6 +517,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $weekplan->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

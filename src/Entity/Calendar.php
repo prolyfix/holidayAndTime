@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CalendarRepository::class)]
-class Calendar
+class Calendar extends Commentable
 {
     const STATE_PENDING = 'pending';
     const STATE_APPROVED = 'approved';
@@ -15,17 +15,8 @@ class Calendar
     
     public function __construct()
     {
-        $this->creationDate = new \DateTime();
         $this->state = self::STATE_PENDING;
     }
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isAll = null;
@@ -61,22 +52,6 @@ class Calendar
     #[ORM\Column(nullable: true)]
     private ?float $absenceInWorkingDays = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(\DateTimeInterface $date): static
-    {
-        $this->creationDate = $date;
-
-        return $this;
-    }
 
     public function isIsAll(): ?bool
     {

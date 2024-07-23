@@ -91,8 +91,8 @@ class UserCrudController extends AbstractCrudController
             AssociationField::new('manager'),
             AssociationField::new('workingGroup'),
             DateField::new('startDate'),
-            DateField::new('endDate'),
-            CollectionField::new('userWeekdayProperties')->setEntryType(UserWeekdayPropertyType::class),
+            DateField::new('endDate')->hideOnIndex(),
+            CollectionField::new('userWeekdayProperties')->setEntryType(UserWeekdayPropertyType::class)->hideOnIndex() ,
             CollectionField::new('userProperties')->setEntryType(UserPropertyType::class),
             BooleanField::new('hasTimesheet'),
             BooleanField::new('isDeactivated') 
@@ -142,14 +142,26 @@ class UserCrudController extends AbstractCrudController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
         $queryBuilder = parent::createIndexQueryBuilder( $searchDto,  $entityDto,  $fields,  $filters);
-        if ($user->hasRole('ROLE_ADMIN')) {
-            // Admin can see all users
+        
+        if($user->hasRole('SUPER_ADMIN')){
             return $queryBuilder;
         }
 
-            $queryBuilder
-                ->andWhere('id = :userId')
-                ->setParameter('userID', $user->getId());
+        $queryBuilder->andwhere('entity.company = :company')
+            ->setParameter('company', $user->getCompany());
+
+        if ($user->hasRole('ROLE_ADMIN')) {
+            return $queryBuilder;
+        }
+
+        if($user->hasRole('ROLE_MANAGER')){
+            $queryBuilder->andWhere('entity.workingGroup = :manager')
+                ->setParameter('manager', $user->getWorkingGroup());
+            return $queryBuilder;
+        }
+        $queryBuilder
+            ->andWhere('id = :userId')
+            ->setParameter('userID', $user->getId());
 
         return $queryBuilder;
     }
@@ -173,7 +185,7 @@ class UserCrudController extends AbstractCrudController
             $groupHolidaysCount += $days;
             $holiday->setAbsenceInWorkingDays($days);
         }
-        return $this->render('user/show.html.twig', [
+        return $this->render('admin/user/show.html.twig', [
             'user' => $user,
             'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),
             'pendingForYear'        => $em->getRepository(Calendar::class)->calculatePendingForYear($user, date('Y')),
