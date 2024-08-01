@@ -35,14 +35,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\Attribute\Route;
 
 
 class UserCrudController extends AbstractCrudController
 {
-    public function __construct(private MailerInterface $mailer, private EntityManagerInterface $em)
+    public function __construct(private MailerInterface $mailer, private EntityManagerInterface $em, private Security $security)
     {
-         $this->mailer = $mailer;
+        $this->em = $em;
+        $this->security = $security;
+        $this->mailer = $mailer;
     }
 
     public static function getEntityFqcn(): string
@@ -85,10 +88,15 @@ class UserCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        $user = $this->security->getUser();
         return [
             TextField::new('name'),
             TextField::new('email'),
-            AssociationField::new('manager'),
+            AssociationField::new('manager')->setFormTypeOption('query_builder', function ($entity) use ($user) {
+                return $entity->createQueryBuilder('m')
+                    ->andWhere('m.company = :company')
+                    ->setParameter('company', $user->getCompany());
+            }),
             AssociationField::new('workingGroup'),
             DateField::new('startDate'),
             DateField::new('endDate')->hideOnIndex(),

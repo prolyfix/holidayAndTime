@@ -24,12 +24,14 @@ class CalendarRepository extends ServiceEntityRepository
         parent::__construct($registry, Calendar::class);
     }
 
-    public function getCalendarsForYear($year)
+    public function getCalendarsForYear($year, $company)
     {
         $query = $this->createQueryBuilder('c')
             ->select('c')
-            ->where('c.startDate BETWEEN :start AND :end')
-            ->orWhere('c.endDate BETWEEN :start AND :end')
+            ->join('c.user', 'u')
+            ->where('(c.startDate BETWEEN :start AND :end OR c.endDate BETWEEN :start AND :end)')
+            ->andWhere('u.company = :company')
+            ->setParameter('company', $company)
             ->setParameter('start', $year . '-01-01')
             ->setParameter('end', $year . '-12-31')
             ->getQuery();

@@ -63,7 +63,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class);
+        yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class)->setAction('viewYear');
         yield MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
         if($this->getUser()->isHasTimesheet()){
             yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);

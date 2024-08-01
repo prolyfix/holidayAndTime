@@ -11,9 +11,6 @@ use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -149,14 +146,15 @@ class CalendarCrudController extends AbstractCrudController
         $dateStart = new \DateTime($year.'-01-01');
         $dateEnd = new \DateTime($year.'-12-31');
         $interval = new \DateInterval('P1M');
-        $users = $em->getRepository(User::class)->findBy([],['workingGroup'=>'ASC']);
+        $user = $this->getUser();
+        $users = $em->getRepository(User::class)->findBy(['company'=>$user->getCompany()],['workingGroup'=>'ASC']);
         $outputUser = [];
         $outputBankHolidays = [];
         while($dateStart <= $dateEnd){
             $output[ $dateStart->format('Y-m-d')]['date'] = clone($dateStart);
             $dateStart->add($interval);
         }
-        $calendars = $em->getRepository(Calendar::class)->getCalendarsForYear($year);
+        $calendars = $em->getRepository(Calendar::class)->getCalendarsForYear($year,$user->getCompany());
         foreach($calendars as $calendar){
             if(!$calendar->getTypeOfAbsence()->isIsWorkingDay() && (in_array('ROLE_ADMIN', $this->getUser()->getRoles()) || $calendar->getUser() == $this->getUser() || $calendar->getWorkingGroup() == $this->getUser()->getWorkingGroup()) )
             {
