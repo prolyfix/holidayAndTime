@@ -5,6 +5,7 @@ use App\Entity\Company;
 use App\Entity\Configuration;
 use App\Entity\Location;
 use App\Entity\User;
+use App\Entity\UserSchedule;
 
 class UserFactory
 {
@@ -33,6 +34,8 @@ class UserFactory
         $user = new User();
         $user->setCompany($company);
         $user->setRoles(['ROLE_EMPLOYEE']);
+        $userSchedule = new UserSchedule();
+
         return $user;
         // create employee
     }

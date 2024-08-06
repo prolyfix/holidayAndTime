@@ -90,7 +90,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     /**
      * @var Collection<int, UserSchedule>
      */
-    #[ORM\OneToMany(targetEntity: UserSchedule::class, mappedBy: 'user')]
+    #[ORM\OneToMany(targetEntity: UserSchedule::class, mappedBy: 'user', cascade: ["persist"])]
     private Collection $userSchedules;
 
     public function __construct()

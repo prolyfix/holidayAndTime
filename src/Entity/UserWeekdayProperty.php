@@ -26,7 +26,7 @@ class UserWeekdayProperty
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creationDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userWeekdayProperties')]
+    #[ORM\ManyToOne(inversedBy: 'userWeekdayProperties', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?UserSchedule $userSchedule = null;
 

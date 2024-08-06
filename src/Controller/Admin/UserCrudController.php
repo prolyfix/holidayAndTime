@@ -7,6 +7,7 @@ use App\Entity\Timesheet;
 use App\Entity\User;
 use App\Entity\UserWeekdayProperty;
 use App\Form\UserPropertyType;
+use App\Form\UserScheduleType;
 use App\Form\UserType;
 use App\Form\UserWeekdayPropertyType;
 use App\Manager\HolidayCalculator;
@@ -61,6 +62,7 @@ class UserCrudController extends AbstractCrudController
     {
         return $crud
             ->overrideTemplate('crud/edit', 'admin/user/edit.html.twig')
+            ->overrideTemplate('crud/new', 'admin/user/new.html.twig')
         ;
     }
     public static function getEntityFqcn(): string
@@ -115,7 +117,7 @@ class UserCrudController extends AbstractCrudController
             AssociationField::new('workingGroup'),
             DateField::new('startDate'),
             DateField::new('endDate')->hideOnIndex(),
-            CollectionField::new('userSchedules')->hideOnIndex() ,
+            CollectionField::new('userSchedules')->hideOnIndex()->setEntryType(UserScheduleType::class),
             CollectionField::new('userProperties')->setEntryType(UserPropertyType::class),
             BooleanField::new('hasTimesheet'),
             BooleanField::new('isDeactivated') 

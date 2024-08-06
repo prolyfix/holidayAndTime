@@ -96,6 +96,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }      
 });
+
+
+function addHolidayProperty(e){
+    const holiday = e.currentTarget.dataset.holiday;
+    const holidayProperty = e.currentTarget.dataset.holiday;
+    document.getElementById('holidayToAdd').innerHTML = holiday;
+}
+
+
+
+
+
 document.addEventListener('timerSecond', (e) => {
     document.getElementById('timer').innerHTML = e.detail // e.detail will contain the time
 });
@@ -106,4 +118,4 @@ document
   .querySelectorAll('.add_item_link')
   .forEach(btn => {
       btn.addEventListener("click", addFormToCollection)
-  });
+});

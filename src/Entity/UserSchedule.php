@@ -21,7 +21,7 @@ class UserSchedule extends Commentable
     /**
      * @var Collection<int, UserWeekdayProperty>
      */
-    #[ORM\OneToMany(targetEntity: UserWeekdayProperty::class, mappedBy: 'userSchedule')]
+    #[ORM\OneToMany(targetEntity: UserWeekdayProperty::class, mappedBy: 'userSchedule', cascade: ['persist'])]
     private Collection $userWeekdayProperties;
 
     public function __construct()

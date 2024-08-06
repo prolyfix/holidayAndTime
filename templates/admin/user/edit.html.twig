@@ -1,4 +1,17 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+{% block head_javascript %}
+<script>
+function addHolidayProperty(e){
+    console.log(e.dataset)
+    const holiday = e.dataset.year.replace('__userPropertiesname__','1').replace('__userpropertiesname__','1');
+    const holidayProperty = e.dataset.holidayperyear;
+    console.log(holiday);
+    document.getElementById('yearToAdd').innerHTML = holiday;
+    document.getElementById('holidayToAdd').innerHTML = holidayProperty;
+}
+</script>
+
+{% endblock %}
 {% block page_content %}
 {{form_start(edit_form)}}
     <h1>{{entity.instance.name}}</h1>
@@ -24,6 +37,7 @@
     </div>
     <h2> Urlaub </h2>
     <div class="row">
+        {% set i=0 %}
         {% for userProperty in edit_form.userProperties %}
             <div class="col-md-6">
                 {{form_row(userProperty.year,{attr:{'class':'form-control'},'label':'ab Jahr'})}}
@@ -31,8 +45,21 @@
             <div class="col-md-6">
                {{form_row(userProperty.holidayPerYear,{attr:{'class':'form-control'}})}}
             </div>
- 
+            {% set i=i+1 %}
         {% endfor %}
+        <div class="col-md-6" id="yearToAdd">
+        </div>
+        <div class="col-md-6" id="holidayToAdd">
+        </div>
+        <div class="col-md-6">
+            <div class="btn btn-primary" 
+            data-year="{{ form_widget(edit_form.userProperties.vars.prototype.year)|e('html_attr')}}" 
+            data-holidayperyear="{{ form_widget(edit_form.userProperties.vars.prototype.holidayPerYear)|e('html_attr')}}"
+            onclick="addNewTimes(this)"
+            id="addHolidayProperty"
+            >Urlaub hinzufügen</div>
+        </div>
+        
     </div>
     <h2> Arbeitszeiten</h2>
         <div class="row">
