@@ -6,7 +6,6 @@ use App\Entity\Calendar;
 use App\Entity\WorkingGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Prolyfix\SymfonyDatatablesBundle\Repository\DatatablesTrait;
 
 /**
  * @extends ServiceEntityRepository<Calendar>
@@ -18,7 +17,6 @@ use Prolyfix\SymfonyDatatablesBundle\Repository\DatatablesTrait;
  */
 class CalendarRepository extends ServiceEntityRepository
 {
-    use DatatablesTrait;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calendar::class);

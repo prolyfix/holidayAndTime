@@ -41,15 +41,3 @@ services:
                 entity: 'App\Entity\Calendar'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    Prolyfix\SymfonyDatatablesBundle\Controller\DatatablesController:
-        arguments: ['@service_container','@twig']
-        calls:
-            - method: setContainer
-    Prolyfix\SymfonyDatatablesBundle\Utility\ButtonGenerator:
-        autowire: true
-    Prolyfix\SymfonyDatatablesBundle\Utility\Exporter:
-        autowire: true
-    prolyfix.datatables.extension:
-        class: Prolyfix\SymfonyDatatablesBundle\Twig\DatatablesExtension
-        tags:
-            - { name: twig.extension }     

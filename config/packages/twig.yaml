@@ -1,7 +1,3 @@
-twig:
-    file_name_pattern: '*.twig'
-    paths:
-        '%kernel.project_dir%/templates/bundles/ProlyfixSymfonyDatatables': ProlyfixSymfonyDatatables
 when@test:
     twig:
         strict_variables: true
