@@ -14,10 +14,6 @@ class UserWeekdayProperty
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'userWeekdayProperties')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column(length: 255)]
     private ?string $weekday = null;
 
@@ -30,21 +26,13 @@ class UserWeekdayProperty
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $creationDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'userWeekdayProperties')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?UserSchedule $userSchedule = null;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function __toString()
@@ -95,6 +83,18 @@ class UserWeekdayProperty
     public function setCreationDate(?\DateTimeInterface $creationDate): static
     {
         $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    public function getUserSchedule(): ?UserSchedule
+    {
+        return $this->userSchedule;
+    }
+
+    public function setUserSchedule(?UserSchedule $userSchedule): static
+    {
+        $this->userSchedule = $userSchedule;
 
         return $this;
     }

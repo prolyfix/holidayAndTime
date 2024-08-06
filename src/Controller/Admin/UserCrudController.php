@@ -26,18 +26,28 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterCrudActionEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Exception\ForbiddenActionException;
+use EasyCorp\Bundle\EasyAdminBundle\Exception\InsufficientEntityPermissionException;
+use EasyCorp\Bundle\EasyAdminBundle\Factory\EntityFactory;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -47,7 +57,12 @@ class UserCrudController extends AbstractCrudController
         $this->security = $security;
         $this->mailer = $mailer;
     }
-
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->overrideTemplate('crud/edit', 'admin/user/edit.html.twig')
+        ;
+    }
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -100,7 +115,7 @@ class UserCrudController extends AbstractCrudController
             AssociationField::new('workingGroup'),
             DateField::new('startDate'),
             DateField::new('endDate')->hideOnIndex(),
-            CollectionField::new('userWeekdayProperties')->setEntryType(UserWeekdayPropertyType::class)->hideOnIndex() ,
+            CollectionField::new('userSchedules')->hideOnIndex() ,
             CollectionField::new('userProperties')->setEntryType(UserPropertyType::class),
             BooleanField::new('hasTimesheet'),
             BooleanField::new('isDeactivated') 
@@ -108,6 +123,9 @@ class UserCrudController extends AbstractCrudController
         ];
     }
     
+
+
+
     public function monthView(Request $request): Response
     {   
         $em = $this->em;
@@ -127,10 +145,11 @@ class UserCrudController extends AbstractCrudController
         $firmHolidays = $em->getRepository(Calendar::class)->retrieveAllHolidaysForFirmForYear($year);
         $bankHolidays = $em->getRepository(Calendar::class)->retrieveBankHolidaysForYear($year);
         $workingDays = array();
-        foreach($user->getUserWeekdayProperties() as $weekday){
-            if($weekday->getWorkingDay())
-                $workingDays[] = $weekday->getWeekday();
-        }
+        //foreach($user->getUserWeekdayProperties() as $weekday){
+        //    if($weekday->getWorkingDay())
+        //        $workingDays[] = $weekday->getWeekday();
+        
+        //}
         return $this->render('calendar/monthView.html.twig', [
             'user' => $user,
             'month' => $month,

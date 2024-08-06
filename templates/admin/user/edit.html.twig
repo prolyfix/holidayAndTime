@@ -1,0 +1,62 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
+{{form_start(edit_form)}}
+    <h1>{{entity.instance.name}}</h1>
+    <h2> Allgemein und Kontaktdaten </h2>
+    <div class="row">
+        <div class="col-md-6">
+            {{form_row(edit_form.name,{attr:{'class':'form-control'}})}}
+            {{form_row(edit_form.startDate,{attr:{'class':'form-control'}})}}
+        </div>
+        <div class="col-md-6">
+            {{form_row(edit_form.email,{attr:{'class':'form-control'}})}}
+            {{form_row(edit_form.endDate,{attr:{'class':'form-control'}})}}
+        </div>
+    </div>
+    <h2> Zuordnung </h2>
+    <div class="row">
+        <div class="col-md-6">
+            {{form_row(edit_form.manager,{attr:{'class':'form-control'}})}}
+        </div>
+        <div class="col-md-6">
+            {{form_row(edit_form.workingGroup,{attr:{'class':'form-control'}})}}
+        </div>
+    </div>
+    <h2> Urlaub </h2>
+    <div class="row">
+        {% for userProperty in edit_form.userProperties %}
+            <div class="col-md-6">
+                {{form_row(userProperty.year,{attr:{'class':'form-control'},'label':'ab Jahr'})}}
+            </div>
+            <div class="col-md-6">
+               {{form_row(userProperty.holidayPerYear,{attr:{'class':'form-control'}})}}
+            </div>
+ 
+        {% endfor %}
+    </div>
+    <h2> Arbeitszeiten</h2>
+        <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <tr>
+                    <th>Gültig ab</th>
+                    <th>Wochentag</th>
+                    <th>Arbeitstunden</th>
+                </tr>
+            </table>
+        </div>
+        </div>
+    <h2> Rechte </h2>
+    <div class="row">
+        <div class="col-md-4">
+            {{form_widget(edit_form.hasTimesheet)}} {{form_label(edit_form.hasTimesheet)}}
+        </div>
+        <div class="col-md-4">
+            {{form_widget(edit_form.isDeactivated)}} {{form_label(edit_form.isDeactivated)}}
+        </div>
+
+    </div>
+    <input type="submit" value="Speichern" class="btn btn-primary"> 
+{{form_end(edit_form)}}
+
+{% endblock %}

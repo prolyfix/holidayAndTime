@@ -33,7 +33,7 @@ class CheckerManager
         while ($date <= $endDate) {
             $hasToWork = false;
             $weekday = $date->format('l');
-            foreach ($user->getUserWeekdayProperties() as $userWeekdayProperty) {
+            foreach ($user->getRightUserWeekdayProperties($date) as $userWeekdayProperty) {
                 if ($userWeekdayProperty->getWeekday() === $weekday) {
                     if($userWeekdayProperty->getWorkingDay())  
                         $hasToWork = true;

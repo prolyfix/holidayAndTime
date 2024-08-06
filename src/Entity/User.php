@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -43,9 +44,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
-
-    #[ORM\OneToMany(targetEntity: UserWeekdayProperty::class, mappedBy: 'user',cascade: ["persist"])]
-    private Collection $userWeekdayProperties;
 
     #[ORM\OneToMany(targetEntity: UserProperty::class, mappedBy: 'user',cascade: ["persist"])]
     private Collection $userProperties;
@@ -89,21 +87,29 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\ManyToOne(inversedBy: 'users', cascade: ["persist"])]
     private ?Company $company = null;
 
+    /**
+     * @var Collection<int, UserSchedule>
+     */
+    #[ORM\OneToMany(targetEntity: UserSchedule::class, mappedBy: 'user')]
+    private Collection $userSchedules;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->userWeekdayProperties = new ArrayCollection();
         $this->userProperties = new ArrayCollection();
         $this->calendars = new ArrayCollection();
         $this->timesheets = new ArrayCollection();
         $this->issues = new ArrayCollection();
+        $this->userSchedules = new ArrayCollection();
         $timestamp = strtotime('next Monday');
+        $userSchedule = (new UserSchedule())->setUser($this)->setEffectiveDate(new \DateTime());
+        $this->addUserSchedule($userSchedule);
         for ($i = 0; $i < 7; $i++) {
             $userWeekdayProperty = new UserWeekdayProperty();
-            $userWeekdayProperty->setUser($this);
+            $userWeekdayProperty->setUserSchedule($userSchedule);
             $userWeekdayProperty->setWeekday(strftime('%A', $timestamp));
             $timestamp = strtotime('+1 day', $timestamp);
-            $this->addUserWeekdayProperty($userWeekdayProperty);
+            $userSchedule->addUserWeekdayProperty($userWeekdayProperty);
         }
         $userProperty = (new UserProperty())->setHolidayPerYear(0);
         $this->addUserProperty($userProperty);
@@ -235,35 +241,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserWeekdayProperty>
-     */
-    public function getUserWeekdayProperties(): Collection
-    {
-        return $this->userWeekdayProperties;
-    }
-
-    public function addUserWeekdayProperty(UserWeekdayProperty $userWeekdayProperty): static
-    {
-        if (!$this->userWeekdayProperties->contains($userWeekdayProperty)) {
-            $this->userWeekdayProperties->add($userWeekdayProperty);
-            $userWeekdayProperty->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserWeekdayProperty(UserWeekdayProperty $userWeekdayProperty): static
-    {
-        if ($this->userWeekdayProperties->removeElement($userWeekdayProperty)) {
-            // set the owning side to null (unless already changed)
-            if ($userWeekdayProperty->getUser() === $this) {
-                $userWeekdayProperty->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, UserProperty>
@@ -531,5 +508,50 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->company = $company;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, UserSchedule>
+     */
+    public function getUserSchedules(): Collection
+    {
+        return $this->userSchedules;
+    }
+
+    public function addUserSchedule(UserSchedule $userSchedule): static
+    {
+        if (!$this->userSchedules->contains($userSchedule)) {
+            $this->userSchedules->add($userSchedule);
+            $userSchedule->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSchedule(UserSchedule $userSchedule): static
+    {
+        if ($this->userSchedules->removeElement($userSchedule)) {
+            // set the owning side to null (unless already changed)
+            if ($userSchedule->getUser() === $this) {
+                $userSchedule->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRightUserWeekdayProperties(DateTime $dateTime): array
+    {
+        $userSchedules = $this->getUserSchedules();
+        $finalChoosen = [];
+        $intervalInDays = 10000000000000;
+        foreach($userSchedules as $userSchedule){
+            if($userSchedule->getEffectiveDate() <= $dateTime && $dateTime->diff($userSchedule->getEffectiveDate())->days < $intervalInDays){
+                $intervalInDays = $dateTime->diff($userSchedule->getEffectiveDate())->days;
+                $finalChoosen = $userSchedule->getUserWeekdayProperties();
+            }
+        }
+
+        return $finalChoosen;
     }
 }

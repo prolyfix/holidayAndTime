@@ -2,27 +2,29 @@
 
 namespace App\Form;
 
-use App\Entity\User;
-use App\Entity\UserProperty;
+use App\Entity\Company;
+use App\Entity\Location;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserPropertyType extends AbstractType
+class LocationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('holidayPerYear',null, ['attr'=>['class'=>'form-control'],'label'=>'holidayPerYear'])
-            ->add('year',null, ['attr'=>['class'=>'form-control'],'label'=>'year'])
+            ->add('street')
+            ->add('zipCode')
+            ->add('city')
+            ->add('land')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => UserProperty::class,
+            'data_class' => Location::class,
         ]);
     }
 }

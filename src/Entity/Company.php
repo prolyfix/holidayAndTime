@@ -43,6 +43,9 @@ class Company extends Commentable
     #[ORM\OneToMany(targetEntity: Configuration::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
     private Collection $configurations;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logoName = null;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -204,6 +207,18 @@ class Company extends Commentable
                 $configuration->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLogoName(): ?string
+    {
+        return $this->logoName;
+    }
+
+    public function setLogoName(?string $logoName): static
+    {
+        $this->logoName = $logoName;
 
         return $this;
     }

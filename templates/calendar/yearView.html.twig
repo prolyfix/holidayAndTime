@@ -18,8 +18,8 @@
 </style>
                                                 </h1>
 <h1> {% trans %} Kalender {% endtrans %}</h1>
-<div class="btn-group mtb-2" role="group" aria-label="Basic example">
-  <a type="button" class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') -1 })) }}">{{(output|first).date | date('Y') -1 }}</a>
+<div class="btn-group mtb-2 huge" role="group" aria-label="Basic example">
+  <a type="button" class="btn btn-secondary " href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') -1 })) }}">{{(output|first).date | date('Y') -1 }}</a>
   <a type="button" class="btn btn-secondary"> {{(output|first).date | date('Y')}}</a>
   <a type="button" class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') +1 })) }}">{{(output|first).date | date('Y') +1 }}</a>
 </div>

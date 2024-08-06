@@ -43,7 +43,7 @@ class AppExtension extends AbstractExtension
         $realDate = \DateTime::createFromFormat('Y-m-d', $date);
         if(!$realDate)
             return false;
-        $workdays = $user->getUserWeekdayProperties();
+        $workdays = $user->getRightUserWeekdayProperties($realDate);
         foreach($workdays as $workday){
             if($workday->getWeekday() == $trans[$realDate->format('N')] && $workday->getWorkingDay() > 0){
                 return true;

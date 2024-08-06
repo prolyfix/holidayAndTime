@@ -29,8 +29,20 @@
                     <th> Logo </th>
                     <td> {{ app.user.company.location.city }} </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="{{ ea_url()
+                                    .setController('App\\Controller\\Admin\\CompanyCrudController')
+                                    .setAction('edit')
+                                    .setEntityId(app.user.company.id)   
+                            }}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
         </table>
+
     <h2> Module & Darstellung </h2>
         <div class="row">
             {% for configuration in app.user.company.configurations %}

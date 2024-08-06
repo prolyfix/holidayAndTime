@@ -56,8 +56,18 @@ class DashboardController extends AbstractDashboardController
 
     public function configureDashboard(): Dashboard
     {
+        $title = "Holiday and Time";
+        if($this->getUser()->getCompany() !== null){
+            $title = "Holiday and Time - ". $this->getUser()->getCompany()->getName();
+            if($this->getUser()->getCompany()->getLogoName() != null){
+                $title = "<img src='uploads/logo/". $this->getUser()->getCompany()->getLogoName()."'>";
+            }
+        }
         return Dashboard::new()
-            ->setTitle('HolidayAndTime');
+            ->setTitle($title)
+            ->setFaviconPath('images/favicon.ico')
+            ->setFaviconPath('uploads/logo/'.$this->getUser()->getCompany()->getLogoName());
+
     }
 
     public function configureMenuItems(): iterable
