@@ -93,6 +93,9 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: UserSchedule::class, mappedBy: 'user', cascade: ["persist"])]
     private Collection $userSchedules;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $emailInteraction = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -540,7 +543,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getRightUserWeekdayProperties(DateTime $dateTime): array
+    public function getRightUserWeekdayProperties(DateTime $dateTime): iterable
     {
         $userSchedules = $this->getUserSchedules();
         $finalChoosen = [];
@@ -553,5 +556,17 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         }
 
         return $finalChoosen;
+    }
+
+    public function isEmailInteraction(): ?bool
+    {
+        return $this->emailInteraction;
+    }
+
+    public function setEmailInteraction(?bool $emailInteraction): static
+    {
+        $this->emailInteraction = $emailInteraction;
+
+        return $this;
     }
 }

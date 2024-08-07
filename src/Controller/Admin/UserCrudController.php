@@ -61,7 +61,7 @@ class UserCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->overrideTemplate('crud/edit', 'admin/user/edit.html.twig')
+            ->overrideTemplate('crud/edit', 'admin/user/new.html.twig')
             ->overrideTemplate('crud/new', 'admin/user/new.html.twig')
         ;
     }
@@ -120,7 +120,8 @@ class UserCrudController extends AbstractCrudController
             CollectionField::new('userSchedules')->hideOnIndex()->setEntryType(UserScheduleType::class),
             CollectionField::new('userProperties')->setEntryType(UserPropertyType::class),
             BooleanField::new('hasTimesheet'),
-            BooleanField::new('isDeactivated') 
+            BooleanField::new('isDeactivated') ,
+            BooleanField::new('emailInteraction')
 
         ];
     }

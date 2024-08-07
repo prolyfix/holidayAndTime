@@ -9,7 +9,7 @@ use App\Entity\UserSchedule;
 
 class UserFactory
 {
-    const COMPANY_CONFIGURATIONS = ['hasTask'=>'bool','hasWeekplan'=>'bool'];
+    const COMPANY_CONFIGURATIONS = ['hasTask'=>'bool','hasWeekplan'=>'bool','hasProject'=>'bool'];
     public static function createCustomer(): User
     {
         $user = new User();

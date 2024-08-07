@@ -36,6 +36,9 @@ function addTimesheet(e){
 
 {% endblock %}
 {% block page_content %}
+{% if edit_form is defined %}
+    {% set new_form = edit_form  %}
+{% endif %}
 {{form_start(new_form)}}
     <h1>{{entity.instance.name}}</h1>
     <h2> Allgemein und Kontaktdaten </h2>
@@ -188,7 +191,9 @@ function addTimesheet(e){
         <div class="col-md-4">
             {{form_widget(new_form.isDeactivated)}} {{form_label(new_form.isDeactivated)}}
         </div>
-
+        <div class="col-md-4">
+            {{form_widget(new_form.emailInteraction)}} {{form_label(new_form.emailInteraction)}}
+        </div>
     </div>
     <input type="submit" value="Speichern" class="btn btn-primary"> 
 {{form_end(new_form)}}
