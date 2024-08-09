@@ -14,7 +14,14 @@ use Doctrine\ORM\Mapping\DiscriminatorMap;
 #[ORM\Entity]
 #[InheritanceType('JOINED')]
 #[DiscriminatorColumn(name: 'discr', type: 'string')]
-#[DiscriminatorMap(['company' => Company::class, 'user' => User::class, 'location' => Location::class, 'calendar' => Calendar::class, 'userSchedule' => UserSchedule::class])]  
+#[DiscriminatorMap([
+    'company' => Company::class, 
+    'user' => User::class, 
+    'location' => Location::class, 
+    'calendar' => Calendar::class, 
+    'userSchedule' => UserSchedule::class, 
+    'project' => Project::class,
+    'task' => Task::class])]  
 abstract class Commentable extends TimeData
 {
     #[ORM\Id]
