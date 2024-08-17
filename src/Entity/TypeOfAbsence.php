@@ -40,6 +40,9 @@ class TypeOfAbsence
     #[ORM\Column(nullable: true)]
     private ?bool $isWorkingDay = null;
 
+    #[ORM\ManyToOne(inversedBy: 'typeOfAbsences')]
+    private ?Company $company = null;
+
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
@@ -165,6 +168,18 @@ class TypeOfAbsence
     public function setIsWorkingDay(?bool $isWOrkingDay): static
     {
         $this->isWorkingDay = $isWOrkingDay;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): static
+    {
+        $this->company = $company;
 
         return $this;
     }

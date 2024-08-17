@@ -96,6 +96,15 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\Column(nullable: true)]
     private ?bool $emailInteraction = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $state = null;
+
+    /**
+     * @var Collection<int, Task>
+     */
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'assignedTo')]
+    private Collection $tasks;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -117,6 +126,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $userProperty = (new UserProperty())->setHolidayPerYear(0);
         $this->addUserProperty($userProperty);
         $this->weekplans = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
 
@@ -566,6 +576,48 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     public function setEmailInteraction(?bool $emailInteraction): static
     {
         $this->emailInteraction = $emailInteraction;
+
+        return $this;
+    }
+
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+
+    public function setState(?string $state): static
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setAssignedTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getAssignedTo() === $this) {
+                $task->setAssignedTo(null);
+            }
+        }
 
         return $this;
     }

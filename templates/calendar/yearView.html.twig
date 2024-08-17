@@ -18,10 +18,10 @@
 </style>
                                                 </h1>
 <h1> {% trans %} Kalender {% endtrans %}</h1>
-<div class="btn-group mtb-2 huge" role="group" aria-label="Basic example">
-  <a type="button" class="btn btn-secondary " href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') -1 })) }}">{{(output|first).date | date('Y') -1 }}</a>
-  <a type="button" class="btn btn-secondary"> {{(output|first).date | date('Y')}}</a>
-  <a type="button" class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') +1 })) }}">{{(output|first).date | date('Y') +1 }}</a>
+<div class="btn-group mtb-2 huge" role="group" style="text-align:center;display:block;margin-bottom:1em;">
+  <a type="button" class="btn btn-secondary card_bignumber" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') -1 })) }}"> <i class="fa-fw fas fa-arrow-left"></i>{{(output|first).date | date('Y') -1 }}</a>
+  <a type="button" class="btn btn-secondary card_bignumber"> {{(output|first).date | date('Y')}}</a>
+  <a type="button" class="btn btn-secondary card_bignumber" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') +1 })) }}">{{(output|first).date | date('Y') +1 }} <i class="fa-fw fas fa-arrow-right"></i></a>
 </div>
 {% set date = null %}
 {% set year = null %}

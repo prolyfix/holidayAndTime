@@ -46,12 +46,19 @@ class Company extends Commentable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logoName = null;
 
+    /**
+     * @var Collection<int, TypeOfAbsence>
+     */
+    #[ORM\OneToMany(targetEntity: TypeOfAbsence::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Collection $typeOfAbsences;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->configurations = new ArrayCollection();
+        $this->typeOfAbsences = new ArrayCollection();
     }
 
 
@@ -189,6 +196,16 @@ class Company extends Commentable
         return $this->configurations;
     }
 
+    public function getConfiguration(string $key): ?Configuration
+    {
+        foreach ($this->configurations as $configuration) {
+            if ($configuration->getName() === $key) {
+                return $configuration;
+            }
+        }
+        return null;
+    }
+
     public function addConfiguration(Configuration $configuration): static
     {
         if (!$this->configurations->contains($configuration)) {
@@ -219,6 +236,36 @@ class Company extends Commentable
     public function setLogoName(?string $logoName): static
     {
         $this->logoName = $logoName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TypeOfAbsence>
+     */
+    public function getTypeOfAbsences(): Collection
+    {
+        return $this->typeOfAbsences;
+    }
+
+    public function addTypeOfAbsence(TypeOfAbsence $typeOfAbsence): static
+    {
+        if (!$this->typeOfAbsences->contains($typeOfAbsence)) {
+            $this->typeOfAbsences->add($typeOfAbsence);
+            $typeOfAbsence->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTypeOfAbsence(TypeOfAbsence $typeOfAbsence): static
+    {
+        if ($this->typeOfAbsences->removeElement($typeOfAbsence)) {
+            // set the owning side to null (unless already changed)
+            if ($typeOfAbsence->getCompany() === $this) {
+                $typeOfAbsence->setCompany(null);
+            }
+        }
 
         return $this;
     }

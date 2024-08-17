@@ -1,26 +1,7 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 {% block page_content %}
-    <h1>User</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-        </tbody>
-    </table>
-    {% if user.hasTimesheet %}
-    <h2> Zeitstempel </h2>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>{% trans %}Actual overtime{% endtrans %}</th>
-                <td>{{ toTime(overtime) }}</td>
-            </tr>
-        </tbody>
-    </table>
-     
+    <h1>{{app.user.name}}</h1>
+    {% if user.hasTimesheet %}     
     <a 
         href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'crudAction': 'monthView' })) }}"
         class="btn btn-primary"
@@ -56,6 +37,91 @@
     >
         {% trans %} Urlaubsrechner {% endtrans %}
     </a>    
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2> Wochenplan </h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{%trans%}Monday{%endtrans%}</th>
+                <th>{%trans%}Tuesday{%endtrans%}</th>
+                <th>{%trans%}Wednesday{%endtrans%}</th>
+                <th>{%trans%}Thursday{%endtrans%}</th>
+                <th>{%trans%}Friday{%endtrans%}</th>
+                <th>{%trans%}Saturday{%endtrans%}</th>
+                <th>{%trans%}Sunday{%endtrans%}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{% trans %}Arbeitstag{% endtrans %}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[0].workingDay}} {%trans%}day{%endtrans%}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[1].workingDay}} {%trans%}day{%endtrans%}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[2].workingDay}} {%trans%}day{%endtrans%}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[3].workingDay}} {%trans%}day{%endtrans%}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[4].workingDay}} {%trans%}day{%endtrans%}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[5].workingDay}} {%trans%}day{%endtrans%}</td>
+                <td>{{app.user.userSchedules[0].userWeekdayProperties[6].workingDay}} {%trans%}day{%endtrans%}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Arbeitstunden{% endtrans %}</td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[0].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[0].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[1].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[1].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[2].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[2].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[3].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[3].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[4].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[4].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[5].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[5].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if app.user.userSchedules[0].userWeekdayProperties[6].workingHours is not null %}
+                        {{app.user.userSchedules[0].userWeekdayProperties[6].workingHours | date('H:i')}}
+                    {% endif %}
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <h2> Zeitstempel </h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>{% trans %}Actual overtime{% endtrans %}</th>
+                <td>{{ toTime(overtime) }}</td>
+            </tr>
+        </tbody>
+    </table>
     <div class="mb-2"></div>
     <h2> Urlaubs </h2>
     <p> Urlaube sind bis spätestens 31 März für das vorheriges Jahr zu nehmen. Die Resturlaube verfallen. </p>

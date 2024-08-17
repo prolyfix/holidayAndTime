@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Simple Email Template{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .header, .footer {
+            background-color: navy;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .social-icons {
+            text-align: center;
+        }
+
+        .social-icon {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            </div>
+        <div class="content">
+            {% block content %}
+                <p>This is the main content of the email.</p>
+                <p>You can add more content here.</p>
+            {% endblock %}
+        </div>
+        <div class="footer">
+            <h3>Teilzeit Mamas and Pappas</h3>
+            <h4>Urlaubs und Verwaltungstool für sehr bescäftigte Angestellte</h4>
+            <p>Address</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><img src="facebook.png" alt="Facebook"></a>
+                <a href="#" class="social-icon"><img src="twitter.png" alt="Twitter"></a>
+                <a href="#" class="social-icon"><img src="linkedin.png" alt="LinkedIn"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

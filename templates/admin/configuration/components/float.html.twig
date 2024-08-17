@@ -1,0 +1,9 @@
+    <div class="component_bool success" style="font-size:3em;color:darkred;text-align:center">{{configuration.value}}</div>
+    <a href="{{ ea_url()
+                    .setController('App\\Controller\\Admin\\ConfigurationCrudController')
+                    .setAction('edit')
+                    .setEntityId(configuration.id)
+        }}"
+         class="btn btn-sm btn-primary">
+        <i class="fas fa-edit"></i>
+    </a>

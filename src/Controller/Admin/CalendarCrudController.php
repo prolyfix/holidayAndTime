@@ -37,12 +37,17 @@ class CalendarCrudController extends AbstractCrudController
     }
     public function configureFields(string $pageName): iterable
     {
+        $user = $this->getUser();
         return [
             DateField::new('startDate'),
             BooleanField::new('startMorning'),
             DateField::new('endDate'),
             BooleanField::new('endMorning'),
-            AssociationField::new('user'),
+            AssociationField::new('user')->setFormTypeOption('query_builder', function ($entity) use ($user) {
+                return $entity->createQueryBuilder('m')
+                    ->andWhere('m.company = :company')
+                    ->setParameter('company', $user->getCompany());
+            }),
             AssociationField::new('workingGroup'),
             BooleanField::new('isAll'),
             AssociationField::new('typeOfAbsence'),
@@ -208,7 +213,7 @@ class CalendarCrudController extends AbstractCrudController
             $outputBankHolidays[$bankHoliday->getStartDate()->format('Y-m-d')][] = $bankHoliday;
         }
 
-        $users = in_array('ROLE_ADMIN', $this->getUser()->getRoles())?$em->getRepository(User::class)->findBy([],['workingGroup'=>'ASC']):[$this->getUser()];
+        $users = in_array('ROLE_ADMIN', $this->getUser()->getRoles())?$em->getRepository(User::class)->findBy(['company'=>$this->getUser()->getCompany()],['workingGroup'=>'ASC']):[$this->getUser()];
         $groupCount = [];
         foreach($users as $user){
             if($user->isIsDeactivated()) continue;

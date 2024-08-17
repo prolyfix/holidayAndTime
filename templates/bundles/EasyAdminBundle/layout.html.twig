@@ -16,8 +16,7 @@
 {% endif %}
 {% endblock %}
     {% block configured_javascripts %}
-        {{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea.assets.jsAssets ?? [] }, with_context = false) }}
-        {{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea.assets.webpackEncoreAssets ?? [] }, with_context = false) }}
+        {{ importmap('app') }}
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script type="module" src="/js/holidayAndTime.js"></script>
     {% endblock %}

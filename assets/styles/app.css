@@ -9,3 +9,7 @@ table .text-light{
         color: green;
     }
 }
+.card_bignumber{
+    font-size: 4rem;
+    font-weight: bold;
+}

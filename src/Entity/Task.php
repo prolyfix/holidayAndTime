@@ -17,6 +17,9 @@ class Task extends Commentable
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?User $assignedTo = null;
+
 
     public function getProject(): ?Project
     {
@@ -50,6 +53,18 @@ class Task extends Commentable
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAssignedTo(): ?User
+    {
+        return $this->assignedTo;
+    }
+
+    public function setAssignedTo(?User $assignedTo): static
+    {
+        $this->assignedTo = $assignedTo;
 
         return $this;
     }

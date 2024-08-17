@@ -1,7 +1,7 @@
 {% if configuration.value is null or configuration.value == "false" %}
-    <div class="component_bool success" style="font-size:3em;color:green;text-align:center"><i class="menu-icon fa-fw fas fa-check"></i></div>
-{% else %}
     <div class="component_bool success" style="font-size:3em;color:darkred;text-align:center"><i class="menu-icon fa-fw fas fa-x"></i></div>
+{% else %}
+    <div class="component_bool success" style="font-size:3em;color:green;text-align:center"><i class="menu-icon fa-fw fas fa-check"></i></div>
 {% endif %}
     <a href="{{ ea_url()
                     .setController('App\\Controller\\Admin\\ConfigurationCrudController')

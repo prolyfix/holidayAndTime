@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class TaskCrudController extends AbstractCrudController
 {
+
     public static function getEntityFqcn(): string
     {
         return Task::class;
@@ -18,11 +19,17 @@ class TaskCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('name'),
-            AssociationField::new('project'),
-        ];
+        $user = $this->getUser();
+        yield IdField::new('id')->hideOnForm();
+        if($user->getCompany()->getConfiguration('hasProject')->getValue()){
+            yield AssociationField::new('project');
+        }
+        yield TextField::new('name');
+        yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
+            return $entity->createQueryBuilder('m')
+                ->andWhere('m.company = :company')
+                ->setParameter('company', $user->getCompany());
+        });
     }
     
 }

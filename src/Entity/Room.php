@@ -24,6 +24,9 @@ class Room
     #[ORM\OneToMany(targetEntity: Weekplan::class, mappedBy: 'room')]
     private Collection $weekplans;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $numberOfPlace = null;
+
     public function __construct()
     {
         $this->weekplans = new ArrayCollection();
@@ -78,5 +81,17 @@ class Room
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getNumberOfPlace(): ?int
+    {
+        return $this->numberOfPlace;
+    }
+
+    public function setNumberOfPlace(?int $numberOfPlace): static
+    {
+        $this->numberOfPlace = $numberOfPlace;
+
+        return $this;
     }
 }

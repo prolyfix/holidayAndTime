@@ -7,6 +7,7 @@ use App\Entity\UserSchedule;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,7 +16,7 @@ class UserScheduleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('effectiveDate', null, [
+            ->add('effectiveDate', DateType::class, [
                 'widget' => 'single_text',
             ])
             ->add('UserWeekdayProperties', CollectionType::class, [

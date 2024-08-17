@@ -21,16 +21,42 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class DashboardController extends AbstractDashboardController
 {
+
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
+        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+
+        $chart->setData([
+            'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            'datasets' => [
+                [
+                    'label' => 'My First dataset',
+                    'backgroundColor' => 'rgb(255, 99, 132)',
+                    'borderColor' => 'rgb(255, 99, 132)',
+                    'data' => [0, 10, 5, 2, 20, 30, 45],
+                ],
+            ],
+        ]);
+
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => 100,
+                ],
+            ],
+        ]);
         //return parent::index();
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
+        /*
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         return $this->redirect(
             $adminUrlGenerator
@@ -39,7 +65,7 @@ class DashboardController extends AbstractDashboardController
                 ->setEntityId($this->getUser()->getId())
                 ->generateUrl()
         );
-
+        */
         // Option 2. You can make your dashboard redirect to different pages depending on the user
         //
         // if ('jane' === $this->getUser()->getUsername()) {
@@ -49,9 +75,12 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        return $this->render('admin/dashboard/index.html.twig',[
+            'chart' => $chart,
+        ]);
     }
-    public function __construct(private EntityManagerInterface $em){
+    public function __construct(private EntityManagerInterface $em,private ChartBuilderInterface $chartBuilder)
+    {
     }
 
     public function configureDashboard(): Dashboard
@@ -75,30 +104,30 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class)->setAction('viewYear');
         yield MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
-        if($this->getUser()->isHasTimesheet()){
+        if($this->getUser()->isHasTimesheet()|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
 
         }
-        if($this->isGranted('ROLE_ADMIN')) {
+        if($this->isGranted('ROLE_ADMIN')|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
             yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
             yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
             yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
         }
         $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCompany']);
-        if($companyRight && $companyRight->getValue() == 1){
+        if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
         }
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject']);
-        if($projectRight && $projectRight->getValue() == 1){
+        if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Projects', 'fas fa-house', Project::class);
         }
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask','company'=>$this->getUser()->getCompany()]); 
-        if($projectRight && $projectRight->getValue() == 1){
+        if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Task', 'fas fa-house', Task::class);
         }
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
-        if($weekPlanningRight && $weekPlanningRight->getValue() == "true"){
+        if($weekPlanningRight && $weekPlanningRight->getValue() == "true" || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Room', 'fas fa-house', Room::class);
             yield MenuItem::linkToCrud('Week Planning', 'fas fa-house', Weekplan::class);
         }

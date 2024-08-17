@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Company;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,13 +39,15 @@ class FirstUserCommand extends Command
             $io->error('There are already users in the database');
             return Command::FAILURE;
         }
+        $company = new Company();
         $user = new User();
+        $user->setCompany($company);    
         $question = $io->ask('Enter the email of the first user');
         $user->setEmail($question);
         $plainPassword = $io->ask('Enter the password of the first user');
         $encodedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($encodedPassword);
-        $user->setRoles(['ROLE_ADMIN']);
+        $user->setRoles(['ROLE_SUPER_ADMIN']);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

@@ -24,6 +24,14 @@ class TimeUtility
             }
         }
         return new \DateTime('00:00:00');
-    
     }
+    public static function getTimeFromMinutes(int $minutes): \DateTime
+    {
+        $baseDate = new \DateTime('1970-01-01 00:00:00');
+
+        // Add the given number of minutes to the base date
+        $interval = new \DateInterval('PT' . $minutes . 'M');
+        $baseDate->add($interval);
+
+        return $baseDate;    }
 }

@@ -1,0 +1,81 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+{% block page_content %}
+	<div class="container container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Overview</h2>
+				<p>Welcome to the dashboard.</p>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+                        <div class="card_bignumber"> {{app.user.company.users | length}} </div>
+						<h5 class="card-title">Number of User</h5>
+						<a href="#" class="btn btn-primary">Add User</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+                    <div class="card-body">
+                    {{ render_chart(chart) }}
+						<h5 class="card-title">Overtime Development</h5>
+						<a href="#" class="btn btn-primary">Add Time</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+                    <div class="card-body">
+						<h5 class="card-title">Holiday Statement</h5>
+						<a href="#" class="btn btn-primary">Add Holiday</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<h2>
+					Benutzer
+				</h2>
+				<table class="table datagrid">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Role</th>
+							<th>Group</th>
+							<th>Overtime</th>
+							<th>Statut</th>
+							<th>Holiday () </th>
+							<th>Action </th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in app.user.company.users %}
+						<tr>
+							<td>
+								{{user.name}}
+							</td>
+							<td>
+							{{user.roles[0]}}	
+							</td>
+							<td>
+								{% if user.workingGroup is not null %}
+									{{user.workingGroup.name}}	
+								{% endif %}
+							</td>
+							<td>
+								{{user.roles[0]}}	
+							</td>							
+							<td>
+								{{user.state}}	
+							</td>
+							<td>
+								{{user.state}}	
+							</td>							
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

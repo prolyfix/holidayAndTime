@@ -45,14 +45,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Security\Permission;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 class UserCrudController extends AbstractCrudController
 {
-    public function __construct(private MailerInterface $mailer, private EntityManagerInterface $em, private Security $security)
+    public function __construct(private MailerInterface $mailer, private EntityManagerInterface $em, private Security $security, private ParameterBagInterface $params)
     {
         $this->em = $em;
         $this->security = $security;
@@ -81,12 +83,14 @@ class UserCrudController extends AbstractCrudController
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        $company = $this->getUser()->getCompany();
+        $entityInstance->setCompany($company);
         $entityInstance->setPassword(uniqid());
         parent::persistEntity($entityManager, $entityInstance);
         $email = new TemplatedEmail();
-        $email->from('kontakt@frauengesundheit-am-see.de')
+        $email->from(new Address($this->params->get('email_sender'), $this->params->get('email_sender_name')))
             ->to($entityInstance->getEmail())
-            ->subject('Willkommen bei Frauengesundheit am See')
+            ->subject('Registrierung bei der Verwaltung von Urlaub und Überstunden von '.$entityInstance->getCompany()->getName())
             ->htmlTemplate('email/registration.html.twig')
             ->context([
                 'user' => $entityInstance

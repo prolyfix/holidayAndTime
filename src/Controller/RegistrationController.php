@@ -10,6 +10,8 @@ use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -23,13 +25,20 @@ class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EmailVerifier $emailVerifier, private ParameterBagInterface $params)
     {
         $this->emailVerifier = $emailVerifier;
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(
+        Request $request, 
+        UserPasswordHasherInterface $userPasswordHasher, 
+        UserAuthenticatorInterface $userAuthenticator, 
+        LoginFormAuthenticator $authenticator, 
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator
+    ): Response
     {
         $user = UserFactory::createCustomer();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -50,10 +59,10 @@ class RegistrationController extends AbstractController
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('kontakt@frauengesundheit-am-see.de', 'Frauengesundheit am See'))
+                    ->from(new Address($this->params->get('email_sender'), $this->params->get('email_sender_name')))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->subject($translator->trans('Please Confirm your Email'))
+                    ->htmlTemplate('email/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
 
