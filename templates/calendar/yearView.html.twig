@@ -80,7 +80,7 @@
 
                             {% elseif outputBankHolidays[date] is defined %}
                                 <td></td>
-                            {% elseif isWorkday(user,date) and (user.startDate | date('Ymd')) < (date | date('Ymd'))%}
+                            {% elseif isWorkday(user,date) and (user.startDate | date('Ymd') < date |replace({'-': ''}))%}
                                 <td class="bg-success">
                                 </td>
                             {% elseif outputWorkingDays[user.id] is defined and outputWorkingDays[user.id][date] is defined   and outputWorkingDays[user.id][date]  %}

@@ -564,7 +564,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
                 $finalChoosen = $userSchedule->getUserWeekdayProperties();
             }
         }
-
         return $finalChoosen;
     }
 

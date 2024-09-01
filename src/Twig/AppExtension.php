@@ -45,7 +45,7 @@ class AppExtension extends AbstractExtension
             return false;
         $workdays = $user->getRightUserWeekdayProperties($realDate);
         foreach($workdays as $workday){
-            if($workday->getWeekday() == $trans[$realDate->format('N')] && $workday->getWorkingDay() > 0){
+            if($workday->getWeekday() == $trans[$realDate->format('N')] && $workday->getWorkingHours() !== null){
                 return true;
             }
         }
