@@ -1,5 +1,13 @@
 import { Timer } from './timer.js';
 
+var isOpen = true;
+
+document.getElementById('showHelpButton').addEventListener('click', function(){
+    document.getElementById('helpsidebar').classList.remove('hidden');
+});
+document.getElementById('closeHelpButton').addEventListener('click', function(){
+    document.getElementById('helpsidebar').classList.add('hidden');
+});
 function start() {
     axios.get('/ajax/start')
     .catch(function (error) {
@@ -7,6 +15,7 @@ function start() {
     });
 }
 function stop(elapsedTime){
+    isOpen = false;
     axios.post('/ajax/stop',{elapsedTime: elapsedTime},{ headers: {
             'Content-Type': 'application/json'
     }})
@@ -56,6 +65,9 @@ retrieveElapsedTime().then((data) => {
     timer.setElapsedTime(data.elapsedTime);
     timer.isBreak = data.isBreak;
     document.getElementById('timer').innerHTML = timer.getTime();
+    if(data.message == 'error'){
+        isOpen = false;
+    }
     if(data.elapsedTime > 0){
         document.getElementById('break').style.display = 'inline-block';
         document.getElementById('start').style.display = 'none';
@@ -112,7 +124,12 @@ document.addEventListener('timerSecond', (e) => {
     document.getElementById('timer').innerHTML = e.detail // e.detail will contain the time
 });
 document.addEventListener('timerMinute', (e) => {
-    breakTime();
+    console.log(isOpen)
+    if(isOpen){
+        breakTime();
+
+    }
+    
 });
 document
   .querySelectorAll('.add_item_link')

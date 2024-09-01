@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Calendar;
 use App\Entity\Company;
 use App\Entity\Configuration;
+use App\Entity\HelpContent;
 use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Room;
@@ -114,6 +115,9 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
             yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
         }
+        if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
+        }        
         $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCompany']);
         if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);

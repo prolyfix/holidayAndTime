@@ -13,3 +13,18 @@ table .text-light{
     font-size: 4rem;
     font-weight: bold;
 }
+.help-sidebar{
+    position: absolute;
+    right: 0;
+    width: 50vw;
+    min-width: 300px;
+    height: 100vh;
+    top: 0;
+    background-color: white;
+    display: block;
+    &.hidden{
+        width: 0vw;
+        min-width:0vw;
+    }
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
