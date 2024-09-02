@@ -10,6 +10,7 @@ use App\Entity\Issue;
 use App\Entity\Project;
 use App\Entity\Room;
 use App\Entity\Task;
+use App\Entity\ThirdParty;
 use App\Entity\Timesheet;
 use App\Entity\TypeOfAbsence;
 use App\Entity\User;
@@ -122,14 +123,18 @@ class DashboardController extends AbstractDashboardController
         if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
         }
-        $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject']);
+        $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject','company'=>$this->getUser()->getCompany()]);
+        dump($projectRight);
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Projects', 'fas fa-house', Project::class);
         }
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask','company'=>$this->getUser()->getCompany()]); 
+        dump($projectRight);
+
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Task', 'fas fa-house', Task::class);
         }
+        yield MenuItem::linkToCrud('ThirdParty', 'fas fa-house', ThirdParty::class);
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
         if($weekPlanningRight && $weekPlanningRight->getValue() == "true" || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Room', 'fas fa-house', Room::class);

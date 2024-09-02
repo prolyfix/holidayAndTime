@@ -15,6 +15,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskCrudController extends AbstractCrudController
@@ -60,6 +61,13 @@ class TaskCrudController extends AbstractCrudController
         ]);
 
     }
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('project')
+            ->add('name')
+        ;
+    }
 
     public function configureFields(string $pageName): iterable
     {
@@ -67,6 +75,7 @@ class TaskCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         if($user->getCompany()->getConfiguration('hasProject')->getValue()){
             yield AssociationField::new('project');
+            //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
         yield TextField::new('name');
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {

@@ -23,6 +23,9 @@ class Location extends Commentable
     #[ORM\OneToOne(mappedBy: 'location', cascade: ['persist', 'remove'])]
     private ?Company $company = null;
 
+    #[ORM\OneToOne(mappedBy: 'location', cascade: ['persist', 'remove'])]
+    private ?ThirdParty $thirdParty = null;
+
 
     public function getStreet(): ?string
     {
@@ -90,6 +93,28 @@ class Location extends Commentable
         }
 
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getThirdParty(): ?ThirdParty
+    {
+        return $this->thirdParty;
+    }
+
+    public function setThirdParty(?ThirdParty $thirdParty): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($thirdParty === null && $this->thirdParty !== null) {
+            $this->thirdParty->setLocation(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($thirdParty !== null && $thirdParty->getLocation() !== $this) {
+            $thirdParty->setLocation($this);
+        }
+
+        $this->thirdParty = $thirdParty;
 
         return $this;
     }
