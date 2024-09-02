@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Commentable;
 use App\Entity\Timesheet;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,6 +20,14 @@ class TimesheetType extends AbstractType
             ->add('startTime',null,['attr'=>['class'=>'form-control'],'widget'=>'single_text'])
             ->add('endTime',null,['attr'=>['class'=>'form-control'],'widget'=>'single_text'])
             ->add('break',null,['attr'=>['class'=>'form-control'],'widget'=>'single_text'])
+            ->add('relatedTo',EntityType::class, [
+                'class' => Commentable::class,
+                'choice_label' => function($commentable){
+                    if(method_exists($commentable, 'getName')) return $commentable->getName();
+                    return $commentable->getId();
+                },
+                'attr'=>['class'=>'form-control']
+            ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'email',

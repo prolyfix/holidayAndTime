@@ -7,6 +7,7 @@ use App\Entity\Company;
 use App\Entity\Configuration;
 use App\Entity\HelpContent;
 use App\Entity\Issue;
+use App\Entity\Media;
 use App\Entity\Project;
 use App\Entity\Room;
 use App\Entity\Task;
@@ -124,12 +125,11 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
         }
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject','company'=>$this->getUser()->getCompany()]);
-        dump($projectRight);
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Projects', 'fas fa-house', Project::class);
         }
+        yield MenuItem::linkToCrud('Medias', 'fas fa-house', Media::class);
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask','company'=>$this->getUser()->getCompany()]); 
-        dump($projectRight);
 
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Task', 'fas fa-house', Task::class);
