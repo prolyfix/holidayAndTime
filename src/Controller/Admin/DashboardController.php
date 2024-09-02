@@ -105,18 +105,25 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        yield MenuItem::section('HR');
         yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class)->setAction('viewYear');
         yield MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
         if($this->getUser()->isHasTimesheet()|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
 
+        }        
+        if($this->isGranted('ROLE_ADMIN')|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::section('Benutzern');
+            yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
+            yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
         }
         if($this->isGranted('ROLE_ADMIN')|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
+            yield MenuItem::section('Configuration');
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
-            yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
             yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
         }
+        yield MenuItem::section('Task');
+        yield MenuItem::section('CRM');
         if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
             yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
         }        
