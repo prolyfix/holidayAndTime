@@ -22,6 +22,9 @@ class Project extends Commentable
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
     private Collection $tasks;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -85,5 +88,17 @@ class Project extends Commentable
     public function __toString(): string
     {
         return $this->name ?? '';
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
     }
 }

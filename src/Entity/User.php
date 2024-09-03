@@ -105,6 +105,9 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'assignedTo')]
     private Collection $tasks;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatarFilename = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -617,6 +620,18 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
                 $task->setAssignedTo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAvatarFilename(): ?string
+    {
+        return $this->avatarFilename;
+    }
+
+    public function setAvatarFilename(?string $avatarFilename): static
+    {
+        $this->avatarFilename = $avatarFilename;
 
         return $this;
     }

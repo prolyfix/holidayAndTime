@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskCrudController extends AbstractCrudController
 {
@@ -59,6 +60,11 @@ class TaskCrudController extends AbstractCrudController
             'form' => $form->createView(),
         ]);
 
+    }
+
+    public function kanban(EntityManagerInterface $em, Request $request): Response
+    {
+        return $this->render('admin/task/kanban.html.twig');
     }
 
     public function configureFields(string $pageName): iterable

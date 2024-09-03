@@ -24,6 +24,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
@@ -101,7 +102,9 @@ class UserCrudController extends AbstractCrudController
             CollectionField::new('userProperties')->setEntryType(UserPropertyType::class),
             BooleanField::new('hasTimesheet'),
             BooleanField::new('isDeactivated') ,
-            BooleanField::new('emailInteraction')
+            BooleanField::new('emailInteraction'),
+            ImageField::new('avatarFilename')->setUploadDir('public/uploads/avatar')->setBasePath('uploads/logo')->hideOnIndex(),
+
 
         ];
     }
