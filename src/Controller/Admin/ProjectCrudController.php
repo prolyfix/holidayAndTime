@@ -26,6 +26,7 @@ class ProjectCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
             DateTimeField::new('creationDate')->hideOnForm(),
+            AssociationField::new('thirdParty'),
             AssociationField::new('tasks')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/task/field.html.twig')
         ];
     }

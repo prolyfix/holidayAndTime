@@ -3,8 +3,10 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Comment;
+use App\Entity\Media;
 use App\Entity\Task;
 use App\Form\CommentType;
+use App\Form\MediaType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -15,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,10 +29,12 @@ class TaskCrudController extends AbstractCrudController
     {
         $action = Action::new('addComment', 'Add Comment', 'fa fa-comment')
             ->linkToCrudAction('addComment');
-        
+        $actionAddMedia = Action::new('addMedia', 'Add Media', 'fa fa-image')
+            ->linkToCrudAction('addMedia');
         return $actions
             // ...
             ->add(Crud::PAGE_INDEX, $action)
+            ->add(Crud::PAGE_DETAIL, $actionAddMedia)
             ->add(Crud::PAGE_DETAIL, $action)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
         ;
@@ -62,6 +67,36 @@ class TaskCrudController extends AbstractCrudController
 
     }
 
+    public function addMedia(EntityManagerInterface $em, Request $request)
+    {
+        $entityId = $request->get('entityId');
+        $entity = $em->getRepository(Task::class)->find($entityId);
+        $media = new Media();
+        $form = $this->createForm(MediaType::class, $media);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $media->setCommentable($entity);
+            $em->persist($media);
+            $em->flush();
+            return $this->redirectToRoute('admin',[
+                'crudAction' => 'detail',
+                'entityId' => $entityId,
+                'crudControllerFqcn' => 'App\Controller\Admin\TaskCrudController',
+            ]);
+        }
+        return $this->render('admin/comment/add.html.twig', [
+            'form' => $form->createView(),
+        ]);
+
+    } 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('project')
+            ->add('name')
+        ;
+    }
+
     public function kanban(EntityManagerInterface $em, Request $request): Response
     {
         return $this->render('admin/task/kanban.html.twig');
@@ -73,6 +108,7 @@ class TaskCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         if($user->getCompany()->getConfiguration('hasProject')->getValue()){
             yield AssociationField::new('project');
+            //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
         yield TextField::new('name');
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
@@ -81,6 +117,7 @@ class TaskCrudController extends AbstractCrudController
                 ->setParameter('company', $user->getCompany());
         });
         yield TextEditorField::new('description');
+        yield AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating();
         yield ChoiceField::new('status')->setChoices([
             'todo' => 'todo',
             'in_progress' => 'in_progress',

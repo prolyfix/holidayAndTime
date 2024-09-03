@@ -45,6 +45,12 @@ class Timesheet
     #[ORM\Column(nullable: true)]
     private ?bool $isBreak = null;
 
+    #[ORM\ManyToOne(inversedBy: 'timesheets')]
+    private ?Commentable $commentable = null;
+
+    #[ORM\ManyToOne(inversedBy: 'relatedTimesheets')]
+    private ?Commentable $relatedTo = null;
+
     public function __construct()
     {
         $this->break = new \DateTime('00:00:00');
@@ -170,6 +176,30 @@ class Timesheet
     public function setIsBreak(?bool $isBreak): static
     {
         $this->isBreak = $isBreak;
+
+        return $this;
+    }
+
+    public function getCommentable(): ?Commentable
+    {
+        return $this->commentable;
+    }
+
+    public function setCommentable(?Commentable $commentable): static
+    {
+        $this->commentable = $commentable;
+
+        return $this;
+    }
+
+    public function getRelatedTo(): ?Commentable
+    {
+        return $this->relatedTo;
+    }
+
+    public function setRelatedTo(?Commentable $relatedTo): static
+    {
+        $this->relatedTo = $relatedTo;
 
         return $this;
     }

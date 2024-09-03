@@ -22,6 +22,9 @@ class Project extends Commentable
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'project')]
     private Collection $tasks;
 
+    #[ORM\ManyToOne(inversedBy: 'projects')]
+    private ?ThirdParty $thirdParty = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
@@ -88,6 +91,18 @@ class Project extends Commentable
     public function __toString(): string
     {
         return $this->name ?? '';
+    }
+
+    public function getThirdParty(): ?ThirdParty
+    {
+        return $this->thirdParty;
+    }
+
+    public function setThirdParty(?ThirdParty $thirdParty): static
+    {
+        $this->thirdParty = $thirdParty;
+
+        return $this;
     }
 
     public function getStatus(): ?string

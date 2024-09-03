@@ -10,6 +10,7 @@
                     <th> Name </th>
                     <td> {{ app.user.company.name }} </td>
                 </tr>
+                {% if app.user.company.location is not null %}
                 <tr>
                     <th colspan="2"> Adresse </th>
                 </tr>
@@ -29,6 +30,7 @@
                     <th> Logo </th>
                     <td> {{ app.user.company.location.city }} </td>
                 </tr>
+                {% endif %}
                 <tr>
                     <td colspan="2">
                         <a href="{{ ea_url()

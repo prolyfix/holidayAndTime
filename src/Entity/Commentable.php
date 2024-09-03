@@ -35,9 +35,24 @@ abstract class Commentable extends TimeData
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'commentable', cascade: ['persist'])]
     private Collection $comments;
 
+    /**
+     * @var Collection<int, Media>
+     */
+    #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'commentable')]
+    private Collection $media;
+
+    /**
+     * @var Collection<int, Timesheet>
+     */
+    #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'relatedTo')]
+    private Collection $relatedTimesheets;
+
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->media = new ArrayCollection();
+        $this->relatedTimesheets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,4 +89,67 @@ abstract class Commentable extends TimeData
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Media>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(Media $medium): static
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media->add($medium);
+            $medium->setCommentable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(Media $medium): static
+    {
+        if ($this->media->removeElement($medium)) {
+            // set the owning side to null (unless already changed)
+            if ($medium->getCommentable() === $this) {
+                $medium->setCommentable(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Timesheet>
+     */
+    public function getRelatedTimesheets(): Collection
+    {
+        return $this->relatedTimesheets;
+    }
+
+    public function addRelatedTimesheet(Timesheet $relatedTimesheet): static
+    {
+        if (!$this->relatedTimesheets->contains($relatedTimesheet)) {
+            $this->relatedTimesheets->add($relatedTimesheet);
+            $relatedTimesheet->setRelatedTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedTimesheet(Timesheet $relatedTimesheet): static
+    {
+        if ($this->relatedTimesheets->removeElement($relatedTimesheet)) {
+            // set the owning side to null (unless already changed)
+            if ($relatedTimesheet->getRelatedTo() === $this) {
+                $relatedTimesheet->setRelatedTo(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
 }
