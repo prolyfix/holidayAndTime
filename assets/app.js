@@ -8,7 +8,4 @@ import './bootstrap.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
-require('datatables.net-bs5/css/dataTables.bootstrap5.min.css');
-require('bootstrap-icons/font/bootstrap-icons.css');
-require('bootstrap');
-require('datatables');
+
