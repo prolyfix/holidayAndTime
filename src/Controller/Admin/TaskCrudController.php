@@ -43,6 +43,29 @@ class TaskCrudController extends AbstractCrudController
         return Task::class;
     }
 
+    public function kanban(EntityManagerInterface $em, Request $request)
+    {
+        $user = $this->getUser();
+        $tasks = $em->getRepository(Task::class)->findBy(['assignedTo' => $user]);
+        $todo = [];
+        $inProgress = [];
+        $done = [];
+        foreach ($tasks as $task) {
+            if ($task->getStatus() === 'todo') {
+                $todo[] = $task;
+            } elseif ($task->getStatus() === 'in_progress') {
+                $inProgress[] = $task;
+            } elseif ($task->getStatus() === 'done') {
+                $done[] = $task;
+            }
+        }
+        return $this->render('admin/task/kanban.html.twig', [
+            'todos' => $todo,
+            'inProgress' => $inProgress,
+            'done' => $done,
+        ]);
+    }
+
     public function addComment(EntityManagerInterface $em, Request $request)
     {
         $entityId = $request->get('entityId');

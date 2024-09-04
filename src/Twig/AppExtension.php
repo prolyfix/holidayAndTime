@@ -86,4 +86,18 @@ class AppExtension extends AbstractExtension
             return false;
         return $realDate->format('N') >= 6;
     }
+    public function weekday($day, $month, $year)
+    {
+        $date = new \DateTime();
+        $date->setDate($year, $month, $day);
+        return ($date->format('D'));
+    }
+    
+    public function datexists($day, $month, $year)
+    {
+        $date = new \DateTime();
+        $date->setDate($year, $month, $day);
+        return ($date->format('m')== $month);
+    }
+
 }

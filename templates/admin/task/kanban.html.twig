@@ -1,0 +1,34 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block content_title %}
+    {% trans %} Kanban {% endtrans %}
+{% endblock %}
+{% block main %}
+<div class="kanban-board">
+    <div class="kanban-column">
+        <div class="kanban-column-header">To Do</div>
+        <div class="kanban-column-content">
+            {% for todo in todos %}
+                <div class="kanban-card">
+                    <!-- Display the details of the todo -->
+                    <div class="kanban-card-title">{{ todo.name }}</div>
+                    <div class="kanban-card-description">{{ todo.description | raw}}</div>
+                    <div class="kanban-card-due-date">{{ "now" | date('Y')}}</div>
+                </div>
+            {% endfor %}
+            <!-- Kanban cards for tasks in "To Do" column -->
+        </div>
+    </div>
+    <div class="kanban-column">
+        <div class="kanban-column-header">In Progress</div>
+        <div class="kanban-column-content">
+            <!-- Kanban cards for tasks in "In Progress" column -->
+        </div>
+    </div>
+    <div class="kanban-column">
+        <div class="kanban-column-header">Done</div>
+        <div class="kanban-column-content">
+            <!-- Kanban cards for tasks in "Done" column -->
+        </div>
+    </div>
+</div>
+{% endblock %}
