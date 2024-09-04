@@ -22,6 +22,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('isWeekend', [$this, 'isWeekend']),
             new TwigFunction('minutesToTime', [$this, 'minutesToTime']),
             new TwigFunction('weekday', [$this, 'weekday']),
+            new TwigFunction('datexists', [$this, 'datexists']),
             new TwigFunction('toTime', [$this, 'toTime']),
             new TwigFunction('calculateDiff', [$this, 'calculateDiff']),
             new TwigFunction('isWorkday', [$this, 'isWorkday']),
@@ -85,12 +86,6 @@ class AppExtension extends AbstractExtension
         if(!$realDate)
             return false;
         return $realDate->format('N') >= 6;
-    }
-    public function weekday($day, $month, $year)
-    {
-        $date = new \DateTime();
-        $date->setDate($year, $month, $day);
-        return ($date->format('D'));
     }
     
     public function datexists($day, $month, $year)

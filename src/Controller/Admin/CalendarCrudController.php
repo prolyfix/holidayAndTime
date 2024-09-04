@@ -10,9 +10,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Ayearctions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -228,12 +229,14 @@ class CalendarCrudController extends AbstractCrudController
             
         }
         return $this->render('calendar/yearView.html.twig', [
-            'output' => $output,
-            'users' => $users,
-            'groupCount' => $groupCount,
-            'outputUser' => $outputUser,
+            'output'        => $output,
+            'users'         => $users,
+            'groupCount'    => $groupCount,
+            'outputUser'    => $outputUser,
             'outputBankHolidays' => $outputBankHolidays,
-            'outputWorkingDays' => $outputWorkingDays
+            'outputWorkingDays' => $outputWorkingDays,
+            'group'         => $request->get('year'),
+            'userP'         => $request->get('user')
         ]);
     }
 

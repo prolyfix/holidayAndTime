@@ -120,10 +120,6 @@ class TaskCrudController extends AbstractCrudController
         ;
     }
 
-    public function kanban(EntityManagerInterface $em, Request $request): Response
-    {
-        return $this->render('admin/task/kanban.html.twig');
-    }
 
     public function configureFields(string $pageName): iterable
     {
