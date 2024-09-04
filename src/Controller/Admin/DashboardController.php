@@ -55,6 +55,8 @@ class DashboardController extends AbstractDashboardController
                 ],
             ],
         ]);
+      
+        $todaysWorkers = $this->todaysWorkers($this->em, $this->getUser()); 
         //return parent::index();
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
@@ -80,6 +82,7 @@ class DashboardController extends AbstractDashboardController
         //
         return $this->render('admin/dashboard/index.html.twig',[
             'chart' => $chart,
+            'todaysWorkers' => $todaysWorkers
         ]);
     }
     public function __construct(private EntityManagerInterface $em,private ChartBuilderInterface $chartBuilder)
@@ -148,4 +151,22 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Week Planning', 'fas fa-house', Weekplan::class);
         }
     }
+
+
+    private function todaysWorkers(EntityManagerInterface $em, User $user): array
+    {
+        $output = [];
+        $usersRaw = $em->getRepository(User::class)->findByCompany($user->getCompany());
+        $today = new \DateTime();
+        foreach($usersRaw as $user){
+            $weekdayProperties = $user->getRightUserWeekdayProperties($today);
+            foreach($weekdayProperties as $weekdayProperty){
+                if($weekdayProperty->getWeekday() == $today->format('l')&& $weekdayProperty->getWorkingHours() !== null){
+                    $output[] = $user;
+                }
+            }
+        }        
+        return $output;
+    }
+
 }

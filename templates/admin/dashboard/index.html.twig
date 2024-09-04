@@ -32,6 +32,17 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-4">
+				<div class="card">
+                    <div class="card-body">
+						<h5 class="card-title">{%trans%}workingToday{%endtrans%}</h5>
+						<ul>
+							{% for user in todaysWorkers %}
+								<li>{{user.name}}</li>
+							{% endfor %}
+					</div>
+				</div>
+			</div>			
 			<div class="col-md-12">
 				<h2>
 					Benutzer
@@ -39,13 +50,14 @@
 				<table class="table datagrid">
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Role</th>
-							<th>Group</th>
-							<th>Overtime</th>
-							<th>Statut</th>
-							<th>Holiday () </th>
-							<th>Action </th>
+							<th>{% trans %}Name{% endtrans %}</th>
+							<th></th>
+							<th>{% trans %}Role{% endtrans %}</th>
+							<th>{% trans %}Group{% endtrans %}</th>
+							<th>{% trans %}Overtime{% endtrans %}</th>
+							<th>{% trans %}Statut{% endtrans %}</th>
+							<th>{% trans %}Holiday{% endtrans %}</th>
+							<th>{% trans %}Action{% endtrans %}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -54,6 +66,8 @@
 							<td>
 								{{user.name}}
 							</td>
+							<td>
+								{% include 'common/avatar.html.twig' %}
 							<td>
 							{{user.roles[0]}}	
 							</td>
