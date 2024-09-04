@@ -25,6 +25,9 @@ class Project extends Commentable
     #[ORM\ManyToOne(inversedBy: 'projects')]
     private ?ThirdParty $thirdParty = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $status = null;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
@@ -98,6 +101,18 @@ class Project extends Commentable
     public function setThirdParty(?ThirdParty $thirdParty): static
     {
         $this->thirdParty = $thirdParty;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
 
         return $this;
     }
