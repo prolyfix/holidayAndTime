@@ -26,6 +26,9 @@ class Media extends TimeData
     #[ORM\JoinColumn(nullable: false)]
     private ?Commentable $commentable = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $theuid = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,7 +49,7 @@ class Media extends TimeData
         if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updatedDate = new \DateTimeImmutable();
+            $this->theuid = uniqid();
         }
     }
 
@@ -75,6 +78,18 @@ class Media extends TimeData
     public function setCommentable(?Commentable $commentable): static
     {
         $this->commentable = $commentable;
+
+        return $this;
+    }
+
+    public function getTheuid(): ?string
+    {
+        return $this->theuid;
+    }
+
+    public function setTheuid(?string $theuid): static
+    {
+        $this->theuid = $theuid;
 
         return $this;
     }

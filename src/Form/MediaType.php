@@ -19,7 +19,6 @@ class MediaType extends AbstractType
         $builder
             ->add('file',VichFileType::class,[
                 'label' => 'Media',
-                'mapped' => false,
                 'required' => false
             ])
             ->add('submit',SubmitType::class, [

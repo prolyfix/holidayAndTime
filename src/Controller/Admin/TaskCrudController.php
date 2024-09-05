@@ -129,6 +129,7 @@ class TaskCrudController extends AbstractCrudController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $media->setCommentable($entity);
+            dump($media);
             $em->persist($media);
             $em->flush();
             return $this->redirectToRoute('admin',[
