@@ -33,7 +33,11 @@ table .text-light{
     flex-wrap: wrap;
     justify-content: space-between;
 }
-
+.kanban-board{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
 .kanban-column {
     flex: 1 0 30%;
     margin: 0 1rem;
@@ -77,6 +81,36 @@ table .text-light{
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    max-width:50px;
-    max-height:50px;
+    width:50px;
+    height:50px;
+}
+.comment-container{
+    width:20vw;
+    max-width: 300px;
+}
+#commentable-list {
+    margin-top: 10px; /* Space between the input and the list */
+    border: 1px solid #ccc; /* Border around the list */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px; /* Padding inside the list */
+    max-height: 200px; /* Maximum height for the list */
+    overflow-y: auto; /* Scroll if the content exceeds the max height */
+    background-color: #f9f9f9; /* Background color */
+}
+#commentable-list.hidden{
+    display:none;
+}   
+#commentable-list div {
+    padding: 8px; /* Padding inside each item */
+    margin-bottom: 5px; /* Space between items */
+    border-bottom: 1px solid #ddd; /* Border between items */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+#commentable-list div:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+#commentable-list div:hover {
+    background-color: #e9e9e9; /* Background color on hover */
 }

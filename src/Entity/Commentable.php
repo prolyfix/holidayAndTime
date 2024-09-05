@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentRepository;
+use App\Repository\CommentableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: CommentableRepository::class)]
 #[InheritanceType('JOINED')]
 #[DiscriminatorColumn(name: 'discr', type: 'string')]
 #[DiscriminatorMap([

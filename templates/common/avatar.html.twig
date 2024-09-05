@@ -1,3 +1,5 @@
 <div class="avatar">
-    <img src="/uploads/avatar/{{ user.avatarFilename }}" alt="{{ user.name }}">
+    {% if user.avatarFilename is not null %}
+        <img src="/uploads/avatar/{{ user.avatarFilename }}" alt="{{ user.name }}">
+    {% endif %}
 </div>

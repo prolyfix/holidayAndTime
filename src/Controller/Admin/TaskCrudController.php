@@ -4,9 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Comment;
 use App\Entity\Media;
+use App\Entity\Project;
 use App\Entity\Task;
 use App\Form\CommentType;
 use App\Form\MediaType;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -18,22 +20,31 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskCrudController extends AbstractCrudController
 {
 
-    
+
+    public function __construct(private RequestStack $requestStack, private EntityManagerInterface $em)
+    {
+    }
+
     public function configureActions(Actions $actions): Actions
     {
         $action = Action::new('addComment', 'Add Comment', 'fa fa-comment')
             ->linkToCrudAction('addComment');
         $actionAddMedia = Action::new('addMedia', 'Add Media', 'fa fa-image')
             ->linkToCrudAction('addMedia');
+        $actionKanboard = Action::new('kanban', 'Kanban', 'fa fa-tasks')
+            ->linkToCrudAction('kanban')->createAsGlobalAction();
         return $actions
             // ...
             ->add(Crud::PAGE_INDEX, $action)
+            ->add(Crud::PAGE_INDEX, $actionKanboard)
             ->add(Crud::PAGE_DETAIL, $actionAddMedia)
             ->add(Crud::PAGE_DETAIL, $action)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
@@ -90,6 +101,25 @@ class TaskCrudController extends AbstractCrudController
 
     }
 
+    public function createEntity(string $entityFqcn)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        $projectId = $request->query->get('project');
+
+        $task = new Task();
+        $task->setAssignedTo($this->getUser());
+        if ($projectId) {
+            $project = $this->em->getRepository(Project::class)->find($projectId);
+            
+            if ($project) {
+                $task->setProject($project);
+            }
+        }
+
+        return $task;
+    }
+
     public function addMedia(EntityManagerInterface $em, Request $request)
     {
         $entityId = $request->get('entityId');
@@ -121,6 +151,7 @@ class TaskCrudController extends AbstractCrudController
     }
 
 
+
     public function configureFields(string $pageName): iterable
     {
         $user = $this->getUser();
@@ -138,6 +169,7 @@ class TaskCrudController extends AbstractCrudController
         yield TextEditorField::new('description');
         yield AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating();
         yield ChoiceField::new('status')->setChoices([
+            'new' => 'new',
             'todo' => 'todo',
             'in_progress' => 'in_progress',
             'done' => 'done',

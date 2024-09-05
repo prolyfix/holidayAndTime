@@ -12,7 +12,6 @@ export default class extends Controller {
     initialize() {
     }
     connect() {
-      alert("ici");
     }
 
 }

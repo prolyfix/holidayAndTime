@@ -99,4 +99,9 @@ class Task extends Commentable
 
         return $this;
     }
+
+    public function __construct()
+    {
+        $this->status = 'new';
+    }
 }

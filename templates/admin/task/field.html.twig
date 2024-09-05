@@ -5,9 +5,7 @@
     <ul>
         
         {% for value in field.value %}
-        <li>
-            {{ value.name }}
-        <li>
+            {% include 'admin/task/card.html.twig' with {'task': value} %}
         {% endfor %}
     </ul>
 {% else %}

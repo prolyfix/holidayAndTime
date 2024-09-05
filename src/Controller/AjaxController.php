@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
+use App\Entity\Commentable;
 use App\Entity\Timesheet;
 use App\Utility\TimeUtility;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/ajax', name: 'app_ajax')]
 class AjaxController extends AbstractController
@@ -72,5 +76,22 @@ class AjaxController extends AbstractController
         $timesheet->setIsBreak($times['isBreak']);
         $em->flush();
         return new JsonResponse(['statut' => 'ok', 'message' => 'Break started', 'data' => ['start' => date('Y-m-d H:i:s')]]);
+    }
+
+    #[Route('/retrieveList', name: 'app_ajax_retrieve_list', methods: ['POST'])]
+    public function retrieveList(EntityManagerInterface $em, Request $request, SerializerInterface $serializer): JsonResponse
+    {
+        $output = [];
+        $data = json_decode($request->getContent(), true);
+        $commentables = $em->getRepository(Commentable::class)->retrieveCommentables( $data['commentable'] ?? null);
+        foreach($commentables as $commentable){
+            $output[] = [
+                'id' => $commentable->getId(),
+                'name' => $commentable->getName(),
+                'type' => $commentable::class,
+            ];
+        }
+
+        return new JsonResponse($output);
     }
 }

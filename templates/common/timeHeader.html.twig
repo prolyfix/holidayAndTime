@@ -1,0 +1,12 @@
+<div class="content-search" data-controller="time">
+	<span id="timer">
+		00:00
+	</span>
+	<i class="user-avatar-icon-foreground fa fa-play fa-inverse" id="start" style="color:lightgray"></i>
+	<i class="user-avatar-icon-foreground fa fa-pause fa-inverse" id="break" style="display:none; color:lightgray"></i>
+	<i class="user-avatar-icon-foreground fa fa-stop fa-inverse" id="stop" style="color:lightgray"></i>
+    <input type="text" id="comment" data-action="input->time#retrieveList" data-time-target="commentable">
+    <div id="commentable-list" class="hidden"></div>
+    <input type="text" id="relation">
+    <div class="" id="relation-list" ><i class="fa-fw fas fa-plane"></i></div>
+</div>
