@@ -20,6 +20,9 @@ class Comment extends TimeData
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?Commentable $commentable = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class Comment extends TimeData
     public function setCommentable(?Commentable $commentable): static
     {
         $this->commentable = $commentable;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

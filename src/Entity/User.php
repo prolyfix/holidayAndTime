@@ -108,6 +108,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarFilename = null;
 
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -635,4 +636,5 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
 
         return $this;
     }
+
 }

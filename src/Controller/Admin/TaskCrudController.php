@@ -83,6 +83,7 @@ class TaskCrudController extends AbstractCrudController
         $entityId = $request->get('entityId');
         $entity = $em->getRepository(Task::class)->find($entityId);
         $comment = new Comment();
+        $comment->setUser($this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -151,6 +152,18 @@ class TaskCrudController extends AbstractCrudController
         ;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if($request->query->get('entityId')){
+            $entityId = $request->query->get('entityId');
+            $entity = $this->em->getRepository(Task::class)->find($entityId);
+            $crud->setPageTitle(Crud::PAGE_DETAIL, $entity->getName());
+        }
+        //$crud->setPageTitle(Crud::PAGE_DETAIL, 'coucou');
+        return $crud;
+    }
+
 
 
     public function configureFields(string $pageName): iterable
@@ -176,6 +189,7 @@ class TaskCrudController extends AbstractCrudController
             'done' => 'done',
         ]);
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
+        yield AssociationField::new('relatedTimesheets')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/timesheet/field.html.twig');
     }
     
 }

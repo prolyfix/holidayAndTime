@@ -1,0 +1,22 @@
+{% if ea.crud.currentAction == 'detail' %}
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Date</th>
+                <th>Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for value in field.value %}
+            <tr>
+                <td>{{ value.user }}</td>
+                <td>{{ value.startTime|date('Y-m-d') }}</td>
+                <td>{{ value.workingMinutes }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

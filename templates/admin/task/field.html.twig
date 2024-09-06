@@ -2,12 +2,9 @@
 {# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
 {# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
 {% if ea.crud.currentAction == 'detail' %}
-    <ul>
-        
         {% for value in field.value %}
             {% include 'admin/task/card.html.twig' with {'task': value} %}
         {% endfor %}
-    </ul>
 {% else %}
     <span class="badge badge-secondary">{{ field.formattedValue }}</span>
 {% endif %}
