@@ -1,0 +1,11 @@
+{% if ea.crud.currentAction == 'detail' %}
+    <div class="row">
+        {% for value in field.value %}
+            <div class="col-md-1">
+                {% include 'admin/media/fileShow.html.twig' with {'file': value} %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

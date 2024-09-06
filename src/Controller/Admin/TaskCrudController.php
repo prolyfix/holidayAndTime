@@ -167,8 +167,8 @@ class TaskCrudController extends AbstractCrudController
                 ->andWhere('m.company = :company')
                 ->setParameter('company', $user->getCompany());
         });
-        yield TextEditorField::new('description');
-        yield AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating();
+        yield TextEditorField::new('description')->setTemplatePath('admin/fields/raw_text_editor.html.twig');
+        yield AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/media/field.html.twig');
         yield ChoiceField::new('status')->setChoices([
             'new' => 'new',
             'todo' => 'todo',
