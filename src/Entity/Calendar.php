@@ -52,6 +52,9 @@ class Calendar extends Commentable
     #[ORM\Column(nullable: true)]
     private ?float $absenceInWorkingDays = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $title = null;
+
 
     public function isIsAll(): ?bool
     {
@@ -181,6 +184,18 @@ class Calendar extends Commentable
     public function setAbsenceInWorkingDays(?float $absenceInWorkingDays): static
     {
         $this->absenceInWorkingDays = $absenceInWorkingDays;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
 
         return $this;
     }

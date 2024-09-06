@@ -27,6 +27,9 @@ class Task extends Commentable
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $dueDate = null;
+
 
     public function getProject(): ?Project
     {
@@ -103,5 +106,17 @@ class Task extends Commentable
     public function __construct()
     {
         $this->status = 'new';
+    }
+
+    public function getDueDate(): ?\DateTimeInterface
+    {
+        return $this->dueDate;
+    }
+
+    public function setDueDate(?\DateTimeInterface $dueDate): static
+    {
+        $this->dueDate = $dueDate;
+
+        return $this;
     }
 }

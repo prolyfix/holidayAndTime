@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -149,6 +150,12 @@ class TaskCrudController extends AbstractCrudController
         return $filters
             ->add('project')
             ->add('name')
+            ->add(ChoiceFilter::new('status')->setChoices([
+                'new' => 'new',
+                'todo' => 'todo',
+                'in_progress' => 'in_progress',
+                'done' => 'done',
+            ]))
         ;
     }
 

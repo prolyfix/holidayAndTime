@@ -3,12 +3,12 @@
     {% trans %} Kanban {% endtrans %}
 {% endblock %}
 {% block main %}
-<div class="kanban-board">
+<div class="kanban-board" data-controller="kanban">
     <div class="kanban-column">
         <div class="kanban-column-header">To Do</div>
         <div class="kanban-column-content">
             {% for todo in todos %}
-                <div class="kanban-card">
+                <div class="kanban-card" data-kanban-target="item">
                     <!-- Display the details of the todo -->
                     <div class="kanban-card-title">{{ todo.name }}</div>
                     <div class="kanban-card-description">{{ todo.description | raw}}</div>
@@ -22,7 +22,7 @@
         <div class="kanban-column-header">In Progress</div>
         <div class="kanban-column-content">
             {% for todo in inProgress %}
-                <div class="kanban-card">
+                <div class="kanban-card" data-kanban-target="item">
                     <!-- Display the details of the todo -->
                     <div class="kanban-card-title">{{ todo.name }}</div>
                     <div class="kanban-card-description">{{ todo.description | raw}}</div>
@@ -35,7 +35,7 @@
         <div class="kanban-column-header">Done</div>
         <div class="kanban-column-content">
             {% for todo in done %}
-                <div class="kanban-card">
+                <div class="kanban-card" data-kanban-target="item">
                     <!-- Display the details of the todo -->
                     <div class="kanban-card-title">{{ todo.name }}</div>
                     <div class="kanban-card-description">{{ todo.description | raw}}</div>
