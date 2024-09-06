@@ -21,13 +21,27 @@
     <div class="kanban-column">
         <div class="kanban-column-header">In Progress</div>
         <div class="kanban-column-content">
-            <!-- Kanban cards for tasks in "In Progress" column -->
+            {% for todo in inProgress %}
+                <div class="kanban-card">
+                    <!-- Display the details of the todo -->
+                    <div class="kanban-card-title">{{ todo.name }}</div>
+                    <div class="kanban-card-description">{{ todo.description | raw}}</div>
+                    <div class="kanban-card-due-date">{{ "now" | date('Y')}}</div>
+                </div>
+            {% endfor %}
         </div>
     </div>
     <div class="kanban-column">
         <div class="kanban-column-header">Done</div>
         <div class="kanban-column-content">
-            <!-- Kanban cards for tasks in "Done" column -->
+            {% for todo in done %}
+                <div class="kanban-card">
+                    <!-- Display the details of the todo -->
+                    <div class="kanban-card-title">{{ todo.name }}</div>
+                    <div class="kanban-card-description">{{ todo.description | raw}}</div>
+                    <div class="kanban-card-due-date">{{ "now" | date('Y')}}</div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </div>
