@@ -125,6 +125,29 @@
     <div class="mb-2"></div>
     <h2> Urlaubs </h2>
     <p> Urlaube sind bis spätestens 31 März für das vorheriges Jahr zu nehmen. Die Resturlaube verfallen. </p>
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Jahr</th>
+                <th>Urlaubsansprüche</th>
+                <th>geplant</th>
+                <th>GruppenUrlaub</th>
+                {# <th>davon in genehmigung</th> #}
+                <th>Rest</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, values in table %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ values.anspruch | number_format(1,",",".") }}</td>
+                    <td>{{ values.singleHoliday | number_format(1,",",".") }}</td>
+                    <td>{{ values.groupHoliday | number_format(1,",",".") }}</td>
+                    <td>{{ (values.anspruch - values.groupHoliday - values.singleHoliday) | number_format(1,",",".") }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <p> im Jahr {{"now"|date('Y')}}</p>
     <table class="table">
         <tbody>

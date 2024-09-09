@@ -43,6 +43,12 @@ class TypeOfAbsence
     #[ORM\ManyToOne(inversedBy: 'typeOfAbsences')]
     private ?Company $company = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $color = null;
+
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $shortTitle = null;
+
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
@@ -180,6 +186,30 @@ class TypeOfAbsence
     public function setCompany(?Company $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function getShortTitle(): ?string
+    {
+        return $this->shortTitle;
+    }
+
+    public function setShortTitle(?string $shortTitle): static
+    {
+        $this->shortTitle = $shortTitle;
 
         return $this;
     }

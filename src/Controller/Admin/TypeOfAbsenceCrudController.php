@@ -6,6 +6,7 @@ use App\Entity\TypeOfAbsence;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -45,6 +46,8 @@ class TypeOfAbsenceCrudController extends AbstractCrudController
             BooleanField::new('hasToBeValidated'),
             BooleanField::new('isBankHoliday'),
             BooleanField::new('isWorkingDay'),
+            TextField::new('shortTitle'),
+            ColorField::new('color'),
         ];
     }
     

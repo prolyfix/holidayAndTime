@@ -25,22 +25,13 @@
 		.bg-Fortbildung {
 			background-color: pink !important;
 		}
-        .bg-SchmutzigeDunstig {
+		.bg-SchmutzigeDunstig {
 			background-color: orange !important;
 		}
-        
 	</style>
 </h1>
-<h1>
-	{% trans %}
-	Kalender
-	{% endtrans %}</h1>
-<div class="btn-group mtb-2" role="group" aria-label="Basic example">
-	<a type="button" class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') -1 })) }}">{{(output|first).date | date('Y') -1 }}</a>
-	<a type="button" class="btn btn-secondary">
-		{{(output|first).date | date('Y')}}</a>
-	<a type="button" class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge(app.request.query.all)|merge({'year': (output|first).date | date('Y') +1 })) }}">{{(output|first).date | date('Y') +1 }}</a>
-</div>
+
+{% include 'calendar/_filter.html.twig' %}
 {% set date = null %}
 {% set year = null %}
 {% set month = null %}
@@ -81,37 +72,37 @@
 						{% if( group is defined and group == key)  or group is null %}
 							{% set rowspan = users | length %}
 							{% for user in users %}
-							{% if( userP is defined and userP is not null) %}
-								 {% set rowspan = 1 %}
-							{% endif %}
-							{% if( userP is defined and userP == user.name)  or userP is null %}
-								<tr>
-									{% if rowspan > 0 %}
-										<td rowspan="{{rowspan}}">
-											{{ key }}
-										</td>
-									{% endif %}
-									<td>{{ user.name }}</td>
-									{% for i in 1..31 %}
-										{% if not datexists(i,outpu.date |date('m'),year) %}
-                                            <td></td>
-                                        {% else %}
+								{% if( userP is defined and userP is not null) %}
+									{% set rowspan = 1 %}
+								{% endif %}
+								{% if( userP is defined and userP == user.name)  or userP is null %}
+									<tr>
+										{% if rowspan > 0 %}
+											<td rowspan="{{rowspan}}">
+												{{ key }}
+											</td>
+										{% endif %}
+										<td>{{ user.name }}</td>
+										{% for i in 1..31 %}
+											{% if not datexists(i,outpu.date |date('m'),year) %}
+												<td></td>
+											{% else %}
 												{% if i > 9 %}
 													{% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~ i %}
 												{% else %}
 													{% set date = year ~ '-' ~ outpu.date | date('m') ~ '-' ~'0'~ i %}
 												{% endif %}
 												{% if outputUser[user.id][date] is defined %}
-													<td class="bg-{{outputUser[user.id][date][0].typeOfAbsence}}">
+													<td class="bg-{{outputUser[user.id][date][0].typeOfAbsence}}" style="background-color:{{outputUser[user.id][date][0].typeOfAbsence.color}}">
 														{{outputUser[user.id][date][0].typeOfAbsence | slice(0,1)}}
+													{#
+																											{% for abs in outputUser[user.id][date] %}
+																												{{ abs.typeOfAbsence | slice(0,1)}}<br/>
+																											{% endfor %} #}
 														{#
-														{% for abs in outputUser[user.id][date] %}
-															{{ abs.typeOfAbsence | slice(0,1)}}<br/>
-														{% endfor %} #}
-														{#
-														{% for abs in outputUser[user.id][date] %}
-															{{ abs.typeOfAbsence | slice(0,1)}}<br/>
-														{% endfor %} #}
+																												{% for abs in outputUser[user.id][date] %}
+																													{{ abs.typeOfAbsence | slice(0,1)}}<br/>
+																												{% endfor %} #}
 													</td>
 												{% else %}
 													{% if isWeekend(date) %}
@@ -129,11 +120,11 @@
 														</td>
 													{% endif %}
 												{% endif %}
-										{% endif %}
-									{% endfor %}
-								</tr>
-								{% set rowspan = 0 %}
-							{% endif %}
+											{% endif %}
+										{% endfor %}
+									</tr>
+									{% set rowspan = 0 %}
+								{% endif %}
 							{% endfor %}
 						{% endif %}
 					{% endfor %}

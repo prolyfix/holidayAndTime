@@ -182,22 +182,47 @@ class UserCrudController extends AbstractCrudController
     public function show( HolidayCalculator $holidayCalculator, EntityManagerInterface $em): Response
     {
 
+        $year = date('Y');
+        $nextYear = date('Y') + 1;
+        $table = [];
+        //$table[$year] = ['anspruch' => 0, 'groupHoliday'=>0, 'singleHoliday'=>0, 'openHoliday'=>0, 'restHoliday'=>0];
+        $table[$year + 1] = ['anspruch' => 0, 'groupHoliday'=>0, 'singleHoliday'=>0, 'openHoliday'=>0, 'restHoliday'=>0];
         $user = $this->getContext()->getEntity()->getInstance();
-        $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(), date('Y'));
+        foreach($user->getUserProperties() as $property){
+            if(isset($table[$property->getYear()]))
+                $table[$property->getYear()]['anspruch'] = $property->getHolidayPerYear();
+        }
+        $groupHolidays = $em->getRepository(Calendar::class)->retrieveHolidaysForGroupForYear($user->getWorkingGroup(),$year);
         $groupHolidaysCount = 0;
         foreach($groupHolidays as $holiday){
             $holiday->setUser($user);
             $days = $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
             $groupHolidaysCount += $days;
             $holiday->setAbsenceInWorkingDays($days);
+            //$table[$year]['groupHoliday'] += $days;
         }
-        $groupHolidays2 = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( date('Y'));
+        $groupHolidays2 = $em->getRepository(Calendar::class)->retrieveHolidaysForFirmForYear( $year);
         foreach($groupHolidays2 as $holiday){
             $holiday->setUser($user);
             $days = $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
             $groupHolidaysCount += $days;
             $holiday->setAbsenceInWorkingDays($days);
+            //$table[$year]['groupHoliday'] += $days;
         }
+        $userHolidays = $em->getRepository(Calendar::class)->retrieveListHolidayForYear($user, $year);
+        foreach($userHolidays as $holiday){
+            if($holiday->getTypeOfAbsence()->isIsHoliday())
+                $days = $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
+            //$table[$year]['singleHoliday'] += $days;
+        }
+        $userHolidays = $em->getRepository(Calendar::class)->retrieveListHolidayForYear($user, $nextYear);
+        foreach($userHolidays as $holiday){
+            if($holiday->getTypeOfAbsence()->isIsHoliday()){
+                $days = $holidayCalculator->calculateEffectiveWorkingDays2($holiday, true);
+                $table[$nextYear]['singleHoliday'] += $days;
+            }
+        }
+
         return $this->render('admin/user/show.html.twig', [
             'user' => $user,
             'holidayForYear'        => $holidayCalculator->calculateHolidayForYear($user, date('Y')),
@@ -208,7 +233,7 @@ class UserCrudController extends AbstractCrudController
             'groupHolidaysList' => $groupHolidays,
             'groupHolidaysList2' => $groupHolidays2,
             'userHoliday' => $em->getRepository(Calendar::class)->retrieveListHolidayForYear($user, date('Y')),
-
+            'table' => $table
         ]);
     }
     
