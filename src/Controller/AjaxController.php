@@ -94,4 +94,29 @@ class AjaxController extends AbstractController
 
         return new JsonResponse($output);
     }
+
+    #[Route('/startWorking', name: 'app_ajax_start_working', methods: ['POST'])]
+    public function startWorking(EntityManagerInterface $em, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $commentable = $em->getRepository(Commentable::class)->find($data['commentable']);
+        $comment = new Comment();
+        $comment->setCommentable($commentable);
+        $comment->setUser($this->getUser());
+        $comment->setComment("Startet arbeiten");
+
+        $actualTimesheet = $em->getRepository(Timesheet::class)->findOneBy(['user' => $this->getUser(), 'endTime' => null]);
+        if($actualTimesheet){
+            $actualTimesheet->setEndTime(new \DateTime('now'));
+            $em->flush();
+        }
+        $timesheet = (new Timesheet())
+            ->setStartTime(new \DateTime('now'))
+            ->setUser($this->getUser())
+            ->setCommentable($commentable);
+        $em->persist($timesheet);
+        $em->persist($comment);
+        $em->flush();
+        return new JsonResponse(['statut' => 'ok', 'message' => 'Working started', 'data' => ['start' => date('Y-m-d H:i:s')]]);
+    }
 }

@@ -1,4 +1,3 @@
-@import "~bootstrap/scss/bootstrap";
 
 table .text-light{
     color: darkgray!important;
@@ -84,10 +83,12 @@ table .text-light{
     width:50px;
     height:50px;
 }
-.comment-container{
-    width:20vw;
+.comment-container {
+    width: 20vw;
     max-width: 300px;
+    position: relative; /* Ensure the container is the positioned ancestor */
 }
+
 #commentable-list {
     margin-top: 10px; /* Space between the input and the list */
     border: 1px solid #ccc; /* Border around the list */
@@ -96,6 +97,11 @@ table .text-light{
     max-height: 200px; /* Maximum height for the list */
     overflow-y: auto; /* Scroll if the content exceeds the max height */
     background-color: #f9f9f9; /* Background color */
+    position: absolute; /* Position absolutely within the container */
+    top: 100%; /* Position below the input field */
+    left: 0; /* Align to the left of the container */
+    width: 100%; /* Match the width of the container */
+    z-index: 1000; /* Ensure it appears above other elements */
 }
 #commentable-list.hidden{
     display:none;
