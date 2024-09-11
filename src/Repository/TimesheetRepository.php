@@ -80,4 +80,18 @@ class TimesheetRepository extends ServiceEntityRepository
         return $qb??0;
     }
 
+    public function stopWorking(User $user)
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->update()
+            ->set('t.endTime', ':end')
+            ->where('t.user = :user')
+            ->andWhere('t.endTime IS NULL')
+            ->setParameter('user', $user)
+            ->setParameter('end', new \DateTime())
+            ->getQuery()
+            ->execute();
+        return $qb;
+    }
+
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TimesheetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -45,15 +47,22 @@ class Timesheet
     #[ORM\Column(nullable: true)]
     private ?bool $isBreak = null;
 
-    #[ORM\ManyToOne(inversedBy: 'timesheets')]
-    private ?Commentable $commentable = null;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'commentable')]
+    private Collection $timesheets;
 
     #[ORM\ManyToOne(inversedBy: 'relatedTimesheets')]
-    private ?Commentable $relatedTo = null;
+    private ?Commentable $relatedCommentable = null;
+
+
 
     public function __construct()
     {
         $this->break = new \DateTime('00:00:00');
+        $this->timesheets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,27 +189,45 @@ class Timesheet
         return $this;
     }
 
-    public function getCommentable(): ?Commentable
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getTimesheets(): Collection
     {
-        return $this->commentable;
+        return $this->timesheets;
     }
 
-    public function setCommentable(?Commentable $commentable): static
+    public function addTimesheet(self $timesheet): static
     {
-        $this->commentable = $commentable;
+        if (!$this->timesheets->contains($timesheet)) {
+            $this->timesheets->add($timesheet);
+        }
 
         return $this;
     }
 
-    public function getRelatedTo(): ?Commentable
+    public function removeTimesheet(self $timesheet): static
     {
-        return $this->relatedTo;
-    }
-
-    public function setRelatedTo(?Commentable $relatedTo): static
-    {
-        $this->relatedTo = $relatedTo;
+        if ($this->timesheets->removeElement($timesheet)) {
+            // set the owning side to null (unless already changed)
+        }
 
         return $this;
     }
+
+    public function getRelatedCommentable(): ?Commentable
+    {
+        return $this->relatedCommentable;
+    }
+
+    public function setRelatedCommentable(?Commentable $relatedCommentable): static
+    {
+        $this->relatedCommentable = $relatedCommentable;
+
+        return $this;
+    }
+
+
+
 }

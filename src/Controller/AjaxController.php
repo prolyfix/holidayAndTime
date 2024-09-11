@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Commentable;
+use App\Entity\Task;
 use App\Entity\Timesheet;
 use App\Utility\TimeUtility;
 use Doctrine\ORM\EntityManagerInterface;
@@ -67,7 +68,8 @@ class AjaxController extends AbstractController
             'message' => 'Data retrieved', 
             'elapsedTime' => $actualWorkingMinutes, 
             'isBreak' => $timesheet->isBreak(),
-            'commentable' => $timesheet->getCommentable()->getName()
+            'commentable' => $timesheet->getRelatedCommentable()->getName(),
+            'commentableId' => $timesheet->getRelatedCommentable()->getId(),
         
         ]);
     }
@@ -98,8 +100,23 @@ class AjaxController extends AbstractController
                 'type' => $commentable::class,
             ];
         }
-
         return new JsonResponse($output);
+    }
+
+    #[Route('/saveComment', name: 'app_ajax_save_comment', methods: ['POST'])]
+    public function saveComment(EntityManagerInterface $em, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $commentable = $em->getRepository(Commentable::class)->findOneById($data['commentableId']);
+        $comment = new Comment();
+        $comment->setCommentable($commentable);
+        $comment->setUser($this->getUser());
+        $comment->setComment($data['comment']);
+        dump($comment);
+        $em->persist($comment);
+        $em->flush();
+        dump($comment);
+        return new JsonResponse(['statut' => 'ok', 'message' => 'Comment saved']);
     }
 
     #[Route('/startWorking', name: 'app_ajax_start_working', methods: ['POST'])]
@@ -120,10 +137,30 @@ class AjaxController extends AbstractController
         $timesheet = (new Timesheet())
             ->setStartTime(new \DateTime('now'))
             ->setUser($this->getUser())
-            ->setCommentable($commentable);
+            ->setRelatedCommentable($commentable);
         $em->persist($timesheet);
         $em->persist($comment);
         $em->flush();
         return new JsonResponse(['statut' => 'ok', 'message' => 'Working started', 'data' => ['start' => date('Y-m-d H:i:s')]]);
+    }
+
+    #[Route('/update-task-state', name: 'update_task_state', methods: ['POST'])]
+    public function updateTaskState(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        //ameliorer
+        $table =["New"=>"new","To Do"=>"todo", "In Progress"=>"in_progress", "Done"=>"done"];
+        $data = json_decode($request->getContent(), true);
+        $taskId = $data['taskId'];
+        $newState = $data['newState'];
+
+        $task = $entityManager->getRepository(Task::class)->find($taskId);
+        if (!$task) {
+            return new JsonResponse(['success' => false, 'message' => 'Task not found'], 404);
+        }
+        dump($newState);
+        $task->setStatus($table[$newState]);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
     }
 }

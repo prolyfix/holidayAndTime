@@ -9,11 +9,15 @@ export default class extends Controller {
     this.retrieveElapsedTime().then((data) => {
       this.timer.setElapsedTime(data.elapsedTime);
       this.timer.isBreak = data.isBreak;
-      this.commentableTarget.value = data.commentable;
+      if(data.commentable){
+        this.commentableTarget.value = data.commentable;
+        document.getElementById('commentableId').value = data.commentableId;
+      }
       document.getElementById('timer').innerHTML = this.timer.getTime();
       if (data.message == 'error') {
         isOpen = false;
       }
+      
       if (data.elapsedTime > 0) {
         document.getElementById('break').style.display = 'inline-block';
         document.getElementById('start').style.display = 'none';
@@ -30,6 +34,27 @@ export default class extends Controller {
   connect() {
 
   }
+
+  saveComment(){
+    fetch('/ajax/saveComment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        comment: document.getElementById('relation').value,
+        commentableId: document.getElementById('commentableId').value
+      })
+    }).then(response => response.json())
+      .then(data => {
+        document.getElementById('comment').value = '';
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
 
   start() {
     console.log("start");

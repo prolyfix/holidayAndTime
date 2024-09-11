@@ -36,19 +36,32 @@ class TaskCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $action = Action::new('addComment', 'Add Comment', 'fa fa-comment')
-            ->linkToCrudAction('addComment');
+        $createTaskAction = Action::new('createTask', 'Create Task', 'fa fa-plus')
+        ->linkToCrudAction('createTask');
         $actionAddMedia = Action::new('addMedia', 'Add Media', 'fa fa-image')
-            ->linkToCrudAction('addMedia');
+        ->linkToCrudAction('addMedia');
+        $actionComment = Action::new('addComment', 'Add Comment', 'fa fa-comment')
+        ->linkToCrudAction('addComment');
+        $actionTimesheet = Action::new('addTimesheet', 'Add Timesheet', 'fa fa-clock')
+        ->linkToCrudAction('addTimesheet');
+        $actionStartWorking = Action::new('startWorking', 'Start Working', 'fa fa-play')
+        ->linkToCrudAction('startWorking');
         $actionKanboard = Action::new('kanban', 'Kanban', 'fa fa-tasks')
             ->linkToCrudAction('kanban')->createAsGlobalAction();
         return $actions
-            // ...
-            ->add(Crud::PAGE_INDEX, $action)
             ->add(Crud::PAGE_INDEX, $actionKanboard)
-            ->add(Crud::PAGE_DETAIL, $actionAddMedia)
-            ->add(Crud::PAGE_DETAIL, $action)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_DETAIL, $actionComment)
+            ->add(Crud::PAGE_DETAIL, $actionAddMedia)
+            ->add(Crud::PAGE_DETAIL, $actionTimesheet)
+            ->add(Crud::PAGE_DETAIL, $actionStartWorking)
+            ->add(Crud::PAGE_DETAIL, $createTaskAction)
+            ->add(Crud::PAGE_INDEX, $actionComment)
+            ->add(Crud::PAGE_INDEX, $actionAddMedia)
+            ->add(Crud::PAGE_INDEX, $actionTimesheet)
+            ->add(Crud::PAGE_INDEX, $actionStartWorking)
+            ->add(Crud::PAGE_INDEX, $createTaskAction)
+
         ;
     }
     public static function getEntityFqcn(): string
@@ -63,6 +76,7 @@ class TaskCrudController extends AbstractCrudController
         $todo = [];
         $inProgress = [];
         $done = [];
+        $new = [];
         foreach ($tasks as $task) {
             if ($task->getStatus() === 'todo') {
                 $todo[] = $task;
@@ -70,12 +84,15 @@ class TaskCrudController extends AbstractCrudController
                 $inProgress[] = $task;
             } elseif ($task->getStatus() === 'done') {
                 $done[] = $task;
+            }elseif ($task->getStatus() === 'new') {
+                $new[] = $task;
             }
         }
         return $this->render('admin/task/kanban.html.twig', [
             'todos' => $todo,
             'inProgress' => $inProgress,
             'done' => $done,
+            'news' => $new,
         ]);
     }
 
@@ -180,7 +197,7 @@ class TaskCrudController extends AbstractCrudController
             yield AssociationField::new('project');
             //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
-        yield TextField::new('name');
+        yield TextField::new('name')->hideOnDetail();
         yield AssociationField::new('createdBy')->hideOnIndex();
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
             return $entity->createQueryBuilder('m')
@@ -196,7 +213,6 @@ class TaskCrudController extends AbstractCrudController
             'done' => 'done',
         ]);
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
-        yield AssociationField::new('relatedTimesheets')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/timesheet/field.html.twig');
     }
     
 }

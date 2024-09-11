@@ -20,7 +20,7 @@ class TimesheetType extends AbstractType
             ->add('startTime',null,['attr'=>['class'=>'form-control'],'widget'=>'single_text'])
             ->add('endTime',null,['attr'=>['class'=>'form-control'],'widget'=>'single_text'])
             ->add('break',null,['attr'=>['class'=>'form-control'],'widget'=>'single_text'])
-            ->add('relatedTo',EntityType::class, [
+            ->add('commentable',EntityType::class, [
                 'class' => Commentable::class,
                 'choice_label' => function($commentable){
                     if(method_exists($commentable, 'getName')) return $commentable->getName();

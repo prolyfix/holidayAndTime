@@ -42,14 +42,16 @@ abstract class Commentable extends TimeData
     #[ORM\OneToMany(targetEntity: Media::class, mappedBy: 'commentable')]
     private Collection $media;
 
-    /**
-     * @var Collection<int, Timesheet>
-     */
-    #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'relatedTo')]
-    private Collection $relatedTimesheets;
 
     #[ORM\ManyToOne(inversedBy: 'commentables')]
     private ?User $createdBy = null;
+
+    /**
+     * @var Collection<int, Timesheet>
+     */
+    #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'relatedCommentable')]
+    private Collection $relatedTimesheets;
+
 
 
     public function __construct()
@@ -124,36 +126,6 @@ abstract class Commentable extends TimeData
         return $this;
     }
 
-    /**
-     * @return Collection<int, Timesheet>
-     */
-    public function getRelatedTimesheets(): Collection
-    {
-        return $this->relatedTimesheets;
-    }
-
-    public function addRelatedTimesheet(Timesheet $relatedTimesheet): static
-    {
-        if (!$this->relatedTimesheets->contains($relatedTimesheet)) {
-            $this->relatedTimesheets->add($relatedTimesheet);
-            $relatedTimesheet->setRelatedTo($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelatedTimesheet(Timesheet $relatedTimesheet): static
-    {
-        if ($this->relatedTimesheets->removeElement($relatedTimesheet)) {
-            // set the owning side to null (unless already changed)
-            if ($relatedTimesheet->getRelatedTo() === $this) {
-                $relatedTimesheet->setRelatedTo(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCreatedBy(): ?User
     {
         return $this->createdBy;
@@ -166,6 +138,34 @@ abstract class Commentable extends TimeData
         return $this;
     }
 
+    /**
+     * @return Collection<int, Timesheet>
+     */
+    public function getRelatedTimesheets(): Collection
+    {
+        return $this->relatedTimesheets;
+    }
 
+    public function addRelatedTimesheet(Timesheet $relatedTimesheet): static
+    {
+        if (!$this->relatedTimesheets->contains($relatedTimesheet)) {
+            $this->relatedTimesheets->add($relatedTimesheet);
+            $relatedTimesheet->setRelatedCommentable($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedTimesheet(Timesheet $relatedTimesheet): static
+    {
+        if ($this->relatedTimesheets->removeElement($relatedTimesheet)) {
+            // set the owning side to null (unless already changed)
+            if ($relatedTimesheet->getRelatedCommentable() === $this) {
+                $relatedTimesheet->setRelatedCommentable(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

@@ -20,9 +20,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use App\Controller\Admin\Trait\CommentableTrait;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 
 class ProjectCrudController extends AbstractCrudController
 {
+    use CommentableTrait;
     public function __construct(private AdminUrlGenerator $crudUrlGenerator, private RequestStack $requestStack, private EntityManagerInterface $em)
     {
     }
@@ -33,13 +36,17 @@ class ProjectCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+
         return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('name'),
+            UrlField::new('name')->formatValue(function ($value, $entity) {
+                return '<a href="/admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CProjectCrudController&entityId='.$entity->getId().'">'.$value.'</a>';
+            })->hideOnDetail(),
             DateTimeField::new('creationDate')->hideOnForm(),
             AssociationField::new('thirdParty'),
             AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/media/field.html.twig'),
             AssociationField::new('tasks')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/task/field.html.twig'),
+
         ];
     }
     public function configureActions(Actions $actions): Actions
@@ -48,11 +55,27 @@ class ProjectCrudController extends AbstractCrudController
         ->linkToCrudAction('createTask');
         $actionAddMedia = Action::new('addMedia', 'Add Media', 'fa fa-image')
         ->linkToCrudAction('addMedia');
+        $actionComment = Action::new('addComment', 'Add Comment', 'fa fa-comment')
+        ->linkToCrudAction('addComment');
+        $actionTimesheet = Action::new('addTimesheet', 'Add Timesheet', 'fa fa-clock')
+        ->linkToCrudAction('addTimesheet');
+        $actionStartWorking = Action::new('startWorking', 'Start Working', 'fa fa-play')
+        ->linkToCrudAction('startWorking');
+
+
         return $actions
             // ...
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_INDEX, $createTaskAction)
+            ->add(Crud::PAGE_DETAIL, $actionComment)
             ->add(Crud::PAGE_DETAIL, $actionAddMedia)
+            ->add(Crud::PAGE_DETAIL, $actionTimesheet)
+            ->add(Crud::PAGE_DETAIL, $actionStartWorking)
+            ->add(Crud::PAGE_DETAIL, $createTaskAction)
+            ->add(Crud::PAGE_INDEX, $actionComment)
+            ->add(Crud::PAGE_INDEX, $actionAddMedia)
+            ->add(Crud::PAGE_INDEX, $actionTimesheet)
+            ->add(Crud::PAGE_INDEX, $actionStartWorking)
+            ->add(Crud::PAGE_INDEX, $createTaskAction)
         ;
     }
     public function addMedia(EntityManagerInterface $em, Request $request)
