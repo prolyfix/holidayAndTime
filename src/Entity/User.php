@@ -108,6 +108,12 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarFilename = null;
 
+    /**
+     * @var Collection<int, Commentable>
+     */
+    #[ORM\OneToMany(targetEntity: Commentable::class, mappedBy: 'createdBy')]
+    private Collection $commentables;
+
 
     public function __construct()
     {
@@ -131,6 +137,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->addUserProperty($userProperty);
         $this->weekplans = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->commentables = new ArrayCollection();
     }
 
 
@@ -633,6 +640,36 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     public function setAvatarFilename(?string $avatarFilename): static
     {
         $this->avatarFilename = $avatarFilename;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentable>
+     */
+    public function getCommentables(): Collection
+    {
+        return $this->commentables;
+    }
+
+    public function addCommentable(Commentable $commentable): static
+    {
+        if (!$this->commentables->contains($commentable)) {
+            $this->commentables->add($commentable);
+            $commentable->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentable(Commentable $commentable): static
+    {
+        if ($this->commentables->removeElement($commentable)) {
+            // set the owning side to null (unless already changed)
+            if ($commentable->getCreatedBy() === $this) {
+                $commentable->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }

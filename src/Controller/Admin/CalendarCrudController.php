@@ -228,6 +228,7 @@ class CalendarCrudController extends AbstractCrudController
             }
             
         }
+        dump($output);
         return $this->render('calendar/yearView.html.twig', [
             'output'        => $output,
             'users'         => $users,

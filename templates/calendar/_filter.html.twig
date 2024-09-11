@@ -34,7 +34,12 @@
 			<a class=" action-new btn btn-primary" data-action="click->calendar#filter">
 				<span class="action-label">Filtern</span>
 			</a>
-			<a class=" action-new btn btn-primary" data-action="click->calendar#filter">
+			<a class=" action-new btn btn-primary" href="
+			{{ ea_url()
+				.setController('App\\Controller\\Admin\\CalendarCrudController')
+				.setAction('index')
+			}}"
+			">
 				<span class="action-label">Als Liste</span>
 			</a>
 		</div>

@@ -49,7 +49,14 @@ services:
             - 
                 name: 'doctrine.orm.entity_listener'
                 event: 'preUpdate'
-                entity: 'App\Entity\UserWeekdayProperty'                
+                entity: 'App\Entity\UserWeekdayProperty'    
+    App\EventListener\CommentableListener:
+        tags:
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'prePersist'
+                entity: 'App\Entity\Commentable'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 parameters:

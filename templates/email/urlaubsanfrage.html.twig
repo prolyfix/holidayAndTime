@@ -1,0 +1,9 @@
+{% extends 'email/base.html.twig' %}
+
+{% block title %} Eine neue Urlaubsanfrage {% endblock %}
+
+{% block content %}
+    {{ calendar.user.name}} hat eine Urlaubsanfrage gestellt.
+    Bitte logen Sie sich ein, um die Anfrage zu bearbeiten.
+    
+{% endblock %}

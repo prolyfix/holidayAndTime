@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping\DiscriminatorMap;
     'calendar' => Calendar::class, 
     'userSchedule' => UserSchedule::class, 
     'project' => Project::class,
+    'workingGroup' => WorkingGroup::class,
     'task' => Task::class])]  
 abstract class Commentable extends TimeData
 {
@@ -46,6 +47,9 @@ abstract class Commentable extends TimeData
      */
     #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'relatedTo')]
     private Collection $relatedTimesheets;
+
+    #[ORM\ManyToOne(inversedBy: 'commentables')]
+    private ?User $createdBy = null;
 
 
     public function __construct()
@@ -146,6 +150,18 @@ abstract class Commentable extends TimeData
                 $relatedTimesheet->setRelatedTo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }

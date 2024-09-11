@@ -15,14 +15,14 @@ export default class extends Controller {
         const params = url.searchParams;
 
         // Get the values from your filter inputs or select elements
-        const group = "your_group_value";
-        const user = "your_user_value";
-        const year = "your_year_value";
+        const group = null;
+        const user = null;
+        const year = null;
 
         // Update the URL parameters
-        params.set("group", group);
-        params.set("user", user);
-        params.set("year", year);
+        //params.set("group", group);
+        //params.set("user", user);
+        //params.set("year", year);
 
         // Redirect to the updated URL
         window.location.href = url.toString();

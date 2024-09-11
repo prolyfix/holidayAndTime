@@ -182,6 +182,7 @@ class TaskCrudController extends AbstractCrudController
             //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
         yield TextField::new('name');
+        yield AssociationField::new('createdBy')->hideOnIndex();
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
             return $entity->createQueryBuilder('m')
                 ->andWhere('m.company = :company')

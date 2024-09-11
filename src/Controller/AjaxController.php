@@ -62,7 +62,14 @@ class AjaxController extends AbstractController
             $timeAfterLastUpdate = (new \DateTime())->diff($timesheet->getUpdateDatetime()??new \DateTime());
             $actualWorkingMinutes += TimeUtility::getMinutesFromDateInterval($timeAfterLastUpdate);
         }
-        return new JsonResponse(['statut' => 'ok', 'message' => 'Data retrieved', 'elapsedTime' => $actualWorkingMinutes, 'isBreak' => $timesheet->isBreak()]);
+        return new JsonResponse([
+            'statut' => 'ok', 
+            'message' => 'Data retrieved', 
+            'elapsedTime' => $actualWorkingMinutes, 
+            'isBreak' => $timesheet->isBreak(),
+            'commentable' => $timesheet->getCommentable()->getName()
+        
+        ]);
     }
 
     #[Route('/break', name: 'app_ajax_break', methods: ['POST'])]
