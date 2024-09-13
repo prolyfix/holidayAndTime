@@ -65,7 +65,7 @@ Trait CommentableTrait{
         $entityId = $request->get('entityId');
         $entity = $em->getRepository(Commentable::class)->find($entityId);
         $timesheet = new Timesheet();
-        $timesheet->setCommentable($entity);
+        $timesheet->setRelatedCommentable($entity);
         $form = $this->createForm(TimesheetType::class, $timesheet);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
