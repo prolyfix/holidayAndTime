@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Room;
+use App\Entity\User;
 use App\Entity\Weekplan;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -53,7 +54,15 @@ class WeekplanCrudController extends AbstractCrudController
             $slots[] = $slot->format('H:i');
             $slot->add(new \DateInterval('PT' . $interval . 'M'));
         }
-        return $this->render('calendar/planning.html.twig', ['rooms' => $rooms, 'slots' => $slots]);
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; // Example days
+        $employees = $em->getRepository(User::class)->findActiveEmployeesOfCompany($this->getUser()->getCompany());
+        return $this->render('calendar/planning.html.twig', [
+            'rooms' => $rooms, 
+            'timeSlots' => $slots,
+            'employees' => $employees,
+            'days' => $days,
+            'bookings' => []
+        ]);
     }
 
 }

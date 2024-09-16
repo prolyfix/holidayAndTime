@@ -16,8 +16,12 @@ class UserFactory
         'hasProject'=>'bool',
         'hasRoomPlan'=>'bool',
         'hasCalendar'=>'bool',
-        'thresholdHalfDay'=>'float',];
-    const COMPANY_DEFAULT_TYPE_OF_ABSENCES = ['vacation'=>[
+        'thresholdHalfDay'=>'float',
+        'hasCRM'=>'bool',
+        'hasApointment'=>'bool',
+    ];
+    const COMPANY_DEFAULT_TYPE_OF_ABSENCES = [
+    'vacation'=>[
         'isHoliday'=>true,
         'isTimeHoliday'=>false,
         'hasToBeValidated'=>true,
@@ -51,7 +55,16 @@ class UserFactory
         'hasToBeValidated'=>true,
         'isBankHoliday'=>true,
         'isWorkingDay'=>false
-    ]];
+    ],
+    'training'=>[
+        'isHoliday'=>false,
+        'isTimeHoliday'=>false,
+        'hasToBeValidated'=>true,
+        'isBankHoliday'=>false,
+        'isWorkingDay'=>true
+    ],
+    ];
+
 
     public static function createCustomer(): User
     {

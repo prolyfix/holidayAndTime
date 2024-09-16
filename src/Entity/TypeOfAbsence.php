@@ -9,7 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TypeOfAbsenceRepository::class)]
-class TypeOfAbsence
+class TypeOfAbsence extends TimeData
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,9 +18,6 @@ class TypeOfAbsence
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isHoliday = null;
@@ -52,6 +49,7 @@ class TypeOfAbsence
     public function __construct()
     {
         $this->calendars = new ArrayCollection();
+        parent::__construct();
     }
 
     public function __toString()
@@ -76,17 +74,6 @@ class TypeOfAbsence
         return $this;
     }
 
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(?\DateTimeInterface $creationDate): static
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
 
     public function isIsHoliday(): ?bool
     {

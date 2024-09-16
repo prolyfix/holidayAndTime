@@ -1,56 +1,48 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+
 {% block page_content %}
+	<div data-controller="room">
+		<div class="row">
+			{% for employee in employees %}
+				<div class="col-md-2" data-room-target="employee" id="employee{{employee.id}}">
+					<div class="btn">
+						{{ employee.name }}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 
-    <table class="table table-bordered">
-        <thead> 
-            <tr>
-                <th> Time </th>
-                <th colspan ="{{rooms | length }}"> Monday </th>
-                <th colspan ="{{rooms | length }}"> Tuesday </th>
-                <th colspan ="{{rooms | length }}"> Wednesday </th>
-                <th colspan ="{{rooms | length }}"> Thursday </th>
-                <th colspan ="{{rooms | length }}"> Friday </th>
-            </tr>
-            <tr>
-                <th> </th>
-                {% for room in rooms %}
-                    <th> {{ room.name }} </th>
-                {% endfor %}
-                {% for room in rooms %}
-                    <th> {{ room.name }} </th>
-                {% endfor %}
-                {% for room in rooms %}
-                    <th> {{ room.name }} </th>
-                {% endfor %}
-                {% for room in rooms %}
-                    <th> {{ room.name }} </th>
-                {% endfor %}
-                {% for room in rooms %}
-                    <th> {{ room.name }} </th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody> 
-                {% for slot in slots %}
-            <tr>
-
-                <td> {{slot}} </td>
-                {% for i in 1..5 %}
-                    {% for i in 1..rooms | length %}
-                        <td> </td>
-                    {% endfor %}
-                {% endfor %}
-            </tr>   
-                {% endfor %}
-
-        </tbody>
-    </table>
-    <div class="event">
-        <div class="event-title">Event 1</div>
-        <div class="event-time">10:00 - 12:00</div>
-    </div>
-
-
-
-                    
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>Time</th>
+					{% for day in days %}
+						<th colspan="{{ rooms | length }}">{{ day }}</th>
+					{% endfor %}
+				</tr>
+				<tr>
+					<th>{%trans%}Rooms{%endtrans%}</th>
+					{% for day in days %}
+						{% for room in rooms %}
+							<th colspan="">{{ room.name }}</th>
+						{% endfor %}
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for timeSlot in timeSlots %}
+					<tr>
+						<td >{{ timeSlot }}</td>
+						{% for day in days %}
+							{% for room in rooms %}
+								<td data-room-target="slot">
+								</td>
+							{% endfor %}
+						{% endfor %}
+						</tr>
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
 {% endblock %}
