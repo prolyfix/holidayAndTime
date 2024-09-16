@@ -114,6 +114,12 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: Commentable::class, mappedBy: 'createdBy')]
     private Collection $commentables;
 
+    /**
+     * @var Collection<int, Project>
+     */
+    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'members')]
+    private Collection $projects;
+
 
     public function __construct()
     {
@@ -138,6 +144,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->weekplans = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->commentables = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
 
@@ -669,6 +676,33 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
             if ($commentable->getCreatedBy() === $this) {
                 $commentable->setCreatedBy(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Project>
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): static
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects->add($project);
+            $project->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): static
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeMember($this);
         }
 
         return $this;

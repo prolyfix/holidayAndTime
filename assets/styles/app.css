@@ -63,6 +63,7 @@ table .text-light{
     font-size: 1rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+    color:#666
 }
 
 .kanban-card-description {
@@ -75,6 +76,9 @@ table .text-light{
     color: #999;
 }
 
+.avatar{
+    display: inline-block;
+}
 .avatar img{
     width: 100%;
     height: 100%;
@@ -82,7 +86,12 @@ table .text-light{
     border-radius: 50%;
     width:50px;
     height:50px;
+    &.small{
+        width:30px;
+        height:30px;
+    }
 }
+
 .comment-container {
     width: 20vw;
     max-width: 300px;

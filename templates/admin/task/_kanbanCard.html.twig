@@ -1,8 +1,15 @@
 <div
 	class="kanban-card" data-kanban-target="item" id="inprogress-{{ todo.id }}">
 	<!-- Display the details of the todo -->
-	<div class="kanban-card-title">{{ todo.name }}</div>
-	<div class="kanban-card-description">{{ (todo.description | raw) }}</div>
+	<a class="kanban-card-title" 
+        href="{{ ea_url()
+                                    .setController('App\\Controller\\Admin\\TaskCrudController')
+                                    .setAction('detail')
+                                    .setEntityId(todo.id)   
+                            }}
+            "
+    >{{ todo.name }}
+    </a>
 	<div class="kanban-card-due-date">
             {% if todo.dueDate %}
                 {{ todo.dueDate | date('d-m-Y') }} 
@@ -26,6 +33,9 @@
                             .setEntityId(todo.id)   
                         }}" data-action-name="addComment">
                 <i class="action-icon fa fa-comment"></i> 
-            </a>                      
+            </a>  
+            {% if todo.assignedTo %}
+                {% include 'common/avatar.html.twig' with {user: todo.assignedTo, class:'small'} %}
+            {% endif %}
     </div>
 </div>

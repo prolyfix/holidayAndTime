@@ -46,6 +46,7 @@ class ProjectCrudController extends AbstractCrudController
             AssociationField::new('thirdParty'),
             AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/media/field.html.twig'),
             AssociationField::new('tasks')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/task/field.html.twig'),
+            AssociationField::new('members'),
 
         ];
     }

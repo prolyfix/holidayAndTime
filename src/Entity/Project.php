@@ -28,10 +28,17 @@ class Project extends Commentable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $status = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'projects')]
+    private Collection $members;
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
         parent::__construct();
+        $this->members = new ArrayCollection();
     }
 
 
@@ -114,6 +121,30 @@ class Project extends Commentable
     public function setStatus(?string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(User $member): static
+    {
+        if (!$this->members->contains($member)) {
+            $this->members->add($member);
+        }
+
+        return $this;
+    }
+
+    public function removeMember(User $member): static
+    {
+        $this->members->removeElement($member);
 
         return $this;
     }
