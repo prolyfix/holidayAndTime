@@ -1,58 +1,39 @@
 <div class="kanban-board" data-controller="kanban">
-    <div class="kanban-column">
-        <div class="kanban-column-header">New</div>
-        <div class="kanban-column-content" data-kanban-target="columnContent">
-            {% for todo in news %}
-                <div class="kanban-card" data-kanban-target="item" id="todo-{{ todo.id }}">
-                    <!-- Display the details of the todo -->
-                    <div class="kanban-card-title">{{ todo.name }}</div>
-                    <div class="kanban-card-description">{{ todo.description | raw }}</div>
-                    <div class="kanban-card-due-date">{{ "now" | date('Y') }}</div>
-                </div>
-            {% endfor %}
-            <!-- Kanban cards for tasks in "To Do" column -->
-        </div>
-    </div>
-    <div class="kanban-column">
-        <div class="kanban-column-header">To Do</div>
-        <div class="kanban-column-content" data-kanban-target="columnContent">
-            {% for todo in todos %}
-                <div class="kanban-card" data-kanban-target="item" id="todo-{{ todo.id }}">
-                    <!-- Display the details of the todo -->
-                    <div class="kanban-card-title">{{ todo.name }}</div>
-                    <div class="kanban-card-description">{{ todo.description | raw }}</div>
-                    <div class="kanban-card-due-date">{{ "now" | date('Y') }}</div>
-                </div>
-            {% endfor %}
-            <!-- Kanban cards for tasks in "To Do" column -->
-        </div>
-    </div>
-    <div class="kanban-column">
-        <div class="kanban-column-header">In Progress</div>
-        <div class="kanban-column-content" data-kanban-target="columnContent">
-            {% for todo in inProgress %}
-                <div class="kanban-card" data-kanban-target="item" id="inprogress-{{ todo.id }}">
-                    <!-- Display the details of the todo -->
-                    <div class="kanban-card-title">{{ todo.name }}</div>
-                    <div class="kanban-card-description">{{ todo.description | raw }}</div>
-                    <div class="kanban-card-due-date">{{ "now" | date('Y') }}</div>
-                </div>
-            {% endfor %}
-            <!-- Kanban cards for tasks in "In Progress" column -->
-        </div>
-    </div>
-    <div class="kanban-column">
-        <div class="kanban-column-header">Done</div>
-        <div class="kanban-column-content" data-kanban-target="columnContent">
-            {% for todo in done %}
-                <div class="kanban-card" data-kanban-target="item" id="inprogress-{{ todo.id }}">
-                    <!-- Display the details of the todo -->
-                    <div class="kanban-card-title">{{ todo.name }}</div>
-                    <div class="kanban-card-description">{{ todo.description | raw }}</div>
-                    <div class="kanban-card-due-date">{{ "now" | date('Y') }}</div>
-                </div>
-            {% endfor %}
-            <!-- Kanban cards for tasks in "In Progress" column -->
-        </div>
-    </div>    
+	<div class="kanban-column">
+		<div class="kanban-column-header">New</div>
+		<div class="kanban-column-content" data-kanban-target="columnContent">
+			{% for todo in news %}
+				{% include 'admin/task/_kanbanCard.html.twig' with {'todo': todo} %}
+			{% endfor %}
+			<!-- Kanban cards for tasks in "To Do" column -->
+		</div>
+	</div>
+	<div class="kanban-column">
+		<div class="kanban-column-header">To Do</div>
+		<div class="kanban-column-content" data-kanban-target="columnContent">
+			{% for todo in todos %}
+				{% include 'admin/task/_kanbanCard.html.twig' with {'todo': todo} %}
+			{% endfor %}
+			<!-- Kanban cards for tasks in "To Do" column -->
+		</div>
+	</div>
+	<div class="kanban-column">
+		<div class="kanban-column-header">In Progress</div>
+		<div class="kanban-column-content" data-kanban-target="columnContent">
+			{% for todo in inProgress %}
+				{% include 'admin/task/_kanbanCard.html.twig' with {'todo': todo} %}
+
+			{% endfor %}
+			<!-- Kanban cards for tasks in "In Progress" column -->
+		</div>
+	</div>
+	<div class="kanban-column">
+		<div class="kanban-column-header">Done</div>
+		<div class="kanban-column-content" data-kanban-target="columnContent">
+			{% for todo in done %}
+				{% include 'admin/task/_kanbanCard.html.twig' with {'todo': todo} %}
+			{% endfor %}
+			<!-- Kanban cards for tasks in "In Progress" column -->
+		</div>
+	</div>
 </div>

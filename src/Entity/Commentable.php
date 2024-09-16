@@ -59,6 +59,7 @@ abstract class Commentable extends TimeData
         $this->comments = new ArrayCollection();
         $this->media = new ArrayCollection();
         $this->relatedTimesheets = new ArrayCollection();
+        parent::__construct();
     }
 
     public function getId(): ?int

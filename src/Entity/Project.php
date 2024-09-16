@@ -31,6 +31,7 @@ class Project extends Commentable
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        parent::__construct();
     }
 
 

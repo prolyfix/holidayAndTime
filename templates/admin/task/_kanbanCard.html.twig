@@ -1,0 +1,31 @@
+<div
+	class="kanban-card" data-kanban-target="item" id="inprogress-{{ todo.id }}">
+	<!-- Display the details of the todo -->
+	<div class="kanban-card-title">{{ todo.name }}</div>
+	<div class="kanban-card-description">{{ (todo.description | raw) }}</div>
+	<div class="kanban-card-due-date">
+            {% if todo.dueDate %}
+                {{ todo.dueDate | date('d-m-Y') }} 
+            {% endif %} 
+            <br/>
+            <a class="btn btn-xs" href="{{ ea_url()
+                                    .setController('App\\Controller\\Admin\\TaskCrudController')
+                                    .setAction('addComment')
+                                    .setEntityId(todo.id)   
+                            }}
+            " data-action-name="createTask">
+                <i class="action-icon fa fa-play"></i> 
+            </a>   
+            <a class="btn btn-xs" href="" data-action-name="createTask">
+                <i class="action-icon fa fa-clock"></i> 
+            </a>             
+            <a class="btn btn-xs" href="
+                        {{ ea_url()
+                            .setController('App\\Controller\\Admin\\TaskCrudController')
+                            .setAction('addComment')
+                            .setEntityId(todo.id)   
+                        }}" data-action-name="addComment">
+                <i class="action-icon fa fa-comment"></i> 
+            </a>                      
+    </div>
+</div>

@@ -106,6 +106,7 @@ class Task extends Commentable
     public function __construct()
     {
         $this->status = 'new';
+        parent::__construct();
     }
 
     public function getDueDate(): ?\DateTimeInterface

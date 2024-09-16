@@ -21,10 +21,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Date;
 
 class TaskCrudController extends AbstractCrudController
 {
@@ -198,7 +201,6 @@ class TaskCrudController extends AbstractCrudController
             //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
         yield TextField::new('name')->hideOnDetail();
-        yield AssociationField::new('createdBy')->hideOnIndex();
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
             return $entity->createQueryBuilder('m')
                 ->andWhere('m.company = :company')
@@ -213,6 +215,7 @@ class TaskCrudController extends AbstractCrudController
             'done' => 'done',
         ]);
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
+        yield DateField::new('dueDate');
     }
     
 }
