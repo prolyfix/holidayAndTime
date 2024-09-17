@@ -30,9 +30,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for timeSlot in timeSlots %}
+				{% for key, timeSlot in timeSlots %}
+					{% if timeSlots[key +1] is defined %}
 					<tr>
-						<td >{{ timeSlot }}</td>
+						<td >{{ timeSlot }}-{{timeSlots[key+1]}}</td>
 						{% for day in days %}
 							{% for room in rooms %}
 								<td data-room-target="slot">
@@ -40,6 +41,7 @@
 							{% endfor %}
 						{% endfor %}
 						</tr>
+					{% endif %}
 					{% endfor %}
 				</tbody>
 			</tbody>
