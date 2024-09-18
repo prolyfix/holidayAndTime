@@ -90,7 +90,7 @@ Trait CommentableTrait{
         $entityId = $request->get('entityId');
         $entity = $em->getRepository(Commentable::class)->find($entityId);
         $timesheet = new Timesheet();
-        $timesheet->setCommentable($entity);
+        $timesheet->setRelatedCommentable($entity);
         $timesheet->setStartTime(new \DateTime());
         $timesheet->setUser($this->getUser());  
         $em->persist($timesheet);
