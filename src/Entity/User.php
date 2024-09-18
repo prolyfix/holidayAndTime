@@ -120,6 +120,9 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'members')]
     private Collection $projects;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $color = null;
+
 
     public function __construct()
     {
@@ -704,6 +707,18 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         if ($this->projects->removeElement($project)) {
             $project->removeMember($this);
         }
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
 
         return $this;
     }

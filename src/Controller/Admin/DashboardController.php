@@ -126,34 +126,37 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
             yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
         }
-        yield MenuItem::section('Task');
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject','company'=>$this->getUser()->getCompany()]);
+        $taskRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask','company'=>$this->getUser()->getCompany()]); 
+        if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN') || $taskRight && $taskRight->getValue() == 1 ) {    
+            yield MenuItem::section('Projects');
+        }
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Projects', 'fas fa-diagram-project', Project::class);
         }
-        $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask','company'=>$this->getUser()->getCompany()]); 
 
-        if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+        if($taskRight && $taskRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Task', 'fas fa-check', Task::class)->setQueryParameter('filters[status]', "new");
         }
-        yield MenuItem::section('CRM');
         if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
             yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
         }        
-        $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCompany']);
-        if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+        if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
         }
+        $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCRM','company'=>$this->getUser()->getCompany()]);
 
-        yield MenuItem::linkToCrud('Medias', 'fas fa-house', Media::class);
+        if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+            yield MenuItem::linkToCrud('Medias', 'fas fa-house', Media::class);
+            yield MenuItem::linkToCrud('ThirdParty', 'fas fa-house', ThirdParty::class);
+            yield MenuItem::linkToCrud('Appointments', 'fas fa-house', Appointment::class);
+        }
 
-        yield MenuItem::linkToCrud('ThirdParty', 'fas fa-house', ThirdParty::class);
-        yield MenuItem::linkToCrud('Appointments', 'fas fa-house', Appointment::class);
 
 
 
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
-        if($weekPlanningRight && $weekPlanningRight->getValue() == "true" || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+        if($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Room', 'fas fa-house', Room::class);
             yield MenuItem::linkToCrud('Week Planning', 'fas fa-house', Weekplan::class);
         }

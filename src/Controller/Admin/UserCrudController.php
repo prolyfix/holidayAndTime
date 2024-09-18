@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -104,6 +105,7 @@ class UserCrudController extends AbstractCrudController
             BooleanField::new('isDeactivated') ,
             BooleanField::new('emailInteraction'),
             ImageField::new('avatarFilename')->setUploadDir('public/uploads/avatar')->setBasePath('uploads/logo')->hideOnIndex(),
+            ColorField::new('color'),
 
 
         ];
