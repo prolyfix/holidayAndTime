@@ -59,6 +59,7 @@ class TimesheetCrudController extends AbstractCrudController
             DateTimeField::new('endTime')->setFormat(' HH:mm'),
             TimeField::new('break')->setFormat('HH:mm'),
             NumberField::new('workingMinutes'),
+            AssociationField::new('relatedCommentable'),
             NumberField::new('overtime')->hideOnForm()
             ->formatValue(function ($value, $entity) {
                 if ($value !== null) {

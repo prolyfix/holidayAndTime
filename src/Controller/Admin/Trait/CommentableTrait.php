@@ -26,10 +26,11 @@ Trait CommentableTrait{
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($comment);
             $em->flush();
+            $className = explode('\\',$entity::class);
             return $this->redirectToRoute('admin',[
                 'crudAction' => 'detail',
                 'entityId' => $entityId,
-                'crudControllerFqcn' => 'App\Controller\Admin\TaskCrudController',
+                'crudControllerFqcn' => 'App\Controller\Admin\\'.end($className).'CrudController',
             ]);
         }
         return $this->render('admin/comment/add.html.twig', [

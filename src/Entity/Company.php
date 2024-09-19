@@ -61,6 +61,11 @@ class Company extends Commentable
         $this->typeOfAbsences = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->name ?? '';
+    }
+
 
     public function getName(): ?string
     {
