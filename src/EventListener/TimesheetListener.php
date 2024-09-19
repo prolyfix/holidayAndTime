@@ -30,6 +30,7 @@ final class TimesheetListener
             $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
             $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
             $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+            $timesheet->setWorkingMinutes($overTimeMinutes);
         }
 
         if($timesheet->getUser()->getStartDate() > $timesheet->getStartTime() || ($timesheet->getUser()->getEndDate() < $timesheet->getEndTime() && $timesheet->getUser()->getEndDate() !== null)){
@@ -56,6 +57,7 @@ final class TimesheetListener
             $overTime = $timesheet->getEndTime()->diff($timesheet->getStartTime());
             $break    = TimeUtility::getMinutesFromTime($timesheet->getBreak());
             $overTimeMinutes = TimeUtility::getMinutesFromDateInterval($overTime) - $break;
+            $timesheet->setWorkingMinutes($overTimeMinutes);
         }
         if($timesheet->getUser()->getStartDate() > $timesheet->getStartTime() || ($timesheet->getUser()->getEndDate() < $timesheet->getEndTime() && $timesheet->getUser()->getEndDate() !== null)){
             $timesheet->setOvertime($overTimeMinutes);
