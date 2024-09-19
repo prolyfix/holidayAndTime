@@ -37,5 +37,14 @@
             {% if todo.assignedTo %}
                 {% include 'common/avatar.html.twig' with {user: todo.assignedTo, class:'small'} %}
             {% endif %}
+            {% if todo.project is not null %}
+                <div class="kanban-breadcrumb">
+                    <a href="{{ ea_url()
+                            .setController('App\\Controller\\Admin\\ProjectCrudController')
+                            .setAction('detail')
+                            .setEntityId(todo.project.id)   
+                        }}" class="">{{ todo.project.name }}</a>
+                </div>
+            {% endif %}
     </div>
 </div>

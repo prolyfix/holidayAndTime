@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\Trait\CommentableTrait;
 use App\Entity\Comment;
 use App\Entity\Media;
 use App\Entity\Project;
@@ -32,6 +33,7 @@ use Symfony\Component\Validator\Constraints\Date;
 class TaskCrudController extends AbstractCrudController
 {
 
+    use CommentableTrait;
 
     public function __construct(private RequestStack $requestStack, private EntityManagerInterface $em)
     {
