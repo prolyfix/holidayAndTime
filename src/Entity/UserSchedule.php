@@ -86,6 +86,6 @@ class UserSchedule extends Commentable
     }
 
     public function __tostring(){
-        return $this->getEffectiveDate()->format('Y-m-d');
+        return 'UserSchedule';
     }
 }
