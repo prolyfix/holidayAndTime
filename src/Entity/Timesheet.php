@@ -60,6 +60,9 @@ class Timesheet
 
     public function __toString(): string
     {
+        if ($this->relatedCommentable === null) {
+            return $this->startTime->format('H:i') . ' - ' . $this->endTime->format('H:i');
+        }
         return $this->relatedCommentable->getName() . ' ' . $this->startTime->format('H:i') . ' - ' . $this->endTime->format('H:i');
     }
     public function __construct()

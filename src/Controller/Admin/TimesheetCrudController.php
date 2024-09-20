@@ -124,7 +124,6 @@ class TimesheetCrudController extends AbstractCrudController
             $overView['week'][$ts->getStartTime()->format('W')] += $ts->getWorkingMinutes();
 
         }
-        dump($timesheets);
         return $this->render('admin/timesheet/resume.html.twig', [
             'overview' => $overView
         ]);
