@@ -1,0 +1,7 @@
+{% if ea.crud.currentAction == 'detail' %}
+{% for value in field.value %}
+    {% include 'common/avatar.html.twig' with {'user': value} %}
+{% endfor %}
+{% else %}
+    <span class="badge badge-secondary">{{ field.formattedValue }}</span>
+{% endif %}

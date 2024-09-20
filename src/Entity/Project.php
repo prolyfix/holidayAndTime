@@ -142,6 +142,18 @@ class Project extends Commentable
         return $this;
     }
 
+    public function getRelatedTimesheetsIncludedTasks(): Collection
+    {
+        $output = $this->getRelatedTimesheets();
+        foreach ($this->tasks as $task) {
+            foreach ($task->getRelatedTimesheets() as $timesheets) {
+                $output->add($timesheets);
+            }
+        }
+
+        return $output;
+    }
+
     public function removeMember(User $member): static
     {
         $this->members->removeElement($member);

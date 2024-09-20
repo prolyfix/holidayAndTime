@@ -1,11 +1,9 @@
-<div class="card">
+<div class="card comment">
     <div class="card-body">
         <p class="card-text">{{ task.comment | raw}}</p>
-        {% include 'common/avatar.html.twig' with {'user': task.user} %}    
+            
     </div>
     <div class="card-footer">
-        <a href="" class="btn btn-primary">Show</a>
-        <a href="" class="btn btn-warning">Edit</a>
-        <a href="" class="btn btn-danger">Delete</a>
+        {% include 'common/avatar.html.twig' with {'user': task.user, 'class':'small'} %} | {{ task.user.name }} | {{ task.creationDate|date('Y-m-d H:i') }}
     </div>
 </div>

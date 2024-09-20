@@ -3,19 +3,28 @@
         <thead>
             <tr>
                 <th>User</th>
+                <th>Task</th>
                 <th>Date</th>
                 <th>Minutes</th>
             </tr>
         </thead>
         <tbody>
+        {% set workingMinutes = 0 %}
         {% for value in field.value %}
             <tr>
                 <td>{{ value.user }}</td>
+                <td>{% if value.relatedCommentable is not null %} {{value.relatedCommentable.name}} {% endif %}</td>
                 <td>{{ value.startTime|date('Y-m-d') }}</td>
                 <td>{{ value.workingMinutes }}</td>
+                {% set workingMinutes = workingMinutes + value.workingMinutes %}
             </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Total</td>
+                <td>{{ workingMinutes }}</td>
+            </tr>
     </table>
 {% else %}
     <span class="badge badge-secondary">{{ field.formattedValue }}</span>

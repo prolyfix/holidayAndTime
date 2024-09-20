@@ -81,3 +81,6 @@ table .text-light{
 #commentable-list div:hover {
     background-color: #e9e9e9; /* Background color on hover */
 }
+.card.comment{
+    margin-bottom:2em;
+}

@@ -80,13 +80,12 @@ export default class extends Controller {
         elapsedTime: elapsedTime
       })
     }).then(response => response.json())
-      .catch(function (error) {
-        console.log(error);
-      });
+      this.timer.stop()
   }
 
 
   startWorking(event) {
+    const name = event.currentTarget.dataset.name;  
     fetch('/ajax/startWorking', {
       method: 'POST',
       headers: {
@@ -100,7 +99,7 @@ export default class extends Controller {
       .then(data => {
         this.retrieveElapsedTime().then((data) => { this.timer.setElapsedTime(data.elapsedTime); })
         console.log(event)
-        this.commentableTarget.value = event.currentTarget.dataset.name;
+        this.commentableTarget.value = name;
         this.timer.start();
         let list = document.getElementById('commentable-list')
         list.classList.add('hidden');
@@ -124,7 +123,14 @@ export default class extends Controller {
 
 
   retrieveList() {
-    console.log(this.commentableTarget.value);
+    let search = this.commentableTarget.value;
+    console.log(search);
+    if(search.length < 2){
+      let list = document.getElementById('commentable-list')
+      list.classList.add('hidden');
+      return
+    } 
+
     fetch('/ajax/retrieveList', {
       method: 'POST',
       headers: {
@@ -132,7 +138,7 @@ export default class extends Controller {
         'Accept': 'application/json'
       },
       body: JSON.stringify({
-        commentable: event.currentTarget.dataset.value
+        commentable: this.commentableTarget.value
       })
     }
     )

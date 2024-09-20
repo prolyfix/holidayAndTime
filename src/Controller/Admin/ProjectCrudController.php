@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Controller\Admin\Trait\CommentableTrait;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 
 class ProjectCrudController extends AbstractCrudController
@@ -46,7 +47,8 @@ class ProjectCrudController extends AbstractCrudController
             AssociationField::new('thirdParty'),
             AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/media/field.html.twig'),
             AssociationField::new('tasks')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/task/field.html.twig'),
-            AssociationField::new('members'),
+            AssociationField::new('members')->setTemplatePath('admin/user/field.html.twig'),
+            ArrayField::new('relatedTimesheetsIncludedTasks')->hideOnForm()->hideOnIndex()->setTemplatePath('admin/timesheet/field.html.twig'),
             AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig'),
 
         ];
