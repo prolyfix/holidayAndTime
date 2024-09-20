@@ -107,6 +107,29 @@ class TimesheetCrudController extends AbstractCrudController
     ;
     }
 
+    public function showResume()
+    {
+        $user = $this->getUser();
+        $timesheets = $this->em->getRepository(Timesheet::class)->findBy(['user' => $user]);
+        $overView = ['year'=>[], 'month'=>[], 'week'=>[]];
+        foreach($timesheets as $ts)
+        {
+            isset($overView['year'][$ts->getStartTime()->format('Y')]) ?: $overView['year'][$ts->getStartTime()->format('Y')] = 0;
+            $overView['year'][$ts->getStartTime()->format('Y')] += $ts->getWorkingMinutes();
+
+            isset($overView['month'][$ts->getStartTime()->format('m')]) ?: $overView['month'][$ts->getStartTime()->format('m')] = 0;
+            $overView['month'][$ts->getStartTime()->format('m')] += $ts->getWorkingMinutes();
+
+            isset($overView['week'][$ts->getStartTime()->format('W')]) ?: $overView['week'][$ts->getStartTime()->format('W')] = 0;
+            $overView['week'][$ts->getStartTime()->format('W')] += $ts->getWorkingMinutes();
+
+        }
+        dump($timesheets);
+        return $this->render('admin/timesheet/resume.html.twig', [
+            'overview' => $overView
+        ]);
+    }
+
 
     #[Route('/admin/timesheet/consume-time', name: 'admin_timesheet_consume_time')]
     public function consumeTime(Request $request, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator)

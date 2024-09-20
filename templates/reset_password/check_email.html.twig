@@ -1,11 +1,26 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/page/login.html.twig' %}
 
-{% block title %}Password Reset Email Sent{% endblock %}
+{% block wrapper_wrapper %}
+	{% for flash_error in app.flashes('reset_password_error') %}
+		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+	{% endfor %}
+	{% include '@EasyAdmin/flash_messages.html.twig' %}
 
-{% block body %}
-    <p>
-        Falls ein Konto mit Ihrer E-Mail-Adresse übereinstimmt, wurde Ihnen gerade eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts gesendet.
-        Dieser Link verfällt in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p>Falls Sie keine E-Mail erhalten haben, überprüfen Sie bitte Ihren Spam-Ordner oder <a href="{{ path('app_forgot_password_request') }}">versuchen Sie es erneut.</a>.</p>
+	<div class="login-wrapper">
+		<header class="main-header">
+			<div id="header-logo"></div>
+		</header>
+
+		<section class="content">
+
+
+			<p>
+				Falls ein Konto mit Ihrer E-Mail-Adresse übereinstimmt, wurde Ihnen gerade eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts gesendet.
+								        Dieser Link verfällt in
+				{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+			</p>
+			<p>Falls Sie keine E-Mail erhalten haben, überprüfen Sie bitte Ihren Spam-Ordner oder
+				<a href="{{ path('app_forgot_password_request') }}">versuchen Sie es erneut.</a>.</p>
+		</section>
+	</div>
 {% endblock %}

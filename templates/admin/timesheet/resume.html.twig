@@ -1,0 +1,58 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block content_title %}
+    {% trans %} Resume TimeSheet {% endtrans %}
+{% endblock %}
+{% block main %}
+    <h1>{% trans %}Resume TimeSheet{% endtrans %}</h1>
+    <h2> Week: </h2>
+    <table>     
+        <thead> 
+            <tr>
+                <th>Month</th>
+                <th>Worked</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for month, time in overview.week %}
+            <tr>
+                <td>{{ month }}</td>
+                <td>{{ toTime(time) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h2> Month: </h2>
+    <table>     
+        <thead> 
+            <tr>
+                <th>Month</th>
+                <th>Worked</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for month, time in overview.month %}
+            <tr>
+                <td>{{ month }}</td>
+                <td>{{ toTime(time) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h2> Year: </h2>
+    <table>     
+        <thead> 
+            <tr>
+                <th>Month</th>
+                <th>Worked</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for month, time in overview.year %}
+            <tr>
+                <td>{{ month }}</td>
+                <td>{{ toTime(time) }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>    
+{% endblock %}
