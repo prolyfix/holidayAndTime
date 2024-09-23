@@ -44,10 +44,21 @@
 							{% endfor %}
 					</div>
 				</div>
-			</div>			
+			</div>	
+			<div class="col-md-4">
+				<div class="card">
+                    <div class="card-body">
+						<h5 class="card-title">{%trans%}workload.today{%endtrans%}</h5>
+						<ul>
+							{% for key,minutes in workloadToday %}
+								<li>{{key}}: {{toTime(minutes)}}</li>
+							{% endfor %}
+					</div>
+				</div>
+			</div>						
 			<div class="col-md-12">
 				<h2>
-					Benutzer
+					{% trans %}Benutzer{% endtrans %}
 				</h2>
 				<table class="table datagrid">
 					<thead>

@@ -1,15 +1,22 @@
-<div class="content-search" data-controller="time">
+<div class="content-search" data-controller="time" style="display:-webkit-box">
 	<span id="timer">
 		00:00
 	</span>
 	<i class="user-avatar-icon-foreground fa fa-play fa-inverse" id="start" style="color:lightgray" data-action="click->time#start"></i>
 	<i class="user-avatar-icon-foreground fa fa-pause fa-inverse" id="break" style="display:none; color:lightgray" data-action="click->time#break"></i>
 	<i class="user-avatar-icon-foreground fa fa-stop fa-inverse" id="stop" style="color:lightgray" data-action="click->time#stop"></i>
-    <input type="text" id="comment" data-action="input->time#retrieveList" data-time-target="commentable">
+	<input type="text" id="comment" data-action="input->time#retrieveList" data-time-target="commentable"  class="form-control" style="width:200px;display:none">
+	<span id="actualCommentable" >COUCOU</span>
+	<span class="btn btn-xs" id="changeCommentable"  data-action="click->time#changeCommentable">
+		<i class="action-icon fa fa-plus"></i>
+	</span>
+	<span class="btn btn-xs" id="cancelChangeCommentable"  data-action="click->time#cancelChangeCommentable" style="display:none">
+		<i class="action-icon fa fa-cancel"></i>
+	</span>	
 	<input type="hidden" id="commentableId">
-    <div id="commentable-list" class="hidden"></div>
-    <input type="text" id="relation">
-	<div class="btn btn-sm">
-		<i class="fa fa-comment" data-action="click->time#saveComment"></i>
+	<div id="commentable-list" class="hidden"></div>
+	<input type="text" id="relation" class="form-control" style="max-width:200px">
+	<div class="btn btn-sm" data-action="click->time#saveComment">
+		<i class="fa fa-comment" ></i>
 	</div>
 </div>

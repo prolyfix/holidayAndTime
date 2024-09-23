@@ -1,4 +1,8 @@
 {% extends '@!EasyAdmin/layout.html.twig' %}
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
+{% endblock %}
 {% block search_wrapper %}
 	{% if app.user.hasTimesheet %}
 		{% include 'common/timeHeader.html.twig' %}
@@ -29,6 +33,7 @@
 {% endblock %}
 
 {% block configured_javascripts %}
-	{{ importmap('app') }}
-	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    {{ importmap('app') }}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 {% endblock %}

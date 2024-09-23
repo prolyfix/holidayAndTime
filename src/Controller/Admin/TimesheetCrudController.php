@@ -63,6 +63,8 @@ class TimesheetCrudController extends AbstractCrudController
             DateTimeField::new('startTime')->setFormat('EEE, dd.MM.YYYY HH:mm'),
             DateTimeField::new('endTime')->setFormat(' HH:mm'),
             TimeField::new('break')->setFormat('HH:mm'),
+            NumberField::new('workingMinutes'),
+            AssociationField::new('relatedCommentable'),
             NumberField::new('overtime')->hideOnForm()
             ->formatValue(function ($value, $entity) {
                 if ($value !== null) {
@@ -108,6 +110,28 @@ class TimesheetCrudController extends AbstractCrudController
         return $actions
         ->remove(Crud::PAGE_DETAIL, Action::EDIT)
     ;
+    }
+
+    public function showResume()
+    {
+        $user = $this->getUser();
+        $timesheets = $this->em->getRepository(Timesheet::class)->findBy(['user' => $user]);
+        $overView = ['year'=>[], 'month'=>[], 'week'=>[]];
+        foreach($timesheets as $ts)
+        {
+            isset($overView['year'][$ts->getStartTime()->format('Y')]) ?: $overView['year'][$ts->getStartTime()->format('Y')] = 0;
+            $overView['year'][$ts->getStartTime()->format('Y')] += $ts->getWorkingMinutes();
+
+            isset($overView['month'][$ts->getStartTime()->format('m')]) ?: $overView['month'][$ts->getStartTime()->format('m')] = 0;
+            $overView['month'][$ts->getStartTime()->format('m')] += $ts->getWorkingMinutes();
+
+            isset($overView['week'][$ts->getStartTime()->format('W')]) ?: $overView['week'][$ts->getStartTime()->format('W')] = 0;
+            $overView['week'][$ts->getStartTime()->format('W')] += $ts->getWorkingMinutes();
+
+        }
+        return $this->render('admin/timesheet/resume.html.twig', [
+            'overview' => $overView
+        ]);
     }
 
 

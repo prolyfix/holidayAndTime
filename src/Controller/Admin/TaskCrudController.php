@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\Trait\CommentableTrait;
 use App\Entity\Comment;
 use App\Entity\Media;
 use App\Entity\Project;
@@ -32,6 +33,7 @@ use Symfony\Component\Validator\Constraints\Date;
 class TaskCrudController extends AbstractCrudController
 {
 
+    use CommentableTrait;
 
     public function __construct(private RequestStack $requestStack, private EntityManagerInterface $em)
     {
@@ -214,6 +216,7 @@ class TaskCrudController extends AbstractCrudController
             'in_progress' => 'in_progress',
             'done' => 'done',
         ]);
+        yield AssociationField::new('relatedTimesheets')->hideOnIndex()->setTemplatePath('admin/timesheet/field.html.twig');
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
         yield DateField::new('dueDate');
     }

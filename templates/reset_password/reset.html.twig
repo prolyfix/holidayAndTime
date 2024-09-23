@@ -1,12 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends '@EasyAdmin/page/login.html.twig' %}
 
-{% block title %}Passwort zurückzusetzen{% endblock %}
+{% block wrapper_wrapper %}
+	{% for flash_error in app.flashes('reset_password_error') %}
+		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+	{% endfor %}
+	{% include '@EasyAdmin/flash_messages.html.twig' %}
 
-{% block body %}
-    <h1>Passwort zurückzusetzen</h1>
+	<div class="login-wrapper">
+		<header class="main-header">
+			<div id="header-logo"></div>
+		</header>
 
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">{% trans %}Reset password{% endtrans %}</button>
-    {{ form_end(resetForm) }}
+		<section class="content">
+
+			{{ form_start(resetForm) }}
+			{{ form_row(resetForm.plainPassword,{'attr':{'class':'form-control'}}) }}
+			<button class="btn btn-primary">{% trans %}Reset password{% endtrans %}</button>
+			{{ form_end(resetForm) }}
+		</section>
+	</div>
 {% endblock %}

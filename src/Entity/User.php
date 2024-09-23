@@ -124,6 +124,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     private ?string $color = null;
 
 
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -722,5 +723,15 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, FrontendWidget>
+     */
+    public function getFrontendWidgets(): Collection
+    {
+        return $this->frontendWidgets;
+    }
+
+
 
 }

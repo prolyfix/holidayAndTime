@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Commentable;
 use App\Entity\Timesheet;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -93,5 +94,38 @@ class TimesheetRepository extends ServiceEntityRepository
             ->execute();
         return $qb;
     }
+    public function getWorkedHoursToday($user)
+    {
+        $timesheets =  $this->createQueryBuilder('t')
+            ->andWhere('t.startTime >= :today')
+            ->andWhere('t.user = :user')
+            ->setParameter('today', new \DateTime('today'))
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+        $output = [];
+        foreach($timesheets as $timesheet){
+            $key = $this->retrieveProjectFromTimesheet($timesheet->getRelatedCommentable());
+            if(!isset($output[$key])){
+                $output[$key] = 0;
+            }
+            $output[$key] += $timesheet->getWorkingMinutes();
+        }
+        return $output;
+    }
+
+    public function retrieveProjectFromTimesheet(?Commentable $commentable):?string
+    {
+        if($commentable == null){
+            return null;
+        }
+        if(method_exists($commentable, 'getProject') && $commentable->getProject() !== null){
+            return $commentable->getProject()->__toString();
+        }
+        return $commentable->__toString();
+
+    }
+
+
 
 }

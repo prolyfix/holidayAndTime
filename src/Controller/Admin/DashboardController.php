@@ -6,6 +6,7 @@ use App\Entity\Appointment;
 use App\Entity\Calendar;
 use App\Entity\Company;
 use App\Entity\Configuration;
+use App\Entity\DummyEntity;
 use App\Entity\HelpContent;
 use App\Entity\Issue;
 use App\Entity\Media;
@@ -58,32 +59,10 @@ class DashboardController extends AbstractDashboardController
         ]);
       
         $todaysWorkers = $this->todaysWorkers($this->em, $this->getUser()); 
-        //return parent::index();
-
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        /*
-        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        return $this->redirect(
-            $adminUrlGenerator
-                ->setController(UserCrudController::class)
-                ->setAction('show')
-                ->setEntityId($this->getUser()->getId())
-                ->generateUrl()
-        );
-        */
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
         return $this->render('admin/dashboard/index.html.twig',[
             'chart' => $chart,
-            'todaysWorkers' => $todaysWorkers
+            'todaysWorkers' => $todaysWorkers,
+            'workloadToday' => $this->getWorkedHoursToday()
         ]);
     }
     public function __construct(private EntityManagerInterface $em,private ChartBuilderInterface $chartBuilder)
@@ -106,6 +85,12 @@ class DashboardController extends AbstractDashboardController
 
     }
 
+    public function getWorkedHoursToday(): iterable
+    {
+        $workedHours = $this->em->getRepository(Timesheet::class)->getWorkedHoursToday($this->getUser());
+        return $workedHours;
+    }
+
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
@@ -121,11 +106,7 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
             yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
         }
-        if($this->isGranted('ROLE_ADMIN')|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::section('Configuration');
-            yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
-            yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
-        }
+
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject','company'=>$this->getUser()->getCompany()]);
         $taskRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask','company'=>$this->getUser()->getCompany()]); 
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN') || $taskRight && $taskRight->getValue() == 1 ) {    
@@ -147,9 +128,10 @@ class DashboardController extends AbstractDashboardController
         $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCRM','company'=>$this->getUser()->getCompany()]);
 
         if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
-            yield MenuItem::linkToCrud('Medias', 'fas fa-house', Media::class);
-            yield MenuItem::linkToCrud('ThirdParty', 'fas fa-house', ThirdParty::class);
-            yield MenuItem::linkToCrud('Appointments', 'fas fa-house', Appointment::class);
+            yield MenuItem::section('CRM');
+            yield MenuItem::linkToCrud('Medias', 'fas fa-photo-film', Media::class);
+            yield MenuItem::linkToCrud('ThirdParty', 'fas fa-handshake', ThirdParty::class);
+            yield MenuItem::linkToCrud('Appointments', 'fas fa-calendar', Appointment::class);
         }
 
 
@@ -157,8 +139,14 @@ class DashboardController extends AbstractDashboardController
 
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
         if($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
-            yield MenuItem::linkToCrud('Room', 'fas fa-house', Room::class);
-            yield MenuItem::linkToCrud('Week Planning', 'fas fa-house', Weekplan::class);
+            yield MenuItem::section('Week planning');
+            yield MenuItem::linkToCrud('Room', 'fas fa-people-roof', Room::class);
+            yield MenuItem::linkToCrud('Week Planning', 'fas fa-ruler', Weekplan::class);
+        }
+        if($this->isGranted('ROLE_ADMIN')|| $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::section('Configuration');
+            yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
+            yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
         }
     }
 

@@ -4,7 +4,6 @@ export default class extends Controller {
     static targets = ["item", "columnContent"];
 
     initialize() {
-        this.applyStyles();
     }
 
     connect() {
@@ -61,65 +60,5 @@ export default class extends Controller {
                 }
             })
             .catch(error => console.error('Error:', error));
-    }
-
-    applyStyles() {
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .kanban-board {
-                display: flex;
-                gap: 20px;
-            }
-
-            .kanban-column {
-                flex: 1;
-                background-color: #f4f4f4;
-                border-radius: 5px;
-                padding: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .kanban-column-header {
-                font-weight: bold;
-                margin-bottom: 10px;
-            }
-
-            .kanban-column-content {
-                min-height: 200px;
-                padding: 10px;
-                background-color: #fff;
-                border-radius: 5px;
-                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .kanban-card {
-                background-color: #fff;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-                padding: 10px;
-                margin-bottom: 10px;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-                cursor: grab;
-            }
-
-            .kanban-card:active {
-                cursor: grabbing;
-            }
-
-            .kanban-card-title {
-                font-weight: bold;
-            }
-
-            .kanban-card-description {
-                margin-top: 5px;
-            }
-
-            .kanban-card-due-date {
-                margin-top: 10px;
-                font-size: 0.9em;
-                color: #888;
-            }
-        `;
-        document.head.appendChild(style);
     }
 }

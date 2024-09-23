@@ -58,7 +58,15 @@ class Timesheet
     private ?Commentable $relatedCommentable = null;
 
 
+    public function __toString(): string
+    {
 
+        if ($this->relatedCommentable === null) {
+            if($this->startTime == null) return $this->id;
+            return $this->startTime->format('H:i') . ' - ' . $this->endTime->format('H:i');
+        }
+        return $this->relatedCommentable->getName() . ' ' . $this->startTime->format('H:i') . ' - ' . $this->endTime->format('H:i');
+    }
     public function __construct()
     {
         $this->break = new \DateTime('00:00:00');
