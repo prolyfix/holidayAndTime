@@ -46,9 +46,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     {
 
         return new RedirectResponse($this->urlGenerator->generate('admin',[
-            'crudAction' => 'show',
-            'crudControllerFqcn' => 'App\Controller\Admin\UserCrudController',
-            'entityId' => $token->getUser()->getId()
+            'crudAction' => 'index',
+            'crudControllerFqcn' => 'App\Controller\Admin\DashboardController',
         ]));
     }
 

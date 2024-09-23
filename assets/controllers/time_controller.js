@@ -121,6 +121,20 @@ export default class extends Controller {
     })
   }
 
+  changeCommentable(){
+    document.getElementById('actualCommentable').style.display  = 'none';
+    document.getElementById('comment').style.display  = 'inline-block'; 
+    document.getElementById('cancelChangeCommentable').style.display  = 'inline-block';
+    document.getElementById('changeCommentable').style.display  = 'none';
+    
+  }
+
+  cancelChangeCommentable(){
+    document.getElementById('actualCommentable').style.display  = 'inline-block';
+    document.getElementById('comment').style.display  = 'none'; 
+    document.getElementById('cancelChangeCommentable').style.display  = 'none';
+    document.getElementById('changeCommentable').style.display  = 'inline-block';
+  }
 
   retrieveList() {
     let search = this.commentableTarget.value;
