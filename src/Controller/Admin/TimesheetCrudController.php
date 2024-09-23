@@ -50,6 +50,11 @@ class TimesheetCrudController extends AbstractCrudController
             ->add('startTime')
         ;
     }
+
+    public function dayView()
+    {
+        return $this->render('common/_dayView.html.twig');
+    }
     
     public function configureFields(string $pageName): iterable
     {
