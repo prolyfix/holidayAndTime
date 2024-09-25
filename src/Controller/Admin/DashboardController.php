@@ -63,9 +63,6 @@ class DashboardController extends AbstractDashboardController
         $workingTimeThisWeek = $this->getUser()->getRightUserWeekdayProperties(new \DateTime());
         $timesheetThisWeek = $this->em->getRepository(Timesheet::class)->getWeekTimesheet($this->getUser());
 
-        dump($workingTimeThisWeek);
-        dump($timesheetThisWeek);
-
         return $this->render('admin/dashboard/index.html.twig',[
             'chart' => $chart,
             'todaysWorkers' => $todaysWorkers,

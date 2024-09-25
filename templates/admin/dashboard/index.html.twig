@@ -83,13 +83,13 @@
 							<td>{{workingTimeThisWeek.6.workingHours | date('h:i')}}</td>
 						</tr>
 						<tr>
-							<td>{% if timesheetThisWeek.Monday is defined %}{{timesheetThisWeek.Monday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Monday is defined %}{{toTime(timesheetThisWeek.Monday)}}{% endif %}</td>
 							<td>{% if timesheetThisWeek.Tuesday is defined %}{{toTime(timesheetThisWeek.Tuesday)}}{% endif %}</td>
-							<td>{% if timesheetThisWeek.Wednesday is defined %}{{timesheetThisWeek.Wednesday}}{% endif %}</td>
-							<td>{% if timesheetThisWeek.Thursday is defined %}{{timesheetThisWeek.Thursday}}{% endif %}</td>
-							<td>{% if timesheetThisWeek.Friday is defined %}{{timesheetThisWeek.Friday}}{% endif %}</td>
-							<td>{% if timesheetThisWeek.Staturday is defined %}{{timesheetThisWeek.Monday}}{% endif %}</td>
-							<td>{% if timesheetThisWeek.Sunday is defined %}{{timesheetThisWeek.Sunday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Wednesday is defined %}{{toTime(timesheetThisWeek.Wednesday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Thursday is defined %}{{toTime(timesheetThisWeek.Thursday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Friday is defined %}{{toTime(timesheetThisWeek.Friday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Staturday is defined %}{{toTime(timesheetThisWeek.Saturday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Sunday is defined %}{{toTime(timesheetThisWeek.Sunday)}}{% endif %}</td>
 							
 						</tr>						
 					</tbody>
