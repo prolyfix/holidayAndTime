@@ -74,13 +74,13 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>{{workingTimeThisWeek.0.workingHours | date('h:i')}}</td>
-							<td>{{workingTimeThisWeek.1.workingHours | date('h:i')}}</td>
-							<td>{{workingTimeThisWeek.2.workingHours | date('h:i')}}</td>
-							<td>{{workingTimeThisWeek.3.workingHours | date('h:i')}}</td>
-							<td>{{workingTimeThisWeek.4.workingHours | date('h:i')}}</td>
-							<td>{{workingTimeThisWeek.5.workingHours | date('h:i')}}</td>
-							<td>{{workingTimeThisWeek.6.workingHours | date('h:i')}}</td>
+							<td>{% if workingTimeThisWeek.0.workingHours is not null %}{{workingTimeThisWeek.0.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.1.workingHours is not null %}{{workingTimeThisWeek.1.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.2.workingHours is not null %}{{workingTimeThisWeek.2.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.3.workingHours is not null %}{{workingTimeThisWeek.3.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.4.workingHours is not null %}{{workingTimeThisWeek.4.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.5.workingHours is not null %}{{workingTimeThisWeek.5.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.6.workingHours is not null %}{{workingTimeThisWeek.6.workingHours | date('h:i')}}{% endif %}</td>
 						</tr>
 						<tr>
 							<td>{% if timesheetThisWeek.Monday is defined %}{{toTime(timesheetThisWeek.Monday)}}{% endif %}</td>
