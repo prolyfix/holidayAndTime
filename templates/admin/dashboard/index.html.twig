@@ -55,7 +55,46 @@
 							{% endfor %}
 					</div>
 				</div>
-			</div>						
+			</div>		
+			<div class="col-md-12">
+				<h2>
+					{% trans %}WorkingTime.thisWeek{% endtrans %}
+				</h2>
+				<table class="table datagrid">
+					<thead>
+						<tr>
+							<th>{% trans %}Monday{% endtrans %}</th>
+							<th>{% trans %}Tuesday{% endtrans %}</th>
+							<th>{% trans %}Wednesday{% endtrans %}</th>
+							<th>{% trans %}Thursday{% endtrans %}</th>
+							<th>{% trans %}Friday{% endtrans %}</th>
+							<th>{% trans %}Saturday{% endtrans %}</th>
+							<th>{% trans %}Sunday{% endtrans %}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{workingTimeThisWeek.0.workingHours | date('h:i')}}</td>
+							<td>{{workingTimeThisWeek.1.workingHours | date('h:i')}}</td>
+							<td>{{workingTimeThisWeek.2.workingHours | date('h:i')}}</td>
+							<td>{{workingTimeThisWeek.3.workingHours | date('h:i')}}</td>
+							<td>{{workingTimeThisWeek.4.workingHours | date('h:i')}}</td>
+							<td>{{workingTimeThisWeek.5.workingHours | date('h:i')}}</td>
+							<td>{{workingTimeThisWeek.6.workingHours | date('h:i')}}</td>
+						</tr>
+						<tr>
+							<td>{% if timesheetThisWeek.Monday is defined %}{{timesheetThisWeek.Monday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Tuesday is defined %}{{toTime(timesheetThisWeek.Tuesday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Wednesday is defined %}{{timesheetThisWeek.Wednesday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Thursday is defined %}{{timesheetThisWeek.Thursday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Friday is defined %}{{timesheetThisWeek.Friday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Staturday is defined %}{{timesheetThisWeek.Monday}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Sunday is defined %}{{timesheetThisWeek.Sunday}}{% endif %}</td>
+							
+						</tr>						
+					</tbody>
+				</table>
+			</div>							
 			<div class="col-md-12">
 				<h2>
 					{% trans %}Benutzer{% endtrans %}

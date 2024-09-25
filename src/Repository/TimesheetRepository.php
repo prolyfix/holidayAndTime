@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Commentable;
+use App\Entity\Room;
 use App\Entity\Timesheet;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -126,6 +127,30 @@ class TimesheetRepository extends ServiceEntityRepository
 
     }
 
+
+    public function getWeekTimesheet(User $user)
+    {
+        $start = new \DateTime('monday this week');
+        $end = new \DateTime('sunday this week');
+        $output = [];
+        $results = $this->createQueryBuilder('t')
+            ->where('t.user = :user')
+            ->andWhere('t.startTime >= :start')
+            ->andWhere('t.endTime <= :end')
+            ->setParameter('user', $user)
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getResult();
+        foreach($results as $result){
+            $date = new \DateTime($result->getStartTime()->format('l'));
+            if(!isset($output[$date->format('l')])){
+                $output[$date->format('l')] = 0;
+            }
+            $output[$date->format('l')] += $result->getWorkingMinutes();
+        }
+        return $output;
+    }
 
 
 }
