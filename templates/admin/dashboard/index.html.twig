@@ -55,7 +55,46 @@
 							{% endfor %}
 					</div>
 				</div>
-			</div>						
+			</div>		
+			<div class="col-md-12">
+				<h2>
+					{% trans %}WorkingTime.thisWeek{% endtrans %}
+				</h2>
+				<table class="table datagrid">
+					<thead>
+						<tr>
+							<th>{% trans %}Monday{% endtrans %}</th>
+							<th>{% trans %}Tuesday{% endtrans %}</th>
+							<th>{% trans %}Wednesday{% endtrans %}</th>
+							<th>{% trans %}Thursday{% endtrans %}</th>
+							<th>{% trans %}Friday{% endtrans %}</th>
+							<th>{% trans %}Saturday{% endtrans %}</th>
+							<th>{% trans %}Sunday{% endtrans %}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{% if workingTimeThisWeek.0.workingHours is not null %}{{workingTimeThisWeek.0.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.1.workingHours is not null %}{{workingTimeThisWeek.1.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.2.workingHours is not null %}{{workingTimeThisWeek.2.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.3.workingHours is not null %}{{workingTimeThisWeek.3.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.4.workingHours is not null %}{{workingTimeThisWeek.4.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.5.workingHours is not null %}{{workingTimeThisWeek.5.workingHours | date('h:i')}}{% endif %}</td>
+							<td>{% if workingTimeThisWeek.6.workingHours is not null %}{{workingTimeThisWeek.6.workingHours | date('h:i')}}{% endif %}</td>
+						</tr>
+						<tr>
+							<td>{% if timesheetThisWeek.Monday is defined %}{{toTime(timesheetThisWeek.Monday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Tuesday is defined %}{{toTime(timesheetThisWeek.Tuesday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Wednesday is defined %}{{toTime(timesheetThisWeek.Wednesday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Thursday is defined %}{{toTime(timesheetThisWeek.Thursday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Friday is defined %}{{toTime(timesheetThisWeek.Friday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Staturday is defined %}{{toTime(timesheetThisWeek.Saturday)}}{% endif %}</td>
+							<td>{% if timesheetThisWeek.Sunday is defined %}{{toTime(timesheetThisWeek.Sunday)}}{% endif %}</td>
+							
+						</tr>						
+					</tbody>
+				</table>
+			</div>							
 			<div class="col-md-12">
 				<h2>
 					{% trans %}Benutzer{% endtrans %}

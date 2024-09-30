@@ -59,10 +59,16 @@ class DashboardController extends AbstractDashboardController
         ]);
       
         $todaysWorkers = $this->todaysWorkers($this->em, $this->getUser()); 
+
+        $workingTimeThisWeek = $this->getUser()->getRightUserWeekdayProperties(new \DateTime());
+        $timesheetThisWeek = $this->em->getRepository(Timesheet::class)->getWeekTimesheet($this->getUser());
+
         return $this->render('admin/dashboard/index.html.twig',[
             'chart' => $chart,
             'todaysWorkers' => $todaysWorkers,
-            'workloadToday' => $this->getWorkedHoursToday()
+            'workloadToday' => $this->getWorkedHoursToday(),
+            'workingTimeThisWeek' => $workingTimeThisWeek,
+            'timesheetThisWeek' => $timesheetThisWeek
         ]);
     }
     public function __construct(private EntityManagerInterface $em,private ChartBuilderInterface $chartBuilder)
