@@ -65,6 +65,11 @@ export default class extends Controller {
       });
   }
 
+  break(){
+    console.log("break");
+    this.timer.break();
+  }
+
 
 
   stop() {
@@ -135,6 +140,9 @@ export default class extends Controller {
     document.getElementById('cancelChangeCommentable').style.display  = 'none';
     document.getElementById('changeCommentable').style.display  = 'inline-block';
   }
+
+  
+
 
   retrieveList() {
     let search = this.commentableTarget.value;

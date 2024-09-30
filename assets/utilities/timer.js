@@ -9,12 +9,16 @@ export default class Timer {
         this.isBreak = false
     }
 
+
+
     start() {
         if (this.timerInterval) return; // Prevent multiple intervals
         this.isStarted = true;
         this.isBreak = false;
         this.startTime = Date.now() - this.elapsedTime;
-        console.log(Date.now());
+        document.getElementById('start').style.display = 'none';
+        document.getElementById('break').style.display = 'block';
+        document.getElementById('stop').style.display = 'block';
         this.timerInterval = setInterval(() => {
             this.elapsedTime = this.elapsedTime + 1000;
             const event = new CustomEvent('timerSecond', { detail: this.getTime() });
@@ -31,6 +35,9 @@ export default class Timer {
         clearInterval(this.timerIntervalMinutes);
         this.timerInterval = null;
         this.isBreak = true;
+        document.getElementById('break').style.display = 'none';
+        document.getElementById('start').style.display = 'block';
+
     }
     stop() {
         clearInterval(this.timerInterval);
@@ -38,7 +45,11 @@ export default class Timer {
         var temp = this.elapsedTime;
         this.elapsedTime = 0;
         this.timerInterval = null;
+        document.getElementById('stop').style.display = 'none';
+        document.getElementById('break').style.display = 'none';
+        document.getElementById('start').style.display = 'block';
         return temp;
+
     }
     setDisplay(display) {
         this.display = display;

@@ -8,9 +8,7 @@
 	<input type="text" id="comment" data-action="input->time#retrieveList" data-time-target="commentable" class="form-control" style="width:200px;display:none">
 	<span id="actualCommentable"></span>
 	<i class="user-avatar-icon-foreground fa fa-plus fa-inverse" id="stop" style="color:lightgray" data-action="click->time#changeCommentable"></i>
-	<span class="btn btn-xs" id="cancelChangeCommentable" data-action="click->time#cancelChangeCommentable" style="display:none">
-		<i class="action-icon fa fa-cancel"></i>
-	</span>
+	<i class="action-icon fa fa-cancel" id="cancelChangeCommentable" data-action="click->time#cancelChangeCommentable" style="display:none"></i>
 	<input type="hidden" id="commentableId">
 	<div id="commentable-list" class="hidden"></div>
 	<input type="text" id="relation" class="form-control" style="max-width:200px">

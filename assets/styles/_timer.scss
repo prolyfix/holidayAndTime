@@ -8,6 +8,12 @@
         margin: 5px;
         align-self: baseline;
     }
+    input {
+        height: 20px;
+        border: none;
+        border-bottom: 1px solid $color-inactive;
+        border-radius: 0;
+    }
 }
 .active{
     color: $color-primary;
