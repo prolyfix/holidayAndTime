@@ -1,8 +1,14 @@
 import { Controller, StringMapObserver } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    newToast() {
-        const toastContainer = document.querySelector("#toast_container");
+
+    static targets = ['toastContainer'];
+
+
+
+
+    new() {
+        toastContainer = this.toastContainerTarget;
 
         const toast = document.createElement("div");
         toast.classList.add("toast");
@@ -36,4 +42,11 @@ export default class extends Controller {
         const bootstrapToast = new bootstrap.Toast(toast);
         bootstrapToast.show();
     }
+
+
+    close() {
+        event.currentTarget.closest(".toast").remove();
+        this.new();
+    }
+    
 }
