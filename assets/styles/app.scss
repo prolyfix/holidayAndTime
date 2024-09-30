@@ -1,4 +1,7 @@
+@import '_variables.scss';
 @import '_kanban';
+@import '_timer.scss';
+@import '_side_panel.scss';
 $red: white;
 body {
   background: $red;

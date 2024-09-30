@@ -68,8 +68,8 @@ class AjaxController extends AbstractController
             'message' => 'Data retrieved', 
             'elapsedTime' => $actualWorkingMinutes, 
             'isBreak' => $timesheet->isBreak(),
-            'commentable' => $timesheet->getRelatedCommentable()->getName(),
-            'commentableId' => $timesheet->getRelatedCommentable()->getId(),
+            'commentable' => $timesheet->getRelatedCommentable()!== null ? $timesheet->getRelatedCommentable()->getName():null,
+            'commentableId' =>$timesheet->getRelatedCommentable()!== null ? $timesheet->getRelatedCommentable()->getId():null,
         
         ]);
     }

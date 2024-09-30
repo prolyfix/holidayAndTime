@@ -1,0 +1,17 @@
+.content-search{
+    border:1px solid #777;
+    border-radius: 30px;
+    max-width:fit-content;
+    display: flex;
+    * {
+        /* Styles for all descendants */
+        margin: 5px;
+        align-self: baseline;
+    }
+}
+.active{
+    color: $color-primary;
+}
+i{
+    color: $color-inactive;
+}
