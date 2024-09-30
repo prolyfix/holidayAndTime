@@ -21,3 +21,30 @@
 i{
     color: $color-inactive;
 }
+#commentable-list {
+    //border: 1px solid #ccc; /* Border around the list */
+    border-radius: 4px; /* Rounded corners */
+    max-height: 200px; /* Maximum height for the list */
+    overflow-y: auto; /* Scroll if the content exceeds the max height */
+    background-color: white; /* Background color */
+    position: absolute; /* Position absolutely within the container */
+    top: 100%; /* Position below the input field */
+    left: 0; /* Align to the left of the container */
+    width: 100%; /* Match the width of the container */
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+#commentable-list.hidden{
+    display:none;
+}   
+#commentable-list div {
+    border-bottom: 1px solid #ddd; /* Border between items */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+#commentable-list div:last-child {
+    border-bottom: none; /* Remove border from the last item */
+}
+
+#commentable-list div:hover {
+    background-color: #e9e9e9; /* Background color on hover */
+}

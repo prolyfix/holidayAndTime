@@ -1,16 +1,20 @@
 import { Controller, StringMapObserver } from '@hotwired/stimulus';
 import Timer from '../utilities/timer.js';
 export default class extends Controller {
-  static targets = ['commentable', 'choseAction'];
+  static targets = ['commentable', 'choseAction','actualCommentable'];
   initialize() {
 
     this.timer = new Timer();
     this.timer.setDisplay('h:i:s');
     this.retrieveElapsedTime().then((data) => {
+      if(data.statut == "error"){
+        this.timer.stop();
+        return;
+      }
       this.timer.setElapsedTime(data.elapsedTime);
       this.timer.isBreak = data.isBreak;
       if(data.commentable){
-        this.commentableTarget.value = data.commentable;
+        this.actualCommentableTarget.innerHTML = data.commentable;
         document.getElementById('commentableId').value = data.commentableId;
       }
       document.getElementById('timer').innerHTML = this.timer.getTime();
@@ -104,7 +108,9 @@ export default class extends Controller {
       .then(data => {
         this.retrieveElapsedTime().then((data) => { this.timer.setElapsedTime(data.elapsedTime); })
         console.log(event)
-        this.commentableTarget.value = name;
+        this.actualCommentableTarget.innerHTML = name;
+        this.actualCommentableTarget.style.display = 'inline-block';
+        this.commentableTarget.style.display = 'none';
         this.timer.start();
         let list = document.getElementById('commentable-list')
         list.classList.add('hidden');
@@ -174,11 +180,10 @@ export default class extends Controller {
         this.list.forEach(item => {
           const div = document.createElement('div');
           div.textContent = item.name; // Assuming 'name' is the field in the data
-          const playButton = document.createElement('button');
+          const playButton = document.createElement('i');
 
           // create play button
-          playButton.classList.add('btn', 'btn-play');
-          playButton.innerHTML = '<i class="fa fa-play"></i>';
+          playButton.classList.add('fa', 'fa-play');
           playButton.dataset.action = "click->time#startWorking";
           playButton.dataset.value = item.id;
           playButton.dataset.name = item.name;
