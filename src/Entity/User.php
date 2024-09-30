@@ -123,6 +123,12 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $color = null;
 
+    /**
+     * @var Collection<int, WidgetUserPosition>
+     */
+    #[ORM\OneToMany(targetEntity: WidgetUserPosition::class, mappedBy: 'user')]
+    private Collection $widgetUserPositions;
+
 
 
     public function __construct()
@@ -149,6 +155,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->tasks = new ArrayCollection();
         $this->commentables = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->widgetUserPositions = new ArrayCollection();
     }
 
 
@@ -730,6 +737,36 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     public function getFrontendWidgets(): Collection
     {
         return $this->frontendWidgets;
+    }
+
+    /**
+     * @return Collection<int, WidgetUserPosition>
+     */
+    public function getWidgetUserPositions(): Collection
+    {
+        return $this->widgetUserPositions;
+    }
+
+    public function addWidgetUserPosition(WidgetUserPosition $widgetUserPosition): static
+    {
+        if (!$this->widgetUserPositions->contains($widgetUserPosition)) {
+            $this->widgetUserPositions->add($widgetUserPosition);
+            $widgetUserPosition->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWidgetUserPosition(WidgetUserPosition $widgetUserPosition): static
+    {
+        if ($this->widgetUserPositions->removeElement($widgetUserPosition)) {
+            // set the owning side to null (unless already changed)
+            if ($widgetUserPosition->getUser() === $this) {
+                $widgetUserPosition->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 
