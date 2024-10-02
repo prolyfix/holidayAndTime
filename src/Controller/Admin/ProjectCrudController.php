@@ -58,11 +58,11 @@ class ProjectCrudController extends AbstractCrudController
         $createTaskAction = Action::new('createTask', 'Create Task', 'fa fa-plus')
         ->linkToCrudAction('createTask');
         $actionAddMedia = Action::new('addMedia', 'Add Media', 'fa fa-image')
-        ->linkToCrudAction('addMedia');
+        ->linkToCrudAction('addMedia')->setCssClass('btn sidebar-action');
         $actionComment = Action::new('addComment', 'Add Comment', 'fa fa-comment')
-        ->linkToCrudAction('addComment');
+        ->linkToCrudAction('addComment')->setCssClass('btn sidebar-action');
         $actionTimesheet = Action::new('addTimesheet', 'Add Timesheet', 'fa fa-clock')
-        ->linkToCrudAction('addTimesheet');
+        ->linkToCrudAction('addTimesheet')->setCssClass('btn sidebar-action');
         $actionStartWorking = Action::new('startWorking', 'Start Working', 'fa fa-play')
         ->linkToCrudAction('startWorking');
 

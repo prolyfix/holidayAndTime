@@ -12,6 +12,7 @@ use App\Entity\Issue;
 use App\Entity\Media;
 use App\Entity\Project;
 use App\Entity\Room;
+use App\Entity\Tag;
 use App\Entity\Task;
 use App\Entity\ThirdParty;
 use App\Entity\Timesheet;
@@ -125,9 +126,7 @@ class DashboardController extends AbstractDashboardController
         if($taskRight && $taskRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Task', 'fas fa-check', Task::class)->setQueryParameter('filters[status]', "new");
         }
-        if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
-        }        
+       
         if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
         }
@@ -153,7 +152,11 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::section('Configuration');
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
             yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
+            yield MenuItem::linkToCrud('tags', 'fas fa-cog', Tag::class)->setAction('index');
         }
+        if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
+            yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
+        } 
     }
 
 

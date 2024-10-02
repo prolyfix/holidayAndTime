@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class MediaType extends AbstractType
@@ -17,9 +18,10 @@ class MediaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('file',VichFileType::class,[
+            ->add('file',DropzoneType::class,[
                 'label' => 'Media',
-                'required' => false
+                'required' => false,
+                'attr' => ['placeholder' => 'Upload a file'],
             ])
             ->add('submit',SubmitType::class, [
                 'label' => 'Add Comment',

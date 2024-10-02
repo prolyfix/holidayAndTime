@@ -216,9 +216,10 @@ class TaskCrudController extends AbstractCrudController
             'in_progress' => 'in_progress',
             'done' => 'done',
         ]);
-        yield AssociationField::new('relatedTimesheets')->hideOnIndex()->setTemplatePath('admin/timesheet/field.html.twig');
+        yield AssociationField::new('relatedTimesheets')->hideOnForm()->setTemplatePath('admin/timesheet/field.html.twig');
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
         yield DateField::new('dueDate');
+        yield AssociationField::new('tags');
     }
     
 }

@@ -1,19 +1,19 @@
 import { Controller, StringMapObserver } from '@hotwired/stimulus';
 import Timer from '../utilities/timer.js';
 export default class extends Controller {
-  static targets = ['commentable', 'choseAction','actualCommentable'];
+  static targets = ['commentable', 'choseAction', 'actualCommentable'];
   initialize() {
 
     this.timer = new Timer();
     this.timer.setDisplay('h:i:s');
     this.retrieveElapsedTime().then((data) => {
-      if(data.statut == "error"){
+      if (data.statut == "error") {
         this.timer.stop();
         return;
       }
       this.timer.setElapsedTime(data.elapsedTime);
       this.timer.isBreak = data.isBreak;
-      if(data.commentable){
+      if (data.commentable) {
         this.actualCommentableTarget.innerHTML = data.commentable;
         document.getElementById('commentableId').value = data.commentableId;
       }
@@ -21,7 +21,7 @@ export default class extends Controller {
       if (data.message == 'error') {
         isOpen = false;
       }
-      
+
       if (data.elapsedTime > 0) {
         document.getElementById('break').style.display = 'inline-block';
         document.getElementById('start').style.display = 'none';
@@ -36,10 +36,47 @@ export default class extends Controller {
 
 
   connect() {
+    document.querySelectorAll('a.action-startWorking').forEach(link => {
+
+      link.addEventListener('click', this.startWorkingButton.bind(this));
+    }
+    )
+  }
+
+  startWorkingButton(event) {
+    event.preventDefault();
+    fetch(event.currentTarget.getAttribute('href'), {}).then(response => {
+      this.retrieveElapsedTime().then((data) => {
+        if (data.statut == "error") {
+          this.timer.stop();
+          return;
+        }
+        this.timer.setElapsedTime(data.elapsedTime);
+        this.timer.isBreak = data.isBreak;
+        if (data.commentable) {
+          this.actualCommentableTarget.innerHTML = data.commentable;
+          document.getElementById('commentableId').value = data.commentableId;
+        }
+        document.getElementById('timer').innerHTML = this.timer.getTime();
+        if (data.message == 'error') {
+          isOpen = false;
+        }
+
+        if (data.elapsedTime > 0) {
+          document.getElementById('break').style.display = 'inline-block';
+          document.getElementById('start').style.display = 'none';
+        }
+        if (data.isBreak) {
+          document.getElementById('start').style.display = 'inline-block';
+          document.getElementById('break').style.display = 'none';
+        }
+      });
+      this.timer.start();
+    });
 
   }
 
-  saveComment(){
+  saveComment() {
     fetch('/ajax/saveComment', {
       method: 'POST',
       headers: {
@@ -69,7 +106,7 @@ export default class extends Controller {
       });
   }
 
-  break(){
+  break() {
     console.log("break");
     this.timer.break();
   }
@@ -89,12 +126,12 @@ export default class extends Controller {
         elapsedTime: elapsedTime
       })
     }).then(response => response.json())
-      this.timer.stop()
+    this.timer.stop()
   }
 
 
   startWorking(event) {
-    const name = event.currentTarget.dataset.name;  
+    const name = event.currentTarget.dataset.name;
     fetch('/ajax/startWorking', {
       method: 'POST',
       headers: {
@@ -123,41 +160,41 @@ export default class extends Controller {
   retrieveElapsedTime() {
     return new Promise((resolve, reject) => {
       axios.get('/ajax/retrieveElapsedTime')
-      .then(function (response) {
-        resolve(response.data);
-      })
-      .catch(function (error) {
-        reject(error);
-      })
+        .then(function (response) {
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          reject(error);
+        })
     })
   }
 
-  changeCommentable(){
-    document.getElementById('actualCommentable').style.display  = 'none';
-    document.getElementById('comment').style.display  = 'inline-block'; 
-    document.getElementById('cancelChangeCommentable').style.display  = 'inline-block';
-    document.getElementById('changeCommentable').style.display  = 'none';
-    
+  changeCommentable() {
+    document.getElementById('actualCommentable').style.display = 'none';
+    document.getElementById('comment').style.display = 'inline-block';
+    document.getElementById('cancelChangeCommentable').style.display = 'inline-block';
+    document.getElementById('changeCommentable').style.display = 'none';
+
   }
 
-  cancelChangeCommentable(){
-    document.getElementById('actualCommentable').style.display  = 'inline-block';
-    document.getElementById('comment').style.display  = 'none'; 
-    document.getElementById('cancelChangeCommentable').style.display  = 'none';
-    document.getElementById('changeCommentable').style.display  = 'inline-block';
+  cancelChangeCommentable() {
+    document.getElementById('actualCommentable').style.display = 'inline-block';
+    document.getElementById('comment').style.display = 'none';
+    document.getElementById('cancelChangeCommentable').style.display = 'none';
+    document.getElementById('changeCommentable').style.display = 'inline-block';
   }
 
-  
+
 
 
   retrieveList() {
     let search = this.commentableTarget.value;
     console.log(search);
-    if(search.length < 2){
+    if (search.length < 2) {
       let list = document.getElementById('commentable-list')
       list.classList.add('hidden');
       return
-    } 
+    }
 
     fetch('/ajax/retrieveList', {
       method: 'POST',

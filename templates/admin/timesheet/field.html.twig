@@ -27,5 +27,10 @@
             </tr>
     </table>
 {% else %}
+        {% set workingMinutes = 0 %}
+        {% for value in field.value %}
+                {% set workingMinutes = workingMinutes + value.workingMinutes %}
+        {% endfor %}
+        {{toTime(workingMinutes)}}
     <span class="badge badge-secondary">{{ field.formattedValue }}</span>
 {% endif %}

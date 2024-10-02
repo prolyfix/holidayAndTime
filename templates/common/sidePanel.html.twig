@@ -1,6 +1,8 @@
-<div class="sidepanel" style="position:absolute; height:100vh;width:30vw;top:0;right:0;display:none">
-    <div class="sidepanel_title"> Side Panel
+<div class="sidepanel" style="" data-controller="sidebar" data-sidebar-target="sidebar">
+    <div class="close">
+        <a href="javascript:void(0)" class="closebtn" data-action="click->sidebar#close">X</a>
     </div>
-    <div class="sidepanel_body"> Side Body
+    <div class="sidepanel_title" data-sidebar-target="title"> </div>
+    <div class="sidepanel_body"  data-sidebar-target="content" > Side Body
     </div>
 </div>
