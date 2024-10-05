@@ -76,6 +76,7 @@ class DashboardController extends AbstractDashboardController
     {
     }
 
+
     public function configureDashboard(): Dashboard
     {
         $title = "Holiday and Time";
