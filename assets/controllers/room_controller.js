@@ -25,7 +25,6 @@ export default class extends Controller {
         event.preventDefault();
         event.dataTransfer.dropEffect = "move";
     }
-
     drop(event) {
         console.log("drop");
         event.preventDefault();
@@ -39,6 +38,11 @@ export default class extends Controller {
         newElement.id = `new-${id}-${Date.now()}`; // Ensure unique ID
         newElement.classList.add('resizable-element');
     
+        // Add a resize handle to the new element
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = 'resize-handle';
+        newElement.appendChild(resizeHandle);
+    
         // Append the new element to the drop zone
         if (dropzone instanceof Node) {
             dropzone.appendChild(newElement);
@@ -46,43 +50,27 @@ export default class extends Controller {
             console.error('Dropzone is not a valid Node');
         }
     
-        // Make the new element resizable
-        if (typeof $ !== 'undefined' && $.fn.resizable) {
-            $(newElement).resizable();
-        } else {
-            console.error('jQuery or jQuery UI is not loaded');
+        // Implement resizing logic
+        let isResizing = false;
+    
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        });
+    
+        function resize(e) {
+            if (isResizing) {
+                newElement.style.height = e.pageY - newElement.getBoundingClientRect().top + 'px';
+            }
+        }
+    
+        function stopResize() {
+            isResizing = false;
+            document.removeEventListener('mousemove', resize);
+            document.removeEventListener('mouseup', stopResize);
         }
     
         event.dataTransfer.clearData();
-    
-        // Extract task ID and new state from the element and dropzone
-        const taskId = id.split('-')[1]; // Assuming ID format is "todo-1", "inprogress-2", etc.
-        const newState = dropzone.closest('.kanban-column').querySelector('.kanban-column-header').textContent.trim();
-    
-        // Send POST request to update task state
-        fetch('/ajax/update-task-state', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                taskId: taskId,
-                newState: newState,
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Task state updated:', data);
-        })
-        .catch(error => {
-            console.error('Error updating task state:', error);
-        });
-    }
-    resize(event) {
-        const element = event.target;
-        const deltaY = event.clientY - element.offsetTop;
-        const newHeight = deltaY + element.offsetHeight;
-
-        element.style.height = `${newHeight}px`;
     }
 }

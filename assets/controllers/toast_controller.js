@@ -4,12 +4,18 @@ export default class extends Controller {
 
     static targets = ['toastContainer'];
 
+    initialize(){
+          this.toastContainerTarget.addEventListener("awesome", (event) => {
+            this.new(event);
+          });
+    }
 
 
-
-    new() {
-        toastContainer = this.toastContainerTarget;
-
+    new(event) {
+        console.log(event);
+        const toastContainer = this.toastContainerTarget;
+        console.log("ici");
+        
         const toast = document.createElement("div");
         toast.classList.add("toast");
         toast.setAttribute("role", "alert");
@@ -21,7 +27,7 @@ export default class extends Controller {
 
         const toastTitle = document.createElement("strong");
         toastTitle.classList.add("me-auto");
-        toastTitle.textContent = "Toast Title";
+        toastTitle.textContent = "Message";
 
         const toastCloseButton = document.createElement("button");
         toastCloseButton.classList.add("btn-close");
@@ -30,7 +36,7 @@ export default class extends Controller {
 
         const toastBody = document.createElement("div");
         toastBody.classList.add("toast-body");
-        toastBody.textContent = "This is the toast message.";
+        toastBody.textContent = event.detail.text;
 
         toastHeader.appendChild(toastTitle);
         toastHeader.appendChild(toastCloseButton);

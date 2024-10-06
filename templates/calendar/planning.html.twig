@@ -1,6 +1,31 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 
 {% block page_content %}
+<style>
+.resizable-element {
+    position: absolute;
+    display: inline-block;
+    border: 1px solid #ccc; /* Optional: Add a border to see the element */
+    overflow: hidden; /* Ensure content doesn't overflow */
+    top: 0;
+    left: 0;
+    width: 100%; /* Ensure it spans the full width of the parent cell */
+}
+
+.resize-handle {
+    width: 100%;
+    height: 10px;
+    background: #000;
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Position the handle outside the element */
+    cursor: s-resize; /* Vertical resize cursor */
+}
+
+td {
+    position: relative; /* Ensure the parent cell is the containing block */
+}
+</style>
 	<div data-controller="room">
 		<div class="row">
 			{% for employee in employees %}

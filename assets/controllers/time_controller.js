@@ -111,10 +111,13 @@ export default class extends Controller {
     this.timer.break();
   }
 
-
-
   stop() {
     console.log("stop");
+    const eventAwesome = new CustomEvent("awesome", {
+      bubbles: true,
+      detail: { text: "Some text" },
+  });
+  document.querySelector('[data-toast-target="toastContainer"]').dispatchEvent(eventAwesome);
     let elapsedTime = this.timer.stop();
     fetch('/ajax/stop', {
       method: 'POST',

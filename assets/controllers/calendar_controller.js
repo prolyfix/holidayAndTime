@@ -1,7 +1,7 @@
 import { Controller, StringMapObserver } from '@hotwired/stimulus';
 
 export default class extends Controller {
-    static targets = ["filterButton"];
+    static targets = ["filterButton","filterSelect"];
     initialize() {  
     }
     connect() {
@@ -14,17 +14,19 @@ export default class extends Controller {
         const url = new URL(window.location.href);
         const params = url.searchParams;
 
-        // Get the values from your filter inputs or select elements
-        const group = null;
-        const user = null;
-        const year = null;
+        console.log(this.filterSelectTarget);
 
-        // Update the URL parameters
-        //params.set("group", group);
-        //params.set("user", user);
-        //params.set("year", year);
 
-        // Redirect to the updated URL
+        this.filterSelectTargets.forEach((element) => {
+            const name = element.getAttribute("name");
+            const value = element.value;
+            if(value.length == 0){
+                params.delete(name);
+            }
+            params.set(name, value);
+            console.log(params);
+        });
+
         window.location.href = url.toString();
     }
 }

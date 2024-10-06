@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -197,12 +198,14 @@ class TaskCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $user = $this->getUser();
+        yield FormField::addTab('Allgemein', 'start');
         yield IdField::new('id')->hideOnForm();
         if($user->getCompany()->getConfiguration('hasProject')->getValue()){
             yield AssociationField::new('project');
             //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
-        yield TextField::new('name')->hideOnDetail();
+
+        yield TextField::new('name')->hideOnDetail()->setCustomOption('tab', 'start');
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
             return $entity->createQueryBuilder('m')
                 ->andWhere('m.company = :company')
@@ -216,6 +219,7 @@ class TaskCrudController extends AbstractCrudController
             'in_progress' => 'in_progress',
             'done' => 'done',
         ]);
+        yield FormField::addTab('Timesheet', 'start');
         yield AssociationField::new('relatedTimesheets')->hideOnForm()->setTemplatePath('admin/timesheet/field.html.twig');
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
         yield DateField::new('dueDate');
