@@ -1,30 +1,28 @@
 <section class="content-header" data-controller="calendar">
-	<div class="page-actions">
-		<div class="datagrid-filters">
-			<div class="btn-group action-filters">
-                <select class="form-control" data-calendar-target="filterSelect" name="year">
-                    <option value="{{(output|first).date | date('Y') -1}}">{{(output|first).date | date('Y') -1}}</option>
-                    <option value="{{(output|first).date | date('Y') }}" selected>{{(output|first).date | date('Y') }}</option>
-                    <option value="{{(output|first).date | date('Y') +1}}">{{(output|first).date | date('Y') +1}}</option>
-                </select>    
-			</div>
-			{{ generateFilterGroup(app.user) | raw}}
-			{{ generateFilterUser(app.user) | raw}}
-
-
-		</div>        
-		<div class="global-actions">
-			<a class=" action-new btn btn-primary" data-action="click->calendar#filter">
-				<span class="action-label">Filtern</span>
-			</a>
-			<a class=" action-new btn btn-primary" href="
-			{{ ea_url()
-				.setController('App\\Controller\\Admin\\CalendarCrudController')
-				.setAction('index')
-			}}"
-			">
-				<span class="action-label">Als Liste</span>
-			</a>
+	<div class="content-group">
+		<div class="btn-group action-filters">
+			<select class="form-control" data-calendar-target="filterSelect" name="year">
+				<option value="{{(output|first).date | date('Y') -1}}">{{(output|first).date | date('Y') -1}}</option>
+				<option value="{{(output|first).date | date('Y') }}" selected>{{(output|first).date | date('Y') }}</option>
+				<option value="{{(output|first).date | date('Y') +1}}">{{(output|first).date | date('Y') +1}}</option>
+			</select>
 		</div>
+		{{ generateFilterGroup(app.user) | raw}}
+		{{ generateFilterUser(app.user) | raw}}
+		<i class="user-avatar-icon-foreground fa fa-magnifying-glass fa-inverse" style="color:lightgray" data-action="click->calendar#filter"></i>
 	</div>
+	<a class=" action-new btn btn-primary" href="
+						{{ ea_url()
+							.setController('App\\Controller\\Admin\\CalendarCrudController')
+							.setAction('index')
+						}}">
+		<span class="action-label">Als Liste</span>
+	</a>
+	<a class=" action-new btn btn-primary" href="
+						{{ ea_url()
+							.setController('App\\Controller\\Admin\\CalendarCrudController')
+							.setAction('index')
+						}}">
+		<span class="action-label">Monatsansicht</span>
+	</a>
 </section>
