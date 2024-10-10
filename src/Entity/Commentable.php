@@ -186,6 +186,7 @@ abstract class Commentable extends TimeData
 
     public function addTag(Tag $tag): static
     {
+        dump("ici");
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
             $tag->addCommentable($this);

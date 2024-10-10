@@ -31,3 +31,17 @@
     color: black;
   }
 }
+.card{
+  border: 1px solid black;
+  padding: 7px 5px;
+  border-radius: 0;
+}
+.btn{
+  border: 1px solid black;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black; 
+  border-radius: 0;
+}
+input, select{
+  background-color: white !important;
+}

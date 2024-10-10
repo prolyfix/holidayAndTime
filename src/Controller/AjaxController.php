@@ -7,6 +7,7 @@ use App\Entity\Commentable;
 use App\Entity\Task;
 use App\Entity\Timesheet;
 use App\Utility\TimeUtility;
+use App\Entity\WidgetUserPosition;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -161,6 +162,26 @@ class AjaxController extends AbstractController
         $task->setStatus($table[$newState]);
         $entityManager->flush();
 
+        return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/newWidgetPos', name: 'new_widget_position', methods: ['POST'])]
+    public function newWidgetPos(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $widget = $data['widgetId'];
+        $row = $data['row'];
+        $column = $data['column'];
+        $user = $this->getUser();
+        $widgetUserPosition = new  WidgetUserPosition();
+        $widgetUserPosition->setUser($user);
+        $widgetUserPosition->setWidgetClass($widget);
+        $widgetUserPosition->setRowIndex($row);
+        $widgetUserPosition->setColumIndex($column);
+        $widgetUserPosition->setCrudAction('index');
+        $widgetUserPosition->setCrudControllerFqcn('App\Controller\Admin\DashboardController');
+        $entityManager->persist($widgetUserPosition);
+        $entityManager->flush();
         return new JsonResponse(['success' => true]);
     }
 }

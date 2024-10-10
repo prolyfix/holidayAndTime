@@ -24,8 +24,8 @@ class MediaType extends AbstractType
                 'attr' => ['placeholder' => 'Upload a file'],
             ])
             ->add('submit',SubmitType::class, [
-                'label' => 'Add Comment',
-                'attr' => ['class'=>'btn btn-primary'],
+                'label' => 'Add Media',
+                'attr' => ['class'=>'btn btn-primary mt-2'],
             ])            
         ;
     }

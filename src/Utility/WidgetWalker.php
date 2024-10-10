@@ -1,6 +1,7 @@
 <?php
-namespace Utility;
+namespace App\Utility;
 
+use App\Widget\WidgetInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -36,11 +37,10 @@ class WidgetWalker
 
         $tokens = token_get_all(file_get_contents($filePath));
         $count = count($tokens);
-
         for ($i = 0; $i < $count; $i++) {
             if ($tokens[$i][0] === T_NAMESPACE) {
                 for ($j = $i + 1; $j < $count; $j++) {
-                    if ($tokens[$j][0] === T_STRING) {
+                    if ($tokens[$j][0] === 316) {
                         $namespace .= '\\' . $tokens[$j][1];
                     } elseif ($tokens[$j] === '{' || $tokens[$j] === ';') {
                         break;
@@ -50,14 +50,14 @@ class WidgetWalker
 
             if ($tokens[$i][0] === T_CLASS) {
                 for ($j = $i + 1; $j < $count; $j++) {
-                    if ($tokens[$j] === '{') {
-                        $className = $tokens[$i + 2][1];
+                    if ($tokens[$j][0] === 316 || $tokens[$j][0] === 313 && $className === '') {
+                        $className = $tokens[$j][1];
+                        dump($className);
                         break;
                     }
                 }
             }
         }
-
         return $namespace && $className ? $namespace . '\\' . $className : null;
     }
 

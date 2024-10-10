@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use App\Utility\WidgetWalker;
 
 class WidgetUserPositionCrudController extends AbstractCrudController
 {
@@ -15,9 +16,12 @@ class WidgetUserPositionCrudController extends AbstractCrudController
         return WidgetUserPosition::class;
     }
 
-    public function configureWidgetPositions()
+    public function configureWidgetPositions(WidgetWalker $widgetWalker)
     {
-        return $this->render('admin/widget_position/index.html.twig');
+        $availableWidgets = $widgetWalker->findWidgetClasses(__DIR__ . '/../../Widget');
+        return $this->render('admin/widget_position/index.html.twig', [
+            'availableWidgets' => $availableWidgets
+        ]);
     }
 
     /*

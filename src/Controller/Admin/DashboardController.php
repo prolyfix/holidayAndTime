@@ -19,8 +19,10 @@ use App\Entity\Timesheet;
 use App\Entity\TypeOfAbsence;
 use App\Entity\User;
 use App\Entity\Weekplan;
+use App\Entity\WidgetUserPosition;
 use App\Entity\WorkingGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -76,6 +78,10 @@ class DashboardController extends AbstractDashboardController
     {
     }
 
+    public function configureAssets(): Assets
+    {
+        return Assets::new()->addCssFile('style/admin.css');
+    }
 
     public function configureDashboard(): Dashboard
     {
@@ -158,6 +164,8 @@ class DashboardController extends AbstractDashboardController
         if( $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
             yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
         } 
+        yield MenuItem::linkToCrud('widgets', 'fas fa-cog', WidgetUserPosition::class)->setAction(actionName: 'configureWidgetPositions');
+
     }
 
 

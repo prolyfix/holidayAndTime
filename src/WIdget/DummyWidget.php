@@ -3,6 +3,11 @@ namespace App\Widget;
 use App\Widget\WidgetInterface;
 
 class DummyWidget implements WidgetInterface {
+
+    public function __construct() {
+    }
+
+
     public function getName(): string {
         return 'Dummy Widget';
     }

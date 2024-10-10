@@ -17,9 +17,16 @@
         min-height:200px;
         border-bottom: 1px solid #ccc;
         border: 1px dotted black;
+        height: 50px;
         &:last-child{
             border-right: 0;
 
+        }
+        position:relative;
+        .card{
+            position:absolute;
+            min-width:90%;
+            top: 5px;
         }
     }
 }

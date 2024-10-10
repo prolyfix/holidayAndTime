@@ -5,6 +5,7 @@ namespace App\Twig;
 use App\Entity\Configuration;
 use App\Entity\Project;
 use App\Entity\User;
+use App\Entity\WidgetUserPosition;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Polyfill\Intl\Icu\DateFormat\MonthTransformer;
 use Twig\Extension\AbstractExtension;
@@ -29,6 +30,8 @@ class AppExtension extends AbstractExtension
             new TwigFunction('hasCommentInTime', [$this, 'hasCommentInTime']),
             new TwigFunction('generateFilterGroup', [$this, 'generateFilterGroup']),
             new TwigFunction('generateFilterUser', [$this, 'generateFilterGroup']),
+            new TwigFunction('renderWidget', [$this, 'renderWidget']),
+            new TwigFunction('renderWidget2', [$this, 'renderWidget2']),
         ];
     }
 
@@ -39,6 +42,22 @@ class AppExtension extends AbstractExtension
             return false;
         return ($conf->getValue() == 1);
 
+    }
+    public function renderWidget2($user,$crudAction,$crudControllerFqcn)
+    {
+       $widgets = $this->em->getRepository(WidgetUserPosition::class)->findBy([        ]);
+       $output = ""; 
+       foreach($widgets as $widgetUserPosition){
+            $class = $widgetUserPosition->getWidgetClass();
+            $widget = new $class();
+            $output.= $widget->render();
+       }
+        return $output;
+    }
+    public function renderWidget($widget): string
+    {
+       $widget = new $widget();
+       return 	'<div class="card widget" style="" data-widget-target="card" id="widget_'.$widget::class.'" data-widgetId="'.$widget::class.'" data-width="190%">'.$widget->getName().'</div>';
     }
     public function isWorkday(User $user, string $date)
     {

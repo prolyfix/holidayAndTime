@@ -3,19 +3,35 @@
 	<div class="container" id="widgetMain" data-controller="widget">
 		<div class="row">
 			<div class="col-3">
-				<div class="card widget" style="" data-widget-target="card">
+				{% for widget in availableWidgets %}
+					{{ renderWidget(widget) | raw}}
+
+				{% endfor %}
+				<div class="card widget" style="" data-widget-target="card" id="widget_utilisateur" data-width="190%">
 					Utilisateurs
 				</div>
 				<!-- Repeat this card block for each card -->
 			</div>
 			<div class="col-9">
-				<table id="widgetTable" data-widget-target="widgetTable">
+				<table id="widgetTable">
 					<tbody>
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td data-widget-target="widgetTable" data-row="1" data-column="1"></td>
+							<td data-widget-target="widgetTable" data-row="1" data-column="2"></td>
+							<td data-widget-target="widgetTable" data-row="1" data-column="3"></td>
+							<td data-widget-target="widgetTable" data-row="1" data-column="4"></td>
+						</tr>
+						<tr>
+							<td data-widget-target="widgetTable" data-row="2" data-column="1"></td>
+							<td data-widget-target="widgetTable" data-row="2" data-column="2"></td>
+							<td data-widget-target="widgetTable" data-row="2" data-column="3"></td>
+							<td data-widget-target="widgetTable" data-row="2" data-column="4"></td>
+						</tr>
+						<tr>
+							<td data-widget-target="widgetTable" data-row="3" data-column="1"></td>
+							<td data-widget-target="widgetTable" data-row="3" data-column="2"></td>
+							<td data-widget-target="widgetTable" data-row="3" data-column="3"></td>
+							<td data-widget-target="widgetTable" data-row="3" data-column="4"></td>
 						</tr>
 						<!-- Repeat this row block for each row -->
 						<!-- Repeat this row block for each row -->
@@ -24,5 +40,5 @@
 			</div>
 		</div>
 	</div>
-{{parent()}}
+	{{parent()}}
 {% endblock %}
