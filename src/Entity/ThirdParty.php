@@ -30,9 +30,16 @@ class ThirdParty
     #[ORM\OneToMany(targetEntity: Project::class, mappedBy: 'thirdParty')]
     private Collection $projects;
 
+    /**
+     * @var Collection<int, Contact>
+     */
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'thirdPaty')]
+    private Collection $contacts;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,5 +116,35 @@ class ThirdParty
     public function __tostring(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection<int, Contact>
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact): static
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setThirdPaty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact): static
+    {
+        if ($this->contacts->removeElement($contact)) {
+            // set the owning side to null (unless already changed)
+            if ($contact->getThirdPaty() === $this) {
+                $contact->setThirdPaty(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -129,6 +129,9 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: WidgetUserPosition::class, mappedBy: 'user')]
     private Collection $widgetUserPositions;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Contact $contact = null;
+
 
 
     public function __construct()
@@ -765,6 +768,28 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
                 $widgetUserPosition->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contact $contact): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($contact === null && $this->contact !== null) {
+            $this->contact->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($contact !== null && $contact->getUser() !== $this) {
+            $contact->setUser($this);
+        }
+
+        $this->contact = $contact;
 
         return $this;
     }

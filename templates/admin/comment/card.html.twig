@@ -4,6 +4,8 @@
             
     </div>
     <div class="card-footer">
-        {% include 'common/avatar.html.twig' with {'user': task.user, 'class':'small'} %} | {{ task.user.name }} | {{ task.creationDate|date('Y-m-d H:i') }}
+        {% if task.user is not null %}
+            {% include 'common/avatar.html.twig' with {'user': task.user, 'class':'small'} %} | {{ task.user.name }} | {{ task.creationDate|date('Y-m-d H:i') }}
+        {% endif %}   
     </div>
 </div>

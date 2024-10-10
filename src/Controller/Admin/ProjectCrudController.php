@@ -40,7 +40,7 @@ class ProjectCrudController extends AbstractCrudController
     {
 
         return [
-            FormField::addPanel('allgemein'),
+            FormField::addTab('Allgemein', 'start'),
             IdField::new('id')->hideOnForm(),
             UrlField::new('name')->formatValue(function ($value, $entity) {
                 return '<a href="/admin?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CProjectCrudController&entityId='.$entity->getId().'">'.$value.'</a>';
@@ -48,10 +48,12 @@ class ProjectCrudController extends AbstractCrudController
             DateTimeField::new('creationDate')->hideOnForm(),
             AssociationField::new('thirdParty'),
             AssociationField::new('media')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/media/field.html.twig'),
-            FormField::addPanel('tasks'),
-            AssociationField::new('tasks')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/task/field.html.twig'),
             AssociationField::new('members')->setTemplatePath('admin/user/field.html.twig'),
+            FormField::addTab('Tasks', 'start'),
+            AssociationField::new('tasks')->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/task/field.html.twig'),
+            FormField::addTab('Timesheet', 'start'),
             ArrayField::new('relatedTimesheetsIncludedTasks')->hideOnForm()->hideOnIndex()->setTemplatePath('admin/timesheet/field.html.twig'),
+            FormField::addTab('Comments', 'start'),
             AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig'),
 
         ];

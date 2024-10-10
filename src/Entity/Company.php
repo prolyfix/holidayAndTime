@@ -271,7 +271,7 @@ class Company extends Commentable
                 $typeOfAbsence->setCompany(null);
             }
         }
-
         return $this;
     }
+
 }

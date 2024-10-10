@@ -198,12 +198,14 @@ class TaskCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         $user = $this->getUser();
-        yield FormField::addTab('Allgemein', 'start');
+        yield FormField::addTab('Allgemein', 'start')->hideOnForm();
         yield IdField::new('id')->hideOnForm();
         if($user->getCompany()->getConfiguration('hasProject')->getValue()){
             yield AssociationField::new('project');
             //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }
+        yield DateField::new('dueDate');
+        yield AssociationField::new('tags');
 
         yield TextField::new('name')->hideOnDetail()->setCustomOption('tab', 'start');
         yield AssociationField::new('assignedTo')->setFormTypeOption('query_builder', function ($entity) use ($user) {
@@ -219,11 +221,10 @@ class TaskCrudController extends AbstractCrudController
             'in_progress' => 'in_progress',
             'done' => 'done',
         ]);
-        yield FormField::addTab('Timesheet', 'start');
+        yield FormField::addTab('Timesheet', 'start')->hideOnForm();
         yield AssociationField::new('relatedTimesheets')->hideOnForm()->setTemplatePath('admin/timesheet/field.html.twig');
+        yield FormField::addTab('Comments', 'start')->hideOnForm();
         yield AssociationField::new('comments')->hideOnIndex()->hideWhenCreating()->hideWhenUpdating()->setTemplatePath('admin/comment/field.html.twig');
-        yield DateField::new('dueDate');
-        yield AssociationField::new('tags');
     }
     
 }
