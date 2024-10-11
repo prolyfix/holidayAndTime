@@ -134,4 +134,29 @@ class ProjectCrudController extends AbstractCrudController
         $url = str_replace('entityId','project',$url);
         return $this->redirect($url);
     }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $user = $this->getUser();
+        $query = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $company = $user->getCompany();
+        if($user->hasRole(User::ROLE_ADMIN))
+        {
+            return $query;
+        }
+        if($company->hasRight('project'))
+        {
+            if(count($user->getUsers()) > 0)
+            {
+                return $query->andWhere('entity.user IN (:users)')
+                ->setParameter('users', $user->getUsers())
+                ->orWhere('entity.user = :user')   
+                ->setParameter('user', $user); 
+            }
+            if(count($user->getUsers()) == 0){
+                return $query->andWhere('entity.user = :user')
+                ->setParameter('user', $user);
+            }
+        }
+    }
 }

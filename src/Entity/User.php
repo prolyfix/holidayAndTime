@@ -19,6 +19,8 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_MANAGER = 'ROLE_MANAGER';
+    const ROLE_EMPLOYEE = 'ROLE_EMPLOYEE';
+    const ROLE_GAST = 'ROLE_GAST';
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -115,10 +117,10 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     private Collection $commentables;
 
     /**
-     * @var Collection<int, Project>
+     * @var Collection<int, Commentable>
      */
-    #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'members')]
-    private Collection $projects;
+    #[ORM\ManyToMany(targetEntity: Commentable::class, mappedBy: 'members')]
+    private Collection $commentableMembers;
 
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $color = null;
@@ -157,7 +159,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->weekplans = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->commentables = new ArrayCollection();
-        $this->projects = new ArrayCollection();
+        $this->CommentableMembers = new ArrayCollection();
         $this->widgetUserPositions = new ArrayCollection();
     }
 
@@ -696,27 +698,27 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return Collection<int, Project>
+     * @return Collection<int, Commentable>
      */
-    public function getProjects(): Collection
+    public function getCommentableMembers(): Collection
     {
-        return $this->projects;
+        return $this->commentableMembers;
     }
 
-    public function addProject(Project $project): static
+    public function addCommentableMember(Commentable $commentable): static
     {
-        if (!$this->projects->contains($project)) {
-            $this->projects->add($project);
-            $project->addMember($this);
+        if (!$this->commentableMembers->contains($commentable)) {
+            $this->commentableMembers->add($commentable);
+            $commentable->addMember($this);
         }
 
         return $this;
     }
 
-    public function removeProject(Project $project): static
+    public function removeCommentableMember(Commentable $commentable): static
     {
-        if ($this->projects->removeElement($project)) {
-            $project->removeMember($this);
+        if ($this->commentableMembers->removeElement($commentable)) {
+            $commentable->removeMember($this);
         }
 
         return $this;

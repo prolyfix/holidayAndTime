@@ -6,6 +6,7 @@ use App\Entity\Appointment;
 use App\Entity\Calendar;
 use App\Entity\Company;
 use App\Entity\Configuration;
+use App\Entity\Contact;
 use App\Entity\DummyEntity;
 use App\Entity\HelpContent;
 use App\Entity\Issue;
@@ -126,7 +127,11 @@ class DashboardController extends AbstractDashboardController
         if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN') || $taskRight && $taskRight->getValue() == 1 ) {    
             yield MenuItem::section('Projects');
         }
-        if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
+        $belongsToProject = false;
+        if($this->getUser()->getCommentableMembers()->count() > 0){
+            $belongsToProject = true;
+        }
+        if($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'|| $belongsToProject)) {  
             yield MenuItem::linkToCrud('Projects', 'fas fa-diagram-project', Project::class);
         }
 
@@ -142,13 +147,10 @@ class DashboardController extends AbstractDashboardController
         if($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::section('CRM');
             yield MenuItem::linkToCrud('Medias', 'fas fa-photo-film', Media::class);
+            yield MenuItem::linkToCrud('Contact','fas fa-address-book', Contact::class);
             yield MenuItem::linkToCrud('ThirdParty', 'fas fa-handshake', ThirdParty::class);
             yield MenuItem::linkToCrud('Appointments', 'fas fa-calendar', Appointment::class);
         }
-
-
-
-
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
         if($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')){
             yield MenuItem::section('Week planning');

@@ -19,16 +19,18 @@ class Contact
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastName = null;
 
-    #[ORM\ManyToOne(inversedBy: 'contacts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Company $company = null;
-
     #[ORM\OneToOne(inversedBy: 'contact', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'contacts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ThirdParty $thirdPaty = null;
+    private ?ThirdParty $thirdParty = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone = null;
 
     public function getId(): ?int
     {
@@ -59,17 +61,6 @@ class Contact
         return $this;
     }
 
-    public function getCompany(): ?Company
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?Company $company): static
-    {
-        $this->company = $company;
-
-        return $this;
-    }
 
     public function getUser(): ?User
     {
@@ -83,14 +74,38 @@ class Contact
         return $this;
     }
 
-    public function getThirdPaty(): ?ThirdParty
+    public function getThirdParty(): ?ThirdParty
     {
-        return $this->thirdPaty;
+        return $this->thirdParty;
     }
 
-    public function setThirdPaty(?ThirdParty $thirdPaty): static
+    public function setThirdParty(?ThirdParty $thirdParty): static
     {
-        $this->thirdPaty = $thirdPaty;
+        $this->thirdParty = $thirdParty;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
 
         return $this;
     }

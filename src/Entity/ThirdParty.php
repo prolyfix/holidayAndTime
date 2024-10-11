@@ -33,7 +33,7 @@ class ThirdParty
     /**
      * @var Collection<int, Contact>
      */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'thirdPaty')]
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'thirdParty')]
     private Collection $contacts;
 
     public function __construct()
@@ -130,7 +130,7 @@ class ThirdParty
     {
         if (!$this->contacts->contains($contact)) {
             $this->contacts->add($contact);
-            $contact->setThirdPaty($this);
+            $contact->setThirdParty($this);
         }
 
         return $this;
@@ -140,8 +140,8 @@ class ThirdParty
     {
         if ($this->contacts->removeElement($contact)) {
             // set the owning side to null (unless already changed)
-            if ($contact->getThirdPaty() === $this) {
-                $contact->setThirdPaty(null);
+            if ($contact->getThirdParty() === $this) {
+                $contact->setThirdParty(null);
             }
         }
 

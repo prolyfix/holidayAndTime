@@ -58,7 +58,11 @@ abstract class Commentable extends TimeData
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'commentables')]
     private Collection $tags;
 
-
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commentableMembers')]
+    private Collection $members;
 
     public function __construct()
     {
@@ -67,6 +71,8 @@ abstract class Commentable extends TimeData
         $this->relatedTimesheets = new ArrayCollection();
         parent::__construct();
         $this->tags = new ArrayCollection();
+        $this->members = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -200,6 +206,29 @@ abstract class Commentable extends TimeData
         if ($this->tags->removeElement($tag)) {
             $tag->removeCommentable($this);
         }
+
+        return $this;
+    }
+
+        /**
+     * @return Collection<int, User>
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(User $member): static
+    {
+        if (!$this->members->contains($member)) {
+            $this->members->add($member);
+        }
+
+        return $this;
+    }
+    public function removeMember(User $member): static
+    {
+        $this->members->removeElement($member);
 
         return $this;
     }
