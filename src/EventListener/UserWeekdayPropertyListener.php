@@ -21,6 +21,8 @@ final class UserWeekdayPropertyListener
 
     public function prePersist(UserWeekdayProperty $userWeekdayProperty, PrePersistEventArgs $event): void
     {
+        if($userWeekdayProperty->getUserSchedule()->getUser()->getCompany()== null)
+            return;
         $threshold = $userWeekdayProperty->getUserSchedule()->getUser()->getCompany()->getConfiguration('thresholdHalfDay');
         if($threshold === null){
             return;

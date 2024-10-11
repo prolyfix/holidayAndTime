@@ -57,6 +57,18 @@ services:
                 name: 'doctrine.orm.entity_listener'
                 event: 'prePersist'
                 entity: 'App\Entity\Commentable'
+
+    App\EventListener\ContactListener:
+        tags:
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                event: 'postPersist'
+                entity: 'App\Entity\Contact'
+            - 
+                name: 'doctrine.orm.entity_listener'
+                event: 'preUpdate'
+                entity: 'App\Entity\Contact'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 parameters:

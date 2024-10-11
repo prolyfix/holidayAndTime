@@ -200,7 +200,7 @@ class TaskCrudController extends AbstractCrudController
         $user = $this->getUser();
         yield FormField::addTab('Allgemein', 'start')->hideOnForm();
         yield IdField::new('id')->hideOnForm();
-        if($user->getCompany()->getConfiguration('hasProject')->getValue()){
+        if($user->getCompany()!==null && $user->getCompany()->getConfiguration('hasProject')->getValue()){
             yield AssociationField::new('project');
             //yield AssociationField::new('project.ThirdParty')->setLabel('customer')->hideOnForm();
         }

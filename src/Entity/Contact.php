@@ -32,6 +32,9 @@ class Contact
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $phone = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isUser = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,4 +112,16 @@ class Contact
 
         return $this;
     }
+
+    public function getIsUser(): ?bool
+    {
+        return $this->isUser;
+    }
+
+    public function setIsUser(?bool $isUser): static
+    {
+        $this->isUser = $isUser;
+
+        return $this;
+    }   
 }
