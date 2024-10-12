@@ -45,3 +45,8 @@
 input, select{
   background-color: white !important;
 }
+.responsive-logo img{
+  @media screen and (max-width: 768px){
+    width: 40px;
+  }
+}
