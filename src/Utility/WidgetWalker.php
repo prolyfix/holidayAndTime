@@ -2,13 +2,20 @@
 namespace App\Utility;
 
 use App\Widget\WidgetInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
-
+use Symfony\Component\Security\Core\Security;
 
 class WidgetWalker
 {
+
+    public function __construct(private EntityManagerInterface $em, private Security $security)
+    {
+    }
+
     public function findWidgetClasses(string $directory): array
     {
         $widgetClasses = [];
@@ -22,7 +29,7 @@ class WidgetWalker
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $className = $this->getClassNameFromFile($file->getPathname());
                 if ($className && $this->implementsWidgetInterface($className)) {
-                    $widgetClasses[] = $className;
+                    $widgetClasses[] = new $className($this->em, $this->security);
                 }
             }
         }
@@ -52,7 +59,6 @@ class WidgetWalker
                 for ($j = $i + 1; $j < $count; $j++) {
                     if ($tokens[$j][0] === 316 || $tokens[$j][0] === 313 && $className === '') {
                         $className = $tokens[$j][1];
-                        dump($className);
                         break;
                     }
                 }

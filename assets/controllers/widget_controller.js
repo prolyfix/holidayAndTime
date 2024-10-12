@@ -8,13 +8,38 @@ export default class extends Controller {
             card.addEventListener("dragstart", this.dragStart.bind(this));
         });
 
-        console.log(this.widgetTableTargets);
         this.widgetTableTargets.forEach(widgeTable => {
             console.log(widgeTable);
             widgeTable.addEventListener("dragover", this.dragOver.bind(this))
             widgeTable.addEventListener("drop", this.drop.bind(this));
         });
+        this.retrieveCurrentWidgetPos();
+
+        
     }
+
+    retrieveCurrentWidgetPos() {
+        fetch('/ajax/getWidgetPos', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            data.forEach(widget => {
+                const row = widget.row;
+                const column = widget.column;
+                const widgetTable = document.querySelector(`[data-row="${row}"][data-column="${column}"]`);
+                widgetTable.innerHTML = widget.widgetEl;
+            });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
 
     dragStart(event) {
         event.dataTransfer.setData("text/plain", event.target.id);
@@ -22,6 +47,28 @@ export default class extends Controller {
 
     dragOver(event) {
         event.preventDefault();
+    }
+
+    delete(event) {
+        const widgetId = event.currentTarget.dataset.widgetid;
+        fetch('/ajax/deleteWidget', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                widgetId: widgetId
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            const widget = document.querySelector(`[data-widgetid="${widgetId}"]`);
+            widget.parentElement.remove();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
 
     drop(event) {

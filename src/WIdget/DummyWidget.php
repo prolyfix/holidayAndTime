@@ -4,8 +4,9 @@ use App\Widget\WidgetInterface;
 
 class DummyWidget implements WidgetInterface {
 
-    public function __construct() {
+    public function __construct(private $em, private $security) {
     }
+
 
 
     public function getName(): string {
@@ -26,5 +27,9 @@ class DummyWidget implements WidgetInterface {
 
     public function getContext(): array {
         return [];
+    }
+
+    public function isForThisUserAvailable(): bool {
+        return false;
     }
 }

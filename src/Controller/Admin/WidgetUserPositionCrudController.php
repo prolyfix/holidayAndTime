@@ -19,6 +19,11 @@ class WidgetUserPositionCrudController extends AbstractCrudController
     public function configureWidgetPositions(WidgetWalker $widgetWalker)
     {
         $availableWidgets = $widgetWalker->findWidgetClasses(__DIR__ . '/../../Widget');
+        foreach($availableWidgets as $widget) {
+            if(!$widget->isForThisUserAvailable()) {
+                unset($availableWidgets[array_search($widget, $availableWidgets)]);
+            }
+        }
         return $this->render('admin/widget_position/index.html.twig', [
             'availableWidgets' => $availableWidgets
         ]);

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Commentable;
+use App\Entity\Company;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +15,18 @@ class CommentableRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Commentable::class);
+    }
+
+    public function retrieveCommentablesFromCompany(Company $company): iterable
+    {
+        $values  = $this->createQueryBuilder('c')
+            ->join('c.user', 'u')
+            ->andWhere('u.company = :company')
+            ->setParameter('company', $company)
+            ->getQuery()
+            ->getResult();
+
+        return $values;
     }
 
     public function retrieveCommentables($name): array

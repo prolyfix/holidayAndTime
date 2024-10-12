@@ -1,9 +1,12 @@
 <?php
 namespace App\Widget;
 
+use Psr\Container\ContainerInterface;
+
 class NumberOfUserWidget implements WidgetInterface
 {
-
+    public function __construct(private $em, private $security) {
+    }
     public function getName(): string
     {
         return 'Number of Users';
@@ -23,5 +26,10 @@ class NumberOfUserWidget implements WidgetInterface
     public function getContext(): array
     {
         return [];
+    }
+
+    public function isForThisUserAvailable(): bool
+    {
+        return true;
     }
 }

@@ -7,13 +7,15 @@ use App\Entity\Project;
 use App\Entity\User;
 use App\Entity\WidgetUserPosition;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Polyfill\Intl\Icu\DateFormat\MonthTransformer;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
-    public function __construct(private EntityManagerInterface $em)
+    public function __construct(private EntityManagerInterface $em , private Security $security, private Environment $twig) 
     {
 
     }
@@ -45,18 +47,19 @@ class AppExtension extends AbstractExtension
     }
     public function renderWidget2($user,$crudAction,$crudControllerFqcn)
     {
-       $widgets = $this->em->getRepository(WidgetUserPosition::class)->findBy([        ]);
-       $output = ""; 
+       $widgets = $this->em->getRepository(WidgetUserPosition::class)->findBy(['user' => $user]);
+       if(count($widgets) == 0)
+           return 'No Widget Available, please go to your widget settings';
+       $output = []; 
        foreach($widgets as $widgetUserPosition){
             $class = $widgetUserPosition->getWidgetClass();
-            $widget = new $class();
-            $output.= $widget->render();
+            $widget = new $class($this->em,$this->security);
+            $output[]= ['rendered' => $widget->render(),'widget'  => $widget];
        }
-        return $output;
+        return $this->twig->render('widget/widget.html.twig', ['widgets' => $output]);
     }
     public function renderWidget($widget): string
     {
-       $widget = new $widget();
        return 	'<div class="card widget" style="" data-widget-target="card" id="widget_'.$widget::class.'" data-widgetId="'.$widget::class.'" data-width="190%">'.$widget->getName().'</div>';
     }
     public function isWorkday(User $user, string $date)

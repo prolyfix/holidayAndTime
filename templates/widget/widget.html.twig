@@ -1,0 +1,9 @@
+<div class="container dashboard widget">
+	<div class="row">
+		{% for widget in widgets %}
+			<div class="col-md-{{widget.widget.width}}">
+				{{widget.rendered | raw}}
+			</div>
+		{% endfor %}
+	</div>
+</div>

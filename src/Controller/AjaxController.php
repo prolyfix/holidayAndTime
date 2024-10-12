@@ -10,6 +10,7 @@ use App\Utility\TimeUtility;
 use App\Entity\WidgetUserPosition;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -184,4 +185,40 @@ class AjaxController extends AbstractController
         $entityManager->flush();
         return new JsonResponse(['success' => true]);
     }
+
+    #[Route('/getWidgetPos', name: 'retrieve_widget_position', methods: ['GET'])]
+    public function retrieveWidgetPos(EntityManagerInterface $entityManager, Security $security): JsonResponse
+    {
+        $user = $this->getUser();
+        $widgetUserPositions = $entityManager->getRepository(WidgetUserPosition::class)->findBy(['user' => $user]);
+        $output = [];
+    
+        foreach($widgetUserPositions as $widgetUserPosition){
+            $widgetClass = $widgetUserPosition->getWidgetClass();
+            $widgetInstance = new $widgetClass($entityManager, $security);
+            $output[] = [
+                'widgetId' => $widgetInstance->getName(),
+                'widgetEl'  => '<div class="card widget" style="" data-widget-target="card" id="widget_'.$widgetInstance::class.'" data-widgetId="'.$widgetInstance::class.'" data-width="190%">
+                                '.$widgetInstance->getName().'
+                                    <i class="fas fa-trash" data-action="click->widget#delete" data-widgetid="'.$widgetUserPosition->getId().'"></i>
+                                </div>',
+                'row' => $widgetUserPosition->getRowIndex(),
+                'column' => $widgetUserPosition->getColumIndex(),
+            ];
+        }
+        return new JsonResponse($output);
+    }
+
+    #[Route('/deleteWidget', name: 'delete_widget_position', methods: ['POST'])] 
+    public function deleteWidgetPos(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        //TODO: Check if user is allowed to delete this widget
+        $widgetId = $data['widgetId'];
+        $widgetUserPosition = $entityManager->getRepository(WidgetUserPosition::class)->find($widgetId);
+        $entityManager->remove($widgetUserPosition);
+        $entityManager->flush();
+        return new JsonResponse(['success' => true]);
+    }
+
 }
