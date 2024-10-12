@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
-class Tag
+class Tag  extends TimeData
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

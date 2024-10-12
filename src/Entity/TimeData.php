@@ -15,6 +15,12 @@ class TimeData
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedDate = null;
 
+    #[ORM\ManyToOne(inversedBy: 'timeData')]
+    private ?User $createdBy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'timeDataModified')]
+    private ?User $modifiedBy = null;
+
     public function __construct()
     {
         $this->creationDate = new \DateTime();
@@ -40,6 +46,30 @@ class TimeData
     public function setUpdatedDate(?\DateTimeInterface $updatedDate): static
     {
         $this->updatedDate = $updatedDate;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getModifiedBy(): ?User
+    {
+        return $this->modifiedBy;
+    }
+
+    public function setModifiedBy(?User $modifiedBy): static
+    {
+        $this->modifiedBy = $modifiedBy;
 
         return $this;
     }

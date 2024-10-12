@@ -6,7 +6,7 @@ use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
-class Contact
+class Contact  extends TimeData
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -124,4 +124,9 @@ class Contact
 
         return $this;
     }   
+
+    public function __toString(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
 }

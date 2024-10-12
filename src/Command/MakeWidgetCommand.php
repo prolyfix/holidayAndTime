@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Widget\WidgetInterface;
 
 #[AsCommand(
     name: 'make:widget',
@@ -24,23 +25,53 @@ class MakeWidgetCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
-        }
+        $question = $io->ask('What is the name of the widget? (e.g. CalendarWidget)');
+        $widgetName = $question;
+        $widgetClassContent = "<?php
+        namespace App\Widget;
+        use Doctrine\ORM\EntityManagerInterface;
+        use Symfony\Component\Security\Core\Security;
 
-        if ($input->getOption('option1')) {
-            // ...
+        class $widgetName implements WidgetInterface
+        {
+            public function getName(): string
+            {
+                return 'Project Review';
+            }
+            public function getWidth(): int
+            {
+                return 12;
+            }
+            public function getHeight(): int
+            {
+                return 3;
+            }
+            public function render(): string
+            {
+            }
+            public function getContext(): array
+                        {
+            }
+
+            public function isForThisUserAvailable(): bool
+                        {
+            }
+
+            public function __construct(private EntityManagerInterface \$em, Security \$security)
+            {
+            }
+
         }
+        ";
+
+        file_put_contents(__DIR__ . "/../Widget/{$widgetName}.php", $widgetClassContent);
 
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 

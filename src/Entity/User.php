@@ -134,6 +134,18 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Contact $contact = null;
 
+    /**
+     * @var Collection<int, TimeData>
+     */
+    #[ORM\OneToMany(targetEntity: TimeData::class, mappedBy: 'createdBy')]
+    private Collection $timeData;
+
+    /**
+     * @var Collection<int, TimeData>
+     */
+    #[ORM\OneToMany(targetEntity: TimeData::class, mappedBy: 'modifiedBy')]
+    private Collection $timeDataModified;
+
 
 
     public function __construct()
@@ -161,6 +173,8 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->commentables = new ArrayCollection();
         $this->CommentableMembers = new ArrayCollection();
         $this->widgetUserPositions = new ArrayCollection();
+        $this->timeData = new ArrayCollection();
+        $this->timeDataModified = new ArrayCollection();
     }
 
 
@@ -792,6 +806,66 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         }
 
         $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimeData>
+     */
+    public function getTimeData(): Collection
+    {
+        return $this->timeData;
+    }
+
+    public function addTimeData(TimeData $timeData): static
+    {
+        if (!$this->timeData->contains($timeData)) {
+            $this->timeData->add($timeData);
+            $timeData->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeData(TimeData $timeData): static
+    {
+        if ($this->timeData->removeElement($timeData)) {
+            // set the owning side to null (unless already changed)
+            if ($timeData->getCreatedBy() === $this) {
+                $timeData->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TimeData>
+     */
+    public function getTimeDataModified(): Collection
+    {
+        return $this->timeDataModified;
+    }
+
+    public function addTimeDataModified(TimeData $timeDataModified): static
+    {
+        if (!$this->timeDataModified->contains($timeDataModified)) {
+            $this->timeDataModified->add($timeDataModified);
+            $timeDataModified->setModifiedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTimeDataModified(TimeData $timeDataModified): static
+    {
+        if ($this->timeDataModified->removeElement($timeDataModified)) {
+            // set the owning side to null (unless already changed)
+            if ($timeDataModified->getModifiedBy() === $this) {
+                $timeDataModified->setModifiedBy(null);
+            }
+        }
 
         return $this;
     }

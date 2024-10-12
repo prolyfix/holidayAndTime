@@ -43,9 +43,6 @@ abstract class Commentable extends TimeData
     private Collection $media;
 
 
-    #[ORM\ManyToOne(inversedBy: 'commentables')]
-    private ?User $createdBy = null;
-
     /**
      * @var Collection<int, Timesheet>
      */
@@ -140,17 +137,6 @@ abstract class Commentable extends TimeData
         return $this;
     }
 
-    public function getCreatedBy(): ?User
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBy(?User $createdBy): static
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Timesheet>
@@ -192,7 +178,6 @@ abstract class Commentable extends TimeData
 
     public function addTag(Tag $tag): static
     {
-        dump("ici");
         if (!$this->tags->contains($tag)) {
             $this->tags->add($tag);
             $tag->addCommentable($this);

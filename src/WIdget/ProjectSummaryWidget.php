@@ -36,7 +36,6 @@ class ProjectSummaryWidget implements WidgetInterface {
         if(count($this->security->getUser()->getCommentableMembers()) > 0){
             $projects = array_merge($projects,$this->security->getUser()->getCommentableMembers()->toArray());
         }
-        dump($projects);
         $output =  '<div class="card"><div class="card-body">
             <h2>Project Review</h2>
             <table>

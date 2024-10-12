@@ -31,14 +31,15 @@ final class ProjectVoter extends Voter
         $entity = $subject->getInstance();
         if($user->getCompany() !== null){
             if(method_exists($entity, 'getCreatedBy')){
-                return $user->getCompany() === $entity->getCreatedBy()->getUser();
+                if($entity->getCreatedBy()== null){
+                    return true;
+                }
+                return  $user->getCompany() === $entity->getCreatedBy()->getCompany();
             }
         }
         if(method_exists($entity, 'getMembers')){
             return in_array($user, $entity->getMembers()->toArray());
         }
-        dump(method_exists($entity, 'getCreatedBy'));
-        dump($entity);
         return false;
     }
 }

@@ -26,7 +26,6 @@ class ContactListener
                 $contact->setUser($contact->getUser());
                 return;
             }
-            dump($contact);
             $user = new User();
             $user->setEmail($contact->getEmail());
             $user->setContact($contact);
@@ -44,7 +43,6 @@ class ContactListener
                 'user' => $user
             ]);
             $this->mailer->send($email);
-            dump("done");
         }
     }
     public function preUpdate(Contact $contact, PreUpdateEventArgs $event): void

@@ -114,10 +114,8 @@ class AjaxController extends AbstractController
         $comment->setCommentable($commentable);
         $comment->setUser($this->getUser());
         $comment->setComment($data['comment']);
-        dump($comment);
         $em->persist($comment);
         $em->flush();
-        dump($comment);
         return new JsonResponse(['statut' => 'ok', 'message' => 'Comment saved']);
     }
 
@@ -159,7 +157,6 @@ class AjaxController extends AbstractController
         if (!$task) {
             return new JsonResponse(['success' => false, 'message' => 'Task not found'], 404);
         }
-        dump($newState);
         $task->setStatus($table[$newState]);
         $entityManager->flush();
 

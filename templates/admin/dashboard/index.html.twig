@@ -8,15 +8,7 @@
 				<p>Welcome to the dashboard.</p>
 			</div>
 			{% if app.user.company is not null %}
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body">
-                        <div class="card_bignumber"> {{app.user.company.users | length}} </div>
-						<h5 class="card-title">Number of User</h5>
-						<a href="#" class="btn btn-primary">Add User</a>
-					</div>
-				</div>
-			</div>
+
 			{% endif %}
 			<div class="col-md-4">
 				<div class="card">
