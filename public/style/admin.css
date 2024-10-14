@@ -2,7 +2,7 @@
     /* make the backend contents as wide as the browser window */
     --body-max-width: 100%;
     /* change the background color of the <body> */
-    --body-bg: #f5f5f5;
+    --body-bg: #feffff;
     /* make the base font size smaller */
     --font-size-base: 13px;
     /* remove all border radius to make corners straight */
@@ -10,6 +10,7 @@
     --sidebar-menu-active-item-color: #e81e28;
     --button-primary-bg: #e81e28;
     --color-primary: #e81e28;
+    --color-secondary: #e81e28;
     --sidebar-bg: white;
     --sidebar-menu-color: black;
     --sidebar-menu-icon-color: black;

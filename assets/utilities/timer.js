@@ -19,14 +19,17 @@ export default class Timer {
         document.getElementById('start').style.display = 'none';
         document.getElementById('break').style.display = 'block';
         document.getElementById('stop').style.display = 'block';
+
         this.timerInterval = setInterval(() => {
             this.elapsedTime = this.elapsedTime + 1000;
             const event = new CustomEvent('timerSecond', { detail: this.getTime() });
             document.dispatchEvent(event);
+            this.toggleDoublePoints();
         }, 1000);
         this.timerIntervalMinutes = setInterval(() => {
             const event = new CustomEvent('timerMinute', { detail: this.getTime() });
             document.dispatchEvent(event);
+            console.log("timerMinute");
         }, 60000);
     }
 
@@ -39,6 +42,19 @@ export default class Timer {
         document.getElementById('start').style.display = 'block';
 
     }
+
+    toggleDoublePoints() {
+        let time = document.getElementById('timer').innerHTML;
+        console.log(time);
+        if (time.includes(' ')) {
+            time = time.replace(' ', ':');
+        } else {
+            time = time.replace( ':', ' ');
+        }
+        console.log(time);
+        document.getElementById('timer').innerHTML = time;
+    }
+
     stop() {
         clearInterval(this.timerInterval);
         clearInterval(this.timerIntervalMinutes);
