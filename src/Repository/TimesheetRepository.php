@@ -152,5 +152,16 @@ class TimesheetRepository extends ServiceEntityRepository
         return $output;
     }
 
+    public function getTimesheetsForUserBetweenStartAndEnd(User $user, \DateTime $start, \DateTime $end)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.startTime >= :start')
+            ->andWhere('t.endTime <= :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 }

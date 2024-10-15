@@ -38,6 +38,7 @@ class MakeWidgetCommand extends Command
         namespace App\Widget;
         use Doctrine\ORM\EntityManagerInterface;
         use Symfony\Component\Security\Core\Security;
+        use Twig\Environment as Twig;
 
         class $widgetName implements WidgetInterface
         {
@@ -64,7 +65,7 @@ class MakeWidgetCommand extends Command
                         {
             }
 
-            public function __construct(private EntityManagerInterface \$em, Security \$security)
+            public function __construct(private EntityManagerInterface \$em,private Security \$security, private Twig \$twig)
             {
             }
 

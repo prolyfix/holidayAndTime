@@ -5,13 +5,14 @@ use App\Entity\Configuration;
 use App\Entity\Project;
 use App\Widget\WidgetInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Container\ContainerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\Security;
+use Twig\Environment as Twig;
+
 
 class ProjectSummaryWidget implements WidgetInterface {
 
 
-    public function __construct(private $em, private $security) {
+    public function __construct(private $em, private $security, private Twig $twig) {
     }
 
 

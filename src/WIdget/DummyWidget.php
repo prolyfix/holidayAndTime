@@ -4,31 +4,26 @@
         use Symfony\Component\Security\Core\Security;
         use Twig\Environment as Twig;
 
-        class HolidayStatementWidget implements WidgetInterface
+        class DummyWidget implements WidgetInterface
         {
             public function getName(): string
             {
-                return 'Holiday Statement';
+                return 'Project Review';
             }
             public function getWidth(): int
             {
-                return 3;
+                return 12;
             }
             public function getHeight(): int
             {
-                return 1;
+                return 3;
             }
             public function render(): string
             {
-                return 
-                '<div class="card"><div class="card-body">
-                    <h2>Holiday statement</h2>
-                    <i> To be implemented</i>
-                </div></div>';
+                return '<i> TO be deleted </i>';
             }
             public function getContext(): array
-            {
-                return [];
+                        {
             }
 
             public function isForThisUserAvailable(): bool
@@ -36,7 +31,7 @@
                 return true;
             }
 
-            public function __construct(private EntityManagerInterface $em, Security $security, private Twig $twig)
+            public function __construct(private EntityManagerInterface $em,private Security $security, private Twig $twig)
             {
             }
 

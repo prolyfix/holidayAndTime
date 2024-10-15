@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Twig\Environment as Twig;
 
 #[Route('/ajax', name: 'app_ajax')]
 class AjaxController extends AbstractController
@@ -184,7 +185,7 @@ class AjaxController extends AbstractController
     }
 
     #[Route('/getWidgetPos', name: 'retrieve_widget_position', methods: ['GET'])]
-    public function retrieveWidgetPos(EntityManagerInterface $entityManager, Security $security): JsonResponse
+    public function retrieveWidgetPos(EntityManagerInterface $entityManager, Security $security, Twig $twig): JsonResponse
     {
         $user = $this->getUser();
         $widgetUserPositions = $entityManager->getRepository(WidgetUserPosition::class)->findBy(['user' => $user]);
@@ -192,7 +193,12 @@ class AjaxController extends AbstractController
     
         foreach($widgetUserPositions as $widgetUserPosition){
             $widgetClass = $widgetUserPosition->getWidgetClass();
-            $widgetInstance = new $widgetClass($entityManager, $security);
+            if(!class_exists($widgetClass)){
+                $entityManager->remove($widgetUserPosition);
+                $entityManager->flush();
+                continue;
+            }
+            $widgetInstance = new $widgetClass($entityManager, $security, $twig);
             $output[] = [
                 'widgetId' => $widgetInstance->getName(),
                 'widgetEl'  => '<div class="card widget" style="" data-widget-target="card" id="widget_'.$widgetInstance::class.'" data-widgetId="'.$widgetInstance::class.'" data-width="190%">

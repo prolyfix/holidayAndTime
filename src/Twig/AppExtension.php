@@ -53,7 +53,7 @@ class AppExtension extends AbstractExtension
        $output = []; 
        foreach($widgets as $widgetUserPosition){
             $class = $widgetUserPosition->getWidgetClass();
-            $widget = new $class($this->em,$this->security);
+            $widget = new $class($this->em,$this->security,$this->twig);
             $output[]= ['rendered' => $widget->render(),'widget'  => $widget];
        }
         return $this->twig->render('widget/widget.html.twig', ['widgets' => $output]);

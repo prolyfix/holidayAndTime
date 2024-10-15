@@ -4,6 +4,7 @@ namespace App\Widget;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
+use Twig\Environment as Twig;
 
 class NameOfUserWidget implements WidgetInterface
 {
@@ -42,7 +43,7 @@ class NameOfUserWidget implements WidgetInterface
         return true;
     }
 
-    public function __construct(private EntityManagerInterface $em, private Security $security)
+    public function __construct(private EntityManagerInterface $em, private Security $security, private Twig $twig)
     {
     }
 
