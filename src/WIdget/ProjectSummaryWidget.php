@@ -38,7 +38,7 @@ class ProjectSummaryWidget implements WidgetInterface {
         }
         $output =  '<div class="card"><div class="card-body">
             <h2>Project Review</h2>
-            <table>
+            <table class="table">
                 <tr>
                     <th>Project</th>
                     <th>Tasks</th>
@@ -48,6 +48,7 @@ class ProjectSummaryWidget implements WidgetInterface {
         foreach($projects as $project){
             $output .= '<td>'.$project->getName().'</td>';
             $output .= '<td>'.count($project->getTasks()).'</td>';
+            $output .= '</tr><tr>';
         }
         $output .='
                 </tr>

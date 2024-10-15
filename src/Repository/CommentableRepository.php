@@ -20,7 +20,7 @@ class CommentableRepository extends ServiceEntityRepository
     public function retrieveCommentablesFromCompany(Company $company): iterable
     {
         $values  = $this->createQueryBuilder('c')
-            ->join('c.user', 'u')
+            ->join('c.createdBy', 'u')
             ->andWhere('u.company = :company')
             ->setParameter('company', $company)
             ->getQuery()
