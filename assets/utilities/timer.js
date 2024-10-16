@@ -30,7 +30,13 @@ export default class Timer {
             const event = new CustomEvent('timerMinute', { detail: this.getTime() });
             document.dispatchEvent(event);
             console.log("timerMinute");
+            this.showTime();
+
         }, 60000);
+    }
+    showTime(){
+        console.log(this.getTime());    
+        document.getElementById('timer').innerHTML =this.getTime();
     }
 
     break() {
@@ -45,13 +51,11 @@ export default class Timer {
 
     toggleDoublePoints() {
         let time = document.getElementById('timer').innerHTML;
-        console.log(time);
         if (time.includes(' ')) {
             time = time.replace(' ', ':');
         } else {
             time = time.replace( ':', ' ');
         }
-        console.log(time);
         document.getElementById('timer').innerHTML = time;
     }
 
