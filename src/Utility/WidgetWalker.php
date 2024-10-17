@@ -7,13 +7,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
-use Twig\Environment as Twig;
 use Symfony\Component\Security\Core\Security;
 
 class WidgetWalker
 {
 
-    public function __construct(private EntityManagerInterface $em, private Security $security, private Twig $twig)
+    public function __construct(private EntityManagerInterface $em, private Security $security)
     {
     }
 
@@ -29,8 +28,8 @@ class WidgetWalker
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $className = $this->getClassNameFromFile($file->getPathname());
-                if ($className && $this->implementsWidgetInterface($className)) {
-                    $widgetClasses[] = new $className($this->em, $this->security, $this->twig);
+		if ($className && $this->implementsWidgetInterface($className)) {
+                    $widgetClasses[] = new $className($this->em, $this->security);
                 }
             }
         }
@@ -44,11 +43,11 @@ class WidgetWalker
         $className = '';
 
         $tokens = token_get_all(file_get_contents($filePath));
-        $count = count($tokens);
+	$count = count($tokens);
         for ($i = 0; $i < $count; $i++) {
             if ($tokens[$i][0] === T_NAMESPACE) {
                 for ($j = $i + 1; $j < $count; $j++) {
-                    if ($tokens[$j][0] === 316) {
+                    if ($tokens[$j][0] === 316 || $tokens[$j][0]==265) {
                         $namespace .= '\\' . $tokens[$j][1];
                     } elseif ($tokens[$j] === '{' || $tokens[$j] === ';') {
                         break;
@@ -58,13 +57,13 @@ class WidgetWalker
 
             if ($tokens[$i][0] === T_CLASS) {
                 for ($j = $i + 1; $j < $count; $j++) {
-                    if ($tokens[$j][0] === 316 || $tokens[$j][0] === 313 && $className === '') {
+                    if (($tokens[$j][0] === 316 || $tokens[$j][0] === 313 || $tokens[$j][0]==262) && $className === '') {
                         $className = $tokens[$j][1];
                         break;
                     }
                 }
             }
-        }
+	}
         return $namespace && $className ? $namespace . '\\' . $className : null;
     }
 
