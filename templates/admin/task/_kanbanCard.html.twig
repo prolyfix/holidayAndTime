@@ -1,50 +1,42 @@
 <div
 	class="kanban-card" data-kanban-target="item" id="inprogress-{{ todo.id }}">
 	<!-- Display the details of the todo -->
-	<a class="kanban-card-title" 
-        href="{{ ea_url()
-                                    .setController('App\\Controller\\Admin\\TaskCrudController')
-                                    .setAction('detail')
-                                    .setEntityId(todo.id)   
-                            }}
-            "
-    >{{ todo.name }}
-    </a>
-	<div class="kanban-card-due-date">
-            {% if todo.dueDate %}
-                {{ todo.dueDate | date('d-m-Y') }} 
-            {% endif %} 
-            <br/>
-            <a class="btn btn-xs" href="{{ ea_url()
-                                    .setController('App\\Controller\\Admin\\TaskCrudController')
-                                    .setAction('addComment')
-                                    .setEntityId(todo.id)   
-                            }}
-            " data-action-name="createTask">
-                <i class="action-icon fa fa-play"></i> 
-            </a>   
-            <a class="btn btn-xs" href="" data-action-name="createTask">
-                <i class="action-icon fa fa-clock"></i> 
-            </a>             
-            <a class="btn btn-xs" href="
-                        {{ ea_url()
-                            .setController('App\\Controller\\Admin\\TaskCrudController')
-                            .setAction('addComment')
-                            .setEntityId(todo.id)   
-                        }}" data-action-name="addComment">
-                <i class="action-icon fa fa-comment"></i> 
-            </a>  
-            {% if todo.assignedTo %}
-                {% include 'common/avatar.html.twig' with {user: todo.assignedTo, class:'small'} %}
-            {% endif %}
-            {% if todo.project is not null %}
-                <div class="kanban-breadcrumb">
-                    <a href="{{ ea_url()
-                            .setController('App\\Controller\\Admin\\ProjectCrudController')
-                            .setAction('detail')
-                            .setEntityId(todo.project.id)   
-                        }}" class="">{{ todo.project.name }}</a>
-                </div>
-            {% endif %}
-    </div>
+	<a class="kanban-card-title" href="{{ ea_url() .setController('App\\Controller\\Admin\\TaskCrudController') .setAction('detail') .setEntityId(todo.id) }} ">{{ todo.name }}
+	</a>
+	<div class="kanban-card-description">
+		{{ todo.description|length > 50 ? todo.description|striptags|slice(0, 50) ~ '...' : todo.description|striptags }}
+	</div>
+	<div class="kanban-footer">
+		<div class="kanban-card-due-date">
+			{% if todo.dueDate %}
+				{{ todo.dueDate | date('d-m-Y') }}
+			{% endif %}
+			<br/>
+			<a class="btn btn-xs action-startWorking" 
+                href="{{ ea_url() .setController('App\\Controller\\Admin\\TaskCrudController') .setAction('startWorking') .setEntityId(todo.id) }} " 
+                data-action-name="startWorking">
+				<i class="action-icon fa fa-play"></i>
+			</a>
+			<a class="btn btn-xs sidebar-action" data-action-name="createTask"
+            href="{{ ea_url() .setController('App\\Controller\\Admin\\TaskCrudController') .setAction('addTimesheet') .setEntityId(todo.id) }} " >
+				<i class="action-icon fa fa-clock"></i>
+			</a>
+			<a class="btn btn-xs sidebar-action" href="
+							                        {{ ea_url()
+							                            .setController('App\\Controller\\Admin\\TaskCrudController')
+							                            .setAction('addComment')
+							                            .setEntityId(todo.id)
+							                        }}" data-action-name="addComment">
+				<i class="action-icon fa fa-comment"></i>
+			</a>
+			{% if todo.assignedTo %}
+				{% include 'common/avatar.html.twig' with {user: todo.assignedTo, class:'small'} %}
+			{% endif %}
+			{% if todo.project is not null %}
+				<div class="kanban-breadcrumb">
+					<a href="{{ ea_url() .setController('App\\Controller\\Admin\\ProjectCrudController') .setAction('detail') .setEntityId(todo.project.id) }}" class="">{{ todo.project.name }}</a>
+				</div>
+			{% endif %}
+		</div>
+	</div>
 </div>

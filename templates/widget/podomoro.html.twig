@@ -1,0 +1,12 @@
+{% extends 'widget/_skeleton.html.twig' %}
+{% block title %}
+	Prodomor Timer
+{% endblock %}
+
+{% block content %}
+<div data-widget="pomodoro" >
+<div class="card_bignumber">25:00</div>
+<div class="btn btn-primary" data-action="click->podomoro#start">Start</div>
+<div class="btn btn-secondary" data-action="click->podomoro#stop">Stop</div>
+</div>
+{% endblock %}

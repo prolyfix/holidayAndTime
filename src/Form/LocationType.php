@@ -25,6 +25,8 @@ class LocationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Location::class,
+            'class' => Location::class,
+            'query_builder' => ''
         ]);
     }
 }

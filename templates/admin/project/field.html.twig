@@ -1,0 +1,45 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+	{% if ea.crud.currentAction == 'detail' %}
+		<table class="table datagrid"> <thead>
+			<tr>
+				<th scope="col">Name</th>
+                <th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for value in field.value %}
+				<tr>
+					<td>{{ value.name }}
+					</td>
+					<td class="actions actions-as-dropdown">
+						<div class="dropdown dropdown-actions">
+							<a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+								</svg>
+							</a>
+
+							<div class="dropdown-menu dropdown-menu-right" style="">
+								<a class="dropdown-item action-detail" href="http://localhost:8000/admin?crudAction=detail&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-action-name="detail">
+									<span class="action-label">Anzeigen</span>
+								</a>
+
+								<a class="dropdown-item action-edit" href="http://localhost:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-action-name="edit">
+									<span class="action-label">Ändern</span>
+								</a>
+
+								<a class="dropdown-item action-delete text-danger" href="http://localhost:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-action-name="delete" formaction="http://localhost:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-bs-toggle="modal" data-bs-target="#modal-delete">
+									<span class="action-label">Löschen</span>
+								</a>
+
+							</div>
+						</div>
+					</td>
+				{% endfor %}
+			</tbody>
+		</tbody>
+	</table>
+</div>{% else %}
+<span class="badge badge-secondary">{{ field.formattedValue }}</span>{% endif %}

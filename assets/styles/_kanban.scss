@@ -31,6 +31,9 @@
     margin-bottom: 10px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     cursor: grab;
+    height:200px;
+    display: flex;
+    flex-direction: column;
 }
 
 .kanban-card:active {
@@ -57,4 +60,7 @@
     margin-bottom: 10px;
     color: gray;
     font-style: italic;
+}
+.kanban-footer{
+    margin-top:auto;
 }
