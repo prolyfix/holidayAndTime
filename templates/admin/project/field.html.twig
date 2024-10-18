@@ -5,7 +5,7 @@
 		<table class="table datagrid"> <thead>
 			<tr>
 				<th scope="col">Name</th>
-                <th></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -22,16 +22,21 @@
 							</a>
 
 							<div class="dropdown-menu dropdown-menu-right" style="">
-								<a class="dropdown-item action-detail" href="http://localhost:8000/admin?crudAction=detail&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-action-name="detail">
+								<a class="dropdown-item action-detail" href="
+                                            {{ ea_url()
+									                    .setController('App\\Controller\\Admin\\ProjectCrudController')
+									                    .setAction('detail')
+									                    .setEntityId(value.id)
+									        }}" data-action-name="detail">
 									<span class="action-label">Anzeigen</span>
 								</a>
 
-								<a class="dropdown-item action-edit" href="http://localhost:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-action-name="edit">
+								<a class="dropdown-item action-edit" href="{{ ea_url()
+									                    .setController('App\\Controller\\Admin\\ProjectCrudController')
+									                    .setAction('edit')
+									                    .setEntityId(value.id)
+									        }}" data-action-name="edit">
 									<span class="action-label">Ändern</span>
-								</a>
-
-								<a class="dropdown-item action-delete text-danger" href="http://localhost:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-action-name="delete" formaction="http://localhost:8000/admin?crudAction=delete&amp;crudControllerFqcn=App%5CController%5CAdmin%5CThirdPartyCrudController&amp;entityId=1" data-bs-toggle="modal" data-bs-target="#modal-delete">
-									<span class="action-label">Löschen</span>
 								</a>
 
 							</div>
