@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Security;
 class WidgetWalker
 {
 
-    public function __construct(private EntityManagerInterface $em, private Security $security)
+    public function __construct(private EntityManagerInterface $em, private Security $security, private \Twig\Environment $twig)
     {
     }
 
@@ -29,7 +29,7 @@ class WidgetWalker
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $className = $this->getClassNameFromFile($file->getPathname());
 		if ($className && $this->implementsWidgetInterface($className)) {
-                    $widgetClasses[] = new $className($this->em, $this->security);
+                    $widgetClasses[] = new $className($this->em, $this->security, $this->twig);
                 }
             }
         }

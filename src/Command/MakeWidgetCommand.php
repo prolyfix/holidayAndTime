@@ -74,7 +74,7 @@ class MakeWidgetCommand extends Command
 
         file_put_contents(__DIR__ . "/../Widget/{$widgetName}.php", $widgetClassContent);
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('You just created a widget!');
 
         return Command::SUCCESS;
     }
