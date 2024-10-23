@@ -4,27 +4,25 @@
 			<h5 class="card-title">Day Overview</h5>
 			<table>
 				<tbody>
+					{% for timestamp,events in journal %}
 					<tr>
-						<td style="border-right:black 1px dotted; padding:0.5em;">08:00</td>
-						<td></td>
+						<td style="border-right:black 1px dotted; padding:0.5em;">{{timestamp}}</td>
+						<td>
+							{% for event in events %}
+							<div style="position:relative">
+								<div style="position:absolute; top:0px;left:-5px;; width:10px; height: 150%; background-color: red;"></div>
+								<div style="position:absolute; top:0px;left:10px;color:darkgray;width:max-content"><i>{{event}}</i> </div>
+							</div>
+							{% endfor %}
+						
+						</td>
 					</tr>
-					<tr>
-						<td style="border-right:black 1px dotted; padding:0.5em;">08:30</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td style="border-right:black 1px dotted; padding:0.5em;">09:00</td>
-						<td></td>
-					</tr>
-					<tr>
-						<td style="border-right:black 1px dotted; padding:0.5em;">09:30</td>
-						<td></td>
-					</tr>
+					{% endfor %}
 					<tr>
 						<td style="border-right:black 1px dotted; padding:0.5em;">10:00</td>
 						<td style="position:relative">
                             <div style="position:absolute; top:0px;left:-5px;; width:10px; height: 150%; background-color: red;"></div>
-                            <div style="position:absolute; top:0px;left:10px;color:darkgray;"><i>IWIP > final</i> </div>
+                            <div style="position:absolute; top:0px;left:10px;color:darkgray;width:max-content"><i>IWIP > final</i> </div>
                         
                         </td>
 					</tr>
@@ -34,7 +32,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<a href="#" class="btn btn-primary">Add User</a>
 		</div>
 	</div>
 </div>

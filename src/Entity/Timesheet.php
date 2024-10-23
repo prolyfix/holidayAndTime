@@ -65,7 +65,7 @@ class Timesheet  extends TimeData
             if($this->startTime == null) return $this->id;
             return $this->startTime->format('H:i') . ' - ' . $this->endTime->format('H:i');
         }
-        $output =   $this->relatedCommentable->getName() . ' ' . $this->startTime->format('H:i');
+        $output =   $this->relatedCommentable . ' ' . $this->startTime->format('H:i');
         if($this->endTime == null) return $output;
         return $output. ' - ' . $this->endTime->format('H:i');
     }
