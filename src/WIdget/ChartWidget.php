@@ -20,16 +20,8 @@
             }
             public function render(): string
             {
-                return 			
-                '<div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                        {{ render_chart(chart) }}
-                            <h5 class="card-title">Overtime Development</h5>
-                            <a href="#" class="btn btn-primary">Add Time</a>
-                        </div>
-                    </div>
-                </div>';
+                return 	$this->twig->render('widget/chart.html.twig')		;
+;
             }
             public function getContext(): array
             {

@@ -12,7 +12,7 @@
             }
             public function getWidth(): int
             {
-                return 3;
+                return 4;
             }
             public function getHeight(): int
             {

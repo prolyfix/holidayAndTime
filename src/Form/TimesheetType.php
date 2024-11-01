@@ -23,7 +23,7 @@ class TimesheetType extends AbstractType
             ->add('relatedCommentable',EntityType::class, [
                 'class' => Commentable::class,
                 'choice_label' => function($commentable){
-                    if(method_exists($commentable, 'getName')) return $commentable->getName();
+                    if(method_exists($commentable, 'getName')) return $commentable->getName()??$commentable->getId();
                     return $commentable->getId();
                 },
                 'attr'=>['class'=>'form-control']
