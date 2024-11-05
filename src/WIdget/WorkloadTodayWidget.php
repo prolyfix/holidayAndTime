@@ -15,7 +15,7 @@ class WorkloadTodayWidget implements WidgetInterface
     }
     public function getWidth(): int
     {
-        return 12;
+        return 4;
     }
     public function getHeight(): int
     {

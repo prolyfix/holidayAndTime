@@ -4,27 +4,24 @@
         use Symfony\Component\Security\Core\Security;
         use Twig\Environment as Twig;
 
-        class HolidayStatementWidget implements WidgetInterface
+        class ChartWidget implements WidgetInterface
         {
             public function getName(): string
             {
-                return 'Holiday Statement';
+                return 'Chart Widget';
             }
             public function getWidth(): int
             {
-                return 4;
+                return 12;
             }
             public function getHeight(): int
             {
-                return 1;
+                return 3;
             }
             public function render(): string
             {
-                return 
-                '<div class="card"><div class="card-body">
-                    <h2>Holiday statement</h2>
-                    <i> To be implemented</i>
-                </div></div>';
+                return 	$this->twig->render('widget/chart.html.twig')		;
+;
             }
             public function getContext(): array
             {
@@ -36,7 +33,7 @@
                 return true;
             }
 
-            public function __construct(private EntityManagerInterface $em, Security $security, private Twig $twig)
+            public function __construct(private EntityManagerInterface $em,private Security $security, private Twig $twig)
             {
             }
 

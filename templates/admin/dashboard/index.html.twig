@@ -1,24 +1,4 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
 {% block page_content %}
 	{{ renderWidget2(app.user,'index','App\Controller\Admin\DashboardController')  | raw}}
-	<div class="container container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<h2>Overview</h2>
-				<p>Welcome to the dashboard.</p>
-			</div>
-			{% if app.user.company is not null %}
-
-			{% endif %}
-			<div class="col-md-4">
-				<div class="card">
-                    <div class="card-body">
-                    {{ render_chart(chart) }}
-						<h5 class="card-title">Overtime Development</h5>
-						<a href="#" class="btn btn-primary">Add Time</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 {% endblock %}

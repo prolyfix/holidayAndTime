@@ -8,11 +8,12 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use Symfony\Component\Security\Core\Security;
+use Twig\Environment as Twig;
 
 class WidgetWalker
 {
 
-    public function __construct(private EntityManagerInterface $em, private Security $security, private \Twig\Environment $twig)
+    public function __construct(private EntityManagerInterface $em, private Security $security, private Twig $twig)
     {
     }
 
