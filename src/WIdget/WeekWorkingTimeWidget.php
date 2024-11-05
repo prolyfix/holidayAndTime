@@ -42,13 +42,13 @@ class WeekWorkingTimeWidget implements WidgetInterface
 					</thead>
 					<tbody>
 						<tr>
-							<td>' . (($workingTimeThisWeek[0]->getWorkingHours() !== null) ? $workingTimeThisWeek[0]->getWorkingHours()->format('h:i') : '') . '</td>
-							<td>' . (($workingTimeThisWeek[1]->getWorkingHours() !== null) ? $workingTimeThisWeek[1]->getWorkingHours()->format('h:i') : '') . '</td>
-							<td>' . (($workingTimeThisWeek[2]->getWorkingHours() !== null) ? $workingTimeThisWeek[2]->getWorkingHours()->format('h:i') : '') . '</td>
-							<td>' . (($workingTimeThisWeek[3]->getWorkingHours() !== null) ? $workingTimeThisWeek[3]->getWorkingHours()->format('h:i') : '') . '</td>
-							<td>' . (($workingTimeThisWeek[4]->getWorkingHours() !== null) ? $workingTimeThisWeek[4]->getWorkingHours()->format('h:i') : '') . '</td>
-							<td>' . (($workingTimeThisWeek[5]->getWorkingHours() !== null) ? $workingTimeThisWeek[5]->getWorkingHours()->format('h:i') : '') . '</td>
-							<td>' . (($workingTimeThisWeek[6]->getWorkingHours() !== null) ? $workingTimeThisWeek[6]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[0]) && $workingTimeThisWeek[0]->getWorkingHours() !== null) ? $workingTimeThisWeek[0]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[1]) && $workingTimeThisWeek[1]->getWorkingHours() !== null) ? $workingTimeThisWeek[1]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[2]) &&  $workingTimeThisWeek[2]->getWorkingHours() !== null) ? $workingTimeThisWeek[2]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[3]) && $workingTimeThisWeek[3]->getWorkingHours() !== null) ? $workingTimeThisWeek[3]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[4]) && $workingTimeThisWeek[4]->getWorkingHours() !== null) ? $workingTimeThisWeek[4]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[5]) && $workingTimeThisWeek[5]->getWorkingHours() !== null) ? $workingTimeThisWeek[5]->getWorkingHours()->format('h:i') : '') . '</td>
+							<td>' . ((isset($workingTimeThisWeek[6]) && $workingTimeThisWeek[6]->getWorkingHours() !== null) ? $workingTimeThisWeek[6]->getWorkingHours()->format('h:i') : '') . '</td>
 						</tr>
 						<tr>
 							<td>' . (isset($timesheetThisWeek['Monday']) ? $this->toTime($timesheetThisWeek['Monday']) : '') . '</td>
