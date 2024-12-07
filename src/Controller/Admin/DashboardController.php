@@ -106,16 +106,16 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         if ($this->getUser()->getCompany() !== null) {
-            yield MenuItem::section('HR');
+            yield MenuItem::section('HR',icon: 'fas fa-users');
             yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class)->setAction('viewYear');
             yield MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
             if ($this->getUser()->isHasTimesheet() || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
                 yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
             }
             if ($this->isGranted('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-                yield MenuItem::section('Benutzern');
+                yield MenuItem::section('Benutzern',icon: 'fas fa-user');
                 yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
                 yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
             }
@@ -123,7 +123,7 @@ class DashboardController extends AbstractDashboardController
         $projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject', 'company' => $this->getUser()->getCompany()]);
         $taskRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask', 'company' => $this->getUser()->getCompany()]);
         if ($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN') || $taskRight && $taskRight->getValue() == 1) {
-            yield MenuItem::section('Projects');
+            yield MenuItem::section('Projects','fas fa-diagram-project');
         }
         $belongsToProject = false;
         if ($this->getUser()->getCommentableMembers()->count() > 0) {
@@ -143,7 +143,7 @@ class DashboardController extends AbstractDashboardController
         $companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCRM', 'company' => $this->getUser()->getCompany()]);
 
         if ($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::section('CRM');
+            yield MenuItem::section('CRM','fas fa-address-book');
             yield MenuItem::linkToCrud('Medias', 'fas fa-photo-film', Media::class);
             yield MenuItem::linkToCrud('Contact', 'fas fa-address-book', Contact::class);
             yield MenuItem::linkToCrud('ThirdParty', 'fas fa-handshake', ThirdParty::class);
@@ -151,12 +151,12 @@ class DashboardController extends AbstractDashboardController
         }
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
         if ($this->getUser()->getCompany()!==null && ($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'))) {
-            yield MenuItem::section('Week planning');
+            yield MenuItem::section('Week planning','fas fa-calendar-week');
             yield MenuItem::linkToCrud('Room', 'fas fa-people-roof', Room::class);
             yield MenuItem::linkToCrud('Week Planning', 'fas fa-ruler', Weekplan::class);
         }
         if ($this->isGranted('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::section('Configuration');
+            yield MenuItem::section('Configuration','fas fa-cog');
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
             yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
             yield MenuItem::linkToCrud('tags', 'fas fa-cog', Tag::class)->setAction('index');
