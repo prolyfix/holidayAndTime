@@ -130,7 +130,7 @@ class DashboardController extends AbstractDashboardController
             $belongsToProject = true;
         }
         if ($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN' || $belongsToProject)) {
-            yield MenuItem::linkToCrud('Projects', 'fas fa-diagram-project', Project::class);
+            yield MenuItem::linkToCrud('Projects', 'fas fa-project', Project::class);
         }
 
         if ($taskRight && $taskRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
@@ -151,7 +151,7 @@ class DashboardController extends AbstractDashboardController
         }
         $weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
         if ($this->getUser()->getCompany()!==null && ($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'))) {
-            yield MenuItem::section('Week planning','fas fa-calendar-week');
+            yield MenuItem::section('Weekplanning','fas fa-calendar-week');
             yield MenuItem::linkToCrud('Room', 'fas fa-people-roof', Room::class);
             yield MenuItem::linkToCrud('Week Planning', 'fas fa-ruler', Weekplan::class);
         }

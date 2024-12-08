@@ -12,19 +12,14 @@ export default class extends Controller {
 
 
     new(event) {
-        console.log(event);
         const toastContainer = this.toastContainerTarget;
-        console.log("ici");
-        
         const toast = document.createElement("div");
         toast.classList.add("toast");
         toast.setAttribute("role", "alert");
         toast.setAttribute("aria-live", "assertive");
         toast.setAttribute("aria-atomic", "true");
-
         const toastHeader = document.createElement("div");
         toastHeader.classList.add("toast-header");
-
         const toastTitle = document.createElement("strong");
         toastTitle.classList.add("me-auto");
         toastTitle.textContent = "Message";

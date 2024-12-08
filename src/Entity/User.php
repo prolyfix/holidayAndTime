@@ -146,6 +146,12 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: TimeData::class, mappedBy: 'modifiedBy')]
     private Collection $timeDataModified;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
+    private Collection $notifications;
+
 
 
     public function __construct()
@@ -175,6 +181,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->widgetUserPositions = new ArrayCollection();
         $this->timeData = new ArrayCollection();
         $this->timeDataModified = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
 
@@ -864,6 +871,36 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
             // set the owning side to null (unless already changed)
             if ($timeDataModified->getModifiedBy() === $this) {
                 $timeDataModified->setModifiedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
             }
         }
 

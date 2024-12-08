@@ -19,14 +19,9 @@
 		{% endblock %}
 		{% endset %}
 		<title>{{ page_title_block_output|striptags|raw }}</title>
-		{% block head_stylesheets %}
-			<link rel="stylesheet" href="{{ asset('app.css', ea.assets.defaultAssetPackageName) }}">
-		{% endblock %}
+		{% block head_stylesheets %}{% endblock %}
 
-		{% block configured_stylesheets %}
-			{{ include('@EasyAdmin/includes/_css_assets.html.twig', { assets: ea.assets.cssAssets ?? [] }, with_context = false) }}
-			{{ include('@EasyAdmin/includes/_encore_link_tags.html.twig', { assets: ea.assets.webpackEncoreAssets ?? [] }, with_context = false) }}
-		{% endblock %}
+		{% block configured_stylesheets %}{% endblock %}
 
 		<!-- App favicon -->
 		{% block head_favicon %}
@@ -35,11 +30,12 @@
 		{{ include('newStructure/partials/head-css.html.twig') }}
 		{% block head_javascript %}
 			<script src="{{ asset('app.js', ea.assets.defaultAssetPackageName) }}"></script>
-			{% block importmap %}{{ importmap('app') }}{% endblock %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
 		{% endblock head_javascript %}
 
-		{% block configured_javascripts %}
-		{% endblock %}
+		{% block configured_javascripts %}{% endblock %}
 
 		{% if 'rtl' == ea.i18n.textDirection %}
 			<link rel="stylesheet" href="{{ asset('app.rtl.css', ea.assets.defaultAssetPackageName) }}">
@@ -65,72 +61,82 @@
 					{{ include(ea.templatePath('flash_messages')) }}
 				{% endblock flash_messages %}
 				{% set user_menu_avatar %}
-					{% if null == ea.userMenu.avatarUrl %}
-						<span class="user-avatar">
-							<span class="fa-stack">
-								<i class="user-avatar-icon-background fas fa-square fa-stack-2x"></i>
-								<i class="user-avatar-icon-foreground {{ ea.user is not null ? 'fa fa-user' : 'fas fa-user-slash' }} fa-stack-1x fa-inverse"></i>
-							</span>
+				{% if null == ea.userMenu.avatarUrl %}
+					<span class="user-avatar">
+						<span class="fa-stack">
+							<i class="user-avatar-icon-background fas fa-square fa-stack-2x"></i>
+							<i class="user-avatar-icon-foreground {{ ea.user is not null ? 'fa fa-user' : 'fas fa-user-slash' }} fa-stack-1x fa-inverse"></i>
 						</span>
-					{% else %}
-						<img class="user-avatar" src="{{ ea.userMenu.avatarUrl }}" />
-					{% endif %}
+					</span>
+				{% else %}
+					<img class="user-avatar" src="{{ ea.userMenu.avatarUrl }}"/>
+				{% endif %}
 				{% endset %}
-				 {% set impersonator_permission = constant('Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter::IS_IMPERSONATOR') is defined ? 'IS_IMPERSONATOR' : 'ROLE_PREVIOUS_ADMIN' %}
+				{% set impersonator_permission = constant('Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter::IS_IMPERSONATOR') is defined ? 'IS_IMPERSONATOR' : 'ROLE_PREVIOUS_ADMIN' %}
 				{{ include('newStructure/sections/sidebar.html.twig') }}
 
 				<div class="content-page">
 					{{ include('newStructure/sections/topbar.html.twig') }}
 
-                <section class="main-content">
-                    {% set has_search = ea.crud is not null and ea.crud.isSearchEnabled %}
+					<section class="main-content">
+						{% set has_search = ea.crud is not null and ea.crud.isSearchEnabled %}
+						<div class="content-wrapper">
+							{% block content %}
+								<article class="content">
+									{% block content_header_wrapper %}
+										{% set has_help_message = (ea.crud.helpMessage ?? '') is not empty %}
+										<section class="content-header">
+											{% block content_header %}
+												<div class="content-header-title">
+													<h1 class="title">
+														{% block content_help %}
+															{% if has_help_message %}
+																<a tabindex="0" class="content-header-help" data-bs-toggle="popover" data-bs-custom-class="ea-content-help-popover" data-bs-animation="true" data-bs-html="true" data-bs-placement="bottom" data-bs-trigger="focus" data-bs-content="{{ ea.crud.helpMessage|trans|e('html_attr') }}">
+																	<i class="far fa-question-circle"></i>
+																</a>
+															{% endif %}
+														{% endblock %}
+													</h1>
+												</div>
+												<div class="row">
+													<div class="col-12">
+														<div class="page-title-box">
+															<div class="page-title-right">
+																{% block page_actions %}{% endblock %}
+															</div>
+															<h4 class="page-title">
+																{% block content_title %}{% endblock %}
+															</h4>
+														</div>
+													</div>
+												</div>
+												{% block page_actions_wrapper %}
+													<div class="page-actions"></div>
+												{% endblock %}
+											{% endblock content_header %}
+										</section>
+									{% endblock content_header_wrapper %}
 
-                    <div class="content-wrapper">
-                        {% block content %}
-                            <article class="content">
-                                {% block content_header_wrapper %}
-                                    {% set has_help_message = (ea.crud.helpMessage ?? '') is not empty %}
-                                    <section class="content-header">
-                                        {% block content_header %}
-                                            <div class="content-header-title">
-                                                <h1 class="title">
-                                                    {% block content_title %}{% endblock %}
+									<section id="main" class="content-body">
+										<div class="row">
+											{% block main %}{% endblock %}
+										</div>
+									</section>
 
-                                                    {% block content_help %}
-                                                        {% if has_help_message %}
-                                                            <a tabindex="0" class="content-header-help" data-bs-toggle="popover" data-bs-custom-class="ea-content-help-popover" data-bs-animation="true" data-bs-html="true" data-bs-placement="bottom" data-bs-trigger="focus" data-bs-content="{{ ea.crud.helpMessage|trans|e('html_attr') }}">
-                                                                <i class="far fa-question-circle"></i>
-                                                            </a>
-                                                        {% endif %}
-                                                    {% endblock %}
-                                                </h1>
-                                            </div>
+									{% block content_footer_wrapper %}
+										{% set content_footer = block('content_footer') is defined ? block('content_footer') : '' %}
+										{% if content_footer is not empty %}
+											<section class="content-footer">
+												{{ content_footer }}
+											</section>
+										{% endif %}
+									{% endblock %}
+								</article>
+							{% endblock content %}
 
-                                            {% block page_actions_wrapper %}
-                                                <div class="page-actions">{% block page_actions %}{% endblock %}</div>
-                                            {% endblock %}
-                                        {% endblock content_header %}
-                                    </section>
-                                {% endblock content_header_wrapper %}
-
-                                <section id="main" class="content-body">
-                                    {% block main %}{% endblock %}
-                                </section>
-
-                                {% block content_footer_wrapper %}
-                                    {% set content_footer = block('content_footer') is defined ? block('content_footer') : '' %}
-                                    {% if content_footer is not empty %}
-                                        <section class="content-footer">
-                                            {{ content_footer }}
-                                        </section>
-                                    {% endif %}
-                                {% endblock %}
-                            </article>
-                        {% endblock content %}
-
-                        <div id="content-resizer-handler" class="resizer-handler resizer-handler-right"></div>
-                    </div>
-                </section>
+							<div id="content-resizer-handler" class="resizer-handler resizer-handler-right"></div>
+						</div>
+					</section>
 
 					{{ include('newStructure/sections/footer.html.twig') }}
 
