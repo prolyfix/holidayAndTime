@@ -11,11 +11,11 @@ use App\Entity\UserSchedule;
 class UserFactory
 {
     const COMPANY_CONFIGURATIONS = [
-        'hasTask'=>'bool',
-        'hasWeekplan'=>'bool',
-        'hasProject'=>'bool',
-        'hasRoomPlan'=>'bool',
-        'hasCalendar'=>'bool',
+        'task'=>['active'=>'bool'],
+        'hasWeekplan'=>['active'=>'bool'],
+        'hasProject'=>['active'=>'bool'],
+        'hasRoomPlan'=>['active'=>'bool'],
+        'hasCalendar'=>['active'=>'bool'],
         'thresholdHalfDay'=>'float',
         'hasCRM'=>'bool',
         'hasApointment'=>'bool',

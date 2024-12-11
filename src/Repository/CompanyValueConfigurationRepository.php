@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Configuration;
+use App\Entity\CompanyValueConfiguration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Configuration>
+ * @extends ServiceEntityRepository<CompanyValueConfiguration>
  */
-class ConfigurationRepository extends ServiceEntityRepository
+class CompanyValueConfigurationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Configuration::class);
+        parent::__construct($registry, CompanyValueConfiguration::class);
     }
 
     //    /**
-    //     * @return Configuration[] Returns an array of Configuration objects
+    //     * @return CompanyValueConfiguration[] Returns an array of CompanyValueConfiguration objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ConfigurationRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Configuration
+    //    public function findOneBySomeField($value): ?CompanyValueConfiguration
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')

@@ -37,11 +37,6 @@ class Company extends Commentable
     #[ORM\OneToOne(inversedBy: 'company', cascade: ['persist', 'remove'])]
     private ?Location $location = null;
 
-    /**
-     * @var Collection<int, Configuration>
-     */
-    #[ORM\OneToMany(targetEntity: Configuration::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
-    private Collection $configurations;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $logoName = null;
@@ -52,13 +47,26 @@ class Company extends Commentable
     #[ORM\OneToMany(targetEntity: TypeOfAbsence::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
     private Collection $typeOfAbsences;
 
+    /**
+     * @var Collection<int, Dictionnary>
+     */
+    #[ORM\OneToMany(targetEntity: Dictionnary::class, mappedBy: 'company')]
+    private Collection $dictionnaries;
+
+    /**
+     * @var Collection<int, CompanyValueConfiguration>
+     */
+    #[ORM\OneToMany(targetEntity: CompanyValueConfiguration::class, mappedBy: 'company')]
+    private Collection $companyValueConfigurations;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->users = new ArrayCollection();
-        $this->configurations = new ArrayCollection();
         $this->typeOfAbsences = new ArrayCollection();
+        $this->dictionnaries = new ArrayCollection();
+        $this->companyValueConfigurations = new ArrayCollection();
     }
 
     public function __toString()
@@ -193,46 +201,6 @@ class Company extends Commentable
         return $this;
     }
 
-    /**
-     * @return Collection<int, Configuration>
-     */
-    public function getConfigurations(): Collection
-    {
-        return $this->configurations;
-    }
-
-    public function getConfiguration(string $key): ?Configuration
-    {
-        foreach ($this->configurations as $configuration) {
-            if ($configuration->getName() === $key) {
-                return $configuration;
-            }
-        }
-        return null;
-    }
-
-    public function addConfiguration(Configuration $configuration): static
-    {
-        if (!$this->configurations->contains($configuration)) {
-            $this->configurations->add($configuration);
-            $configuration->setCompany($this);
-        }
-
-        return $this;
-    }
-
-    public function removeConfiguration(Configuration $configuration): static
-    {
-        if ($this->configurations->removeElement($configuration)) {
-            // set the owning side to null (unless already changed)
-            if ($configuration->getCompany() === $this) {
-                $configuration->setCompany(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getLogoName(): ?string
     {
         return $this->logoName;
@@ -271,6 +239,66 @@ class Company extends Commentable
                 $typeOfAbsence->setCompany(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dictionnary>
+     */
+    public function getDictionnaries(): Collection
+    {
+        return $this->dictionnaries;
+    }
+
+    public function addDictionnary(Dictionnary $dictionnary): static
+    {
+        if (!$this->dictionnaries->contains($dictionnary)) {
+            $this->dictionnaries->add($dictionnary);
+            $dictionnary->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDictionnary(Dictionnary $dictionnary): static
+    {
+        if ($this->dictionnaries->removeElement($dictionnary)) {
+            // set the owning side to null (unless already changed)
+            if ($dictionnary->getCompany() === $this) {
+                $dictionnary->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CompanyValueConfiguration>
+     */
+    public function getCompanyValueConfigurations(): Collection
+    {
+        return $this->companyValueConfigurations;
+    }
+
+    public function addCompanyValueConfiguration(CompanyValueConfiguration $companyValueConfiguration): static
+    {
+        if (!$this->companyValueConfigurations->contains($companyValueConfiguration)) {
+            $this->companyValueConfigurations->add($companyValueConfiguration);
+            $companyValueConfiguration->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompanyValueConfiguration(CompanyValueConfiguration $companyValueConfiguration): static
+    {
+        if ($this->companyValueConfigurations->removeElement($companyValueConfiguration)) {
+            // set the owning side to null (unless already changed)
+            if ($companyValueConfiguration->getCompany() === $this) {
+                $companyValueConfiguration->setCompany(null);
+            }
+        }
+
         return $this;
     }
 

@@ -16,7 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name: 'app:first-user',
-    description: 'Add a short description for your command',
+    description: 'Create the first user',
 )]
 class FirstUserCommand extends Command
 {

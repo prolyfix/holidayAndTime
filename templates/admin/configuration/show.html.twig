@@ -1,66 +1,108 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 {% block content_title %}
-    {% trans %} Konfiguration {% endtrans %}
+	{% trans %}
+	Konfiguration
+	{% endtrans %}
 {% endblock %}
 {% block main %}
-    <h2> Allgemeine Firmen Informationen </h2>
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th> Name </th>
-                    <td> {{ app.user.company.name }} </td>
-                </tr>
-                {% if app.user.company.location is not null %}
-                <tr>
-                    <th colspan="2"> Adresse </th>
-                </tr>
-                <tr>
-                    <th> Straße </th>
-                    <td> {{ app.user.company.location.street }} </td>
-                </tr>
-                <tr>
-                    <th> Plz </th>
-                    <td> {{ app.user.company.location.zipCode }} </td>
-                </tr>
-                <tr>
-                    <th> Stadt </th>
-                    <td> {{ app.user.company.location.city }} </td>
-                </tr>
-                <tr>
-                    <th> Logo </th>
-                    <td> {{ app.user.company.location.city }} </td>
-                </tr>
-                {% endif %}
-                <tr>
-                    <td colspan="2">
-                        <a href="{{ ea_url()
-                                    .setController('App\\Controller\\Admin\\CompanyCrudController')
-                                    .setAction('edit')
-                                    .setEntityId(app.user.company.id)   
-                            }}">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-tabs nav-bordered" role="tablist">
+						<li class="nav-item" role="presentation">
+							<a href="#home-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active" aria-selected="true" role="tab">
+								{% trans %}Allgemein{% endtrans %}
+							</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a href="#profile-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
+								{% trans %}Modules{% endtrans %}
+							</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active show" id="home-b1" role="tabpanel">
+							<table class="table">
+								<tbody>
+									<tr>
+										<th>
+											Name
+										</th>
+										<td>
+											{{ app.user.company.name }}
+										</td>
+									</tr>
+									{% if app.user.company.location is not null %}
+										<tr>
+											<th colspan="2">
+												Adresse
+											</th>
+										</tr>
+										<tr>
+											<th>
+												Straße
+											</th>
+											<td>
+												{{ app.user.company.location.street }}
+											</td>
+										</tr>
+										<tr>
+											<th>
+												Plz
+											</th>
+											<td>
+												{{ app.user.company.location.zipCode }}
+											</td>
+										</tr>
+										<tr>
+											<th>
+												Stadt
+											</th>
+											<td>
+												{{ app.user.company.location.city }}
+											</td>
+										</tr>
+										<tr>
+											<th>
+												Logo
+											</th>
+											<td>
+												{{ app.user.company.location.city }}
+											</td>
+										</tr>
+									{% endif %}
+									<tr>
+										<td colspan="2">
+											<a href="{{ ea_url() .setController('App\\Controller\\Admin\\CompanyCrudController') .setAction('edit') .setEntityId(app.user.company.id) }}">
+												<i class="fas fa-edit"></i>
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 
-    <h2> Module & Darstellung </h2>
-        <div class="row">
-            {% for configuration in app.user.company.configurations %}
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">{{ configuration.name | trans()}}</h3>
-                        </div>  
-                        <div class="card-body">
-                            <div class="row">
-                                {{ include('admin/configuration/components/' ~ configuration.type ~ '.html.twig', {configuration: configuration}) }}
-                            </div>
-                            <input type="checkbox" class="form-check-input" id="01J8FBS1J6SZ25QWJBVTZ1D148" checked="" data-toggle-url="http://localhost:8000/admin?crudAction=edit&amp;crudControllerFqcn=App%5CController%5CAdmin%5CUserCrudController&amp;csrfToken=4d4b64dd6a0c32da71074.VGX4Tx09SlXcWsE5PWf0xoOvU0axtAPYIXua5iAjlHs.EiqWIGllBmW_O61pDiuXjMDBNCHgwGuHYAvWrXFv0h1kFc4OW3BzGO0tpg&amp;entityId=6&amp;fieldName=hasTimesheet" autocomplete="off">
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+
+						</div>
+						<div class="tab-pane" id="profile-b1" role="tabpanel">
+							{% for configuration in app.user.company.configurations %}
+								<div class="col-md-3">
+									<div class="card">
+										<div class="card-header">
+											<h3 class="card-title">{{ configuration.name | trans()}}</h3>
+										</div>
+										<div class="card-body">
+											<div class="row">
+												{{ include('admin/configuration/components/' ~ configuration.type ~ '.html.twig', {configuration: configuration}) }}
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

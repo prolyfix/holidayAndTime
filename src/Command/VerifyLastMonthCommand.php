@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:verify-last-month',
-    description: 'Add a short description for your command',
+    description: 'Check the last month',
 )]
 class VerifyLastMonthCommand extends Command
 {

@@ -18,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:calculate-absence-day',
-    description: 'Add a short description for your command',
+    description: 'Calculate absence day',
 )]
 class CalculateAbsenceDayCommand extends Command
 {

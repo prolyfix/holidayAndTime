@@ -23,7 +23,9 @@ final class UserWeekdayPropertyListener
     {
         if($userWeekdayProperty->getUserSchedule()->getUser()->getCompany()== null)
             return;
-        $threshold = $userWeekdayProperty->getUserSchedule()->getUser()->getCompany()->getConfiguration('thresholdHalfDay');
+        //TODO: voir pour utiliser la propriété de l'entreprises
+        //$threshold = $userWeekdayProperty->getUserSchedule()->getUser()->getCompany()->getConfiguration('thresholdHalfDay');
+        $threshold = null;
         if($threshold === null){
             return;
         }

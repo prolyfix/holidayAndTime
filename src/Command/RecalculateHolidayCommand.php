@@ -12,7 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:recalculate-holiday',
-    description: 'Add a short description for your command',
+    description: 'recalculate holiday',
 )]
 class RecalculateHolidayCommand extends Command
 {
