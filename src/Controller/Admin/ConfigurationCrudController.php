@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Configuration;
 use App\Form\ConfigurationType;
+use App\Manager\ConfigurationUpdater;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\ActionCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -43,8 +44,9 @@ class ConfigurationCrudController extends AbstractCrudController
         ];
     }
 
-    public function showConfiguration()
+    public function showConfiguration(ConfigurationUpdater $configurationUpdater)
     {
+        $configurationUpdater->getConfigurationList();
         return $this->render('admin/configuration/show.html.twig',['page_title'=>'Configuration','content_title'=>'Configuration']);
     }
 
@@ -70,16 +72,4 @@ class ConfigurationCrudController extends AbstractCrudController
 
         return $responseParameters;
     }
-
-
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
 }
