@@ -54,10 +54,11 @@ class Company extends Commentable
     private Collection $dictionnaries;
 
     /**
-     * @var Collection<int, CompanyValueConfiguration>
+     * @var Collection<int, ModuleConfigurationValue>
      */
-    #[ORM\OneToMany(targetEntity: CompanyValueConfiguration::class, mappedBy: 'company')]
-    private Collection $companyValueConfigurations;
+    #[ORM\OneToMany(targetEntity: ModuleConfigurationValue::class, mappedBy: 'company')]
+    private Collection $moduleConfigurationValues;
+
 
     public function __construct()
     {
@@ -66,7 +67,7 @@ class Company extends Commentable
         $this->users = new ArrayCollection();
         $this->typeOfAbsences = new ArrayCollection();
         $this->dictionnaries = new ArrayCollection();
-        $this->companyValueConfigurations = new ArrayCollection();
+        $this->moduleConfigurationValues = new ArrayCollection();
     }
 
     public function __toString()
@@ -273,33 +274,34 @@ class Company extends Commentable
     }
 
     /**
-     * @return Collection<int, CompanyValueConfiguration>
+     * @return Collection<int, ModuleConfigurationValue>
      */
-    public function getCompanyValueConfigurations(): Collection
+    public function getModuleConfigurationValues(): Collection
     {
-        return $this->companyValueConfigurations;
+        return $this->moduleConfigurationValues;
     }
 
-    public function addCompanyValueConfiguration(CompanyValueConfiguration $companyValueConfiguration): static
+    public function addModuleConfigurationValue(ModuleConfigurationValue $moduleConfigurationValue): static
     {
-        if (!$this->companyValueConfigurations->contains($companyValueConfiguration)) {
-            $this->companyValueConfigurations->add($companyValueConfiguration);
-            $companyValueConfiguration->setCompany($this);
+        if (!$this->moduleConfigurationValues->contains($moduleConfigurationValue)) {
+            $this->moduleConfigurationValues->add($moduleConfigurationValue);
+            $moduleConfigurationValue->setCompany($this);
         }
 
         return $this;
     }
 
-    public function removeCompanyValueConfiguration(CompanyValueConfiguration $companyValueConfiguration): static
+    public function removeModuleConfigurationValue(ModuleConfigurationValue $moduleConfigurationValue): static
     {
-        if ($this->companyValueConfigurations->removeElement($companyValueConfiguration)) {
+        if ($this->moduleConfigurationValues->removeElement($moduleConfigurationValue)) {
             // set the owning side to null (unless already changed)
-            if ($companyValueConfiguration->getCompany() === $this) {
-                $companyValueConfiguration->setCompany(null);
+            if ($moduleConfigurationValue->getCompany() === $this) {
+                $moduleConfigurationValue->setCompany(null);
             }
         }
 
         return $this;
     }
+
 
 }

@@ -5,11 +5,13 @@ namespace App\Controller\Admin;
 use App\Entity\Appointment;
 use App\Entity\Calendar;
 use App\Entity\Company;
+use App\Entity\CompanyValueConfiguration;
 use App\Entity\Contact;
 use App\Entity\DummyEntity;
 use App\Entity\HelpContent;
 use App\Entity\Issue;
 use App\Entity\Media;
+use App\Entity\ModuleConfigurationValue;
 use App\Entity\Project;
 use App\Entity\Room;
 use App\Entity\Tag;
@@ -161,7 +163,7 @@ class DashboardController extends AbstractDashboardController
         if ($this->isGranted('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
             yield MenuItem::section('Configuration','fas fa-cog');
             yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
-            //yield MenuItem::linkToCrud('properties', 'fas fa-cog', Configuration::class)->setAction('showConfiguration');
+            yield MenuItem::linkToCrud('properties', 'fas fa-cog', ModuleConfigurationValue::class)->setAction('showConfiguration');
             yield MenuItem::linkToCrud('tags', 'fas fa-cog', Tag::class)->setAction('index');
         }
         if ($this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {

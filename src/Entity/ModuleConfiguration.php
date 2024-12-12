@@ -25,18 +25,22 @@ class ModuleConfiguration
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    /**
-     * @var Collection<int, CompanyValueConfiguration>
-     */
-    #[ORM\OneToMany(targetEntity: CompanyValueConfiguration::class, mappedBy: 'configuration')]
-    private Collection $companyValueConfigurations;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    /**
+     * @var Collection<int, ModuleConfigurationValue>
+     */
+    #[ORM\OneToMany(targetEntity: ModuleConfigurationValue::class, mappedBy: 'moduleConfiguration')]
+    private Collection $moduleConfigurationValues;
+
+    #[ORM\Column(length: 255)]
+    private ?string $targetEntity = null;
+
     public function __construct()
     {
-        $this->companyValueConfigurations = new ArrayCollection();
+        $this->moduleConfigurationValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,36 +84,6 @@ class ModuleConfiguration
         return $this;
     }
 
-    /**
-     * @return Collection<int, CompanyValueConfiguration>
-     */
-    public function getCompanyValueConfigurations(): Collection
-    {
-        return $this->companyValueConfigurations;
-    }
-
-    public function addCompanyValueConfiguration(CompanyValueConfiguration $companyValueConfiguration): static
-    {
-        if (!$this->companyValueConfigurations->contains($companyValueConfiguration)) {
-            $this->companyValueConfigurations->add($companyValueConfiguration);
-            $companyValueConfiguration->setConfiguration($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompanyValueConfiguration(CompanyValueConfiguration $companyValueConfiguration): static
-    {
-        if ($this->companyValueConfigurations->removeElement($companyValueConfiguration)) {
-            // set the owning side to null (unless already changed)
-            if ($companyValueConfiguration->getConfiguration() === $this) {
-                $companyValueConfiguration->setConfiguration(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
@@ -118,6 +92,48 @@ class ModuleConfiguration
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ModuleConfigurationValue>
+     */
+    public function getModuleConfigurationValues(): Collection
+    {
+        return $this->moduleConfigurationValues;
+    }
+
+    public function addModuleConfigurationValue(ModuleConfigurationValue $moduleConfigurationValue): static
+    {
+        if (!$this->moduleConfigurationValues->contains($moduleConfigurationValue)) {
+            $this->moduleConfigurationValues->add($moduleConfigurationValue);
+            $moduleConfigurationValue->setModuleConfiguration($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModuleConfigurationValue(ModuleConfigurationValue $moduleConfigurationValue): static
+    {
+        if ($this->moduleConfigurationValues->removeElement($moduleConfigurationValue)) {
+            // set the owning side to null (unless already changed)
+            if ($moduleConfigurationValue->getModuleConfiguration() === $this) {
+                $moduleConfigurationValue->setModuleConfiguration(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTargetEntity(): ?string
+    {
+        return $this->targetEntity;
+    }
+
+    public function setTargetEntity(string $targetEntity): static
+    {
+        $this->targetEntity = $targetEntity;
 
         return $this;
     }
