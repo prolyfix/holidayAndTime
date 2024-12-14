@@ -175,8 +175,8 @@ class UserCrudController extends AbstractCrudController
             return $queryBuilder;
         }
         $queryBuilder
-            ->andWhere('id = :userId')
-            ->setParameter('userID', $user->getId());
+            ->andWhere('entity.id = :userId')
+            ->setParameter('userId', $user->getId());
 
         return $queryBuilder;
     }

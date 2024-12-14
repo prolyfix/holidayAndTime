@@ -1,3 +1,6 @@
 when@test:
     twig:
-        strict_variables: true
+        strict_variables: true  
+twig:
+    paths:
+        '%kernel.project_dir%/src/Prolyfix/RssBundle/templates': 'RssBundle'

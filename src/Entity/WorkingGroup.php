@@ -19,6 +19,7 @@ class WorkingGroup extends Commentable
     #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'workingGroup')]
     private Collection $calendars;
 
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -101,5 +102,6 @@ class WorkingGroup extends Commentable
     public function __toString(): string
     {
         return $this->name;
-    }   
+    }
+
 }

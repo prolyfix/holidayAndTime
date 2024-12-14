@@ -59,6 +59,18 @@ class Company extends Commentable
     #[ORM\OneToMany(targetEntity: ModuleConfigurationValue::class, mappedBy: 'company')]
     private Collection $moduleConfigurationValues;
 
+    /**
+     * @var Collection<int, UserRight>
+     */
+    #[ORM\OneToMany(targetEntity: UserRight::class, mappedBy: 'appliedToCompany')]
+    private Collection $userRights;
+
+    /**
+     * @var Collection<int, ModuleRight>
+     */
+    #[ORM\OneToMany(targetEntity: ModuleRight::class, mappedBy: 'appliedToCompany')]
+    private Collection $moduleRIghts;
+
 
     public function __construct()
     {
@@ -68,6 +80,8 @@ class Company extends Commentable
         $this->typeOfAbsences = new ArrayCollection();
         $this->dictionnaries = new ArrayCollection();
         $this->moduleConfigurationValues = new ArrayCollection();
+        $this->userRights = new ArrayCollection();
+        $this->moduleRIghts = new ArrayCollection();
     }
 
     public function __toString()
@@ -297,6 +311,66 @@ class Company extends Commentable
             // set the owning side to null (unless already changed)
             if ($moduleConfigurationValue->getCompany() === $this) {
                 $moduleConfigurationValue->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserRight>
+     */
+    public function getUserRights(): Collection
+    {
+        return $this->userRights;
+    }
+
+    public function addUserRight(UserRight $userRight): static
+    {
+        if (!$this->userRights->contains($userRight)) {
+            $this->userRights->add($userRight);
+            $userRight->setAppliedToCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRight(UserRight $userRight): static
+    {
+        if ($this->userRights->removeElement($userRight)) {
+            // set the owning side to null (unless already changed)
+            if ($userRight->getAppliedToCompany() === $this) {
+                $userRight->setAppliedToCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ModuleRight>
+     */
+    public function getModuleRights(): Collection
+    {
+        return $this->moduleRIghts;
+    }
+
+    public function addModuleRight(ModuleRight $moduleRIght): static
+    {
+        if (!$this->moduleRIghts->contains($moduleRIght)) {
+            $this->moduleRIghts->add($moduleRIght);
+            $moduleRIght->setAppliedToCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModuleRight(ModuleRight $moduleRIght): static
+    {
+        if ($this->moduleRIghts->removeElement($moduleRIght)) {
+            // set the owning side to null (unless already changed)
+            if ($moduleRIght->getAppliedToCompany() === $this) {
+                $moduleRIght->setAppliedToCompany(null);
             }
         }
 

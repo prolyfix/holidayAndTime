@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ModuleRightRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: ModuleRightRepository::class)]
+class ModuleRight
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column]
+    private array $moduleAction = [];
+
+    #[ORM\Column(length: 255)]
+    private ?string $class = null;
+
+    #[ORM\Column]
+    private ?int $relatedId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $coverage = null;
+
+    #[ORM\ManyToOne(inversedBy: 'moduleRights')]
+    private ?Module $module = null;
+
+    #[ORM\ManyToOne(inversedBy: 'moduleRIghts')]
+    private ?Company $appliedToCompany = null;
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getModuleAction(): array
+    {
+        return $this->moduleAction;
+    }
+
+    public function setModuleAction(array $moduleAction): static
+    {
+        $this->moduleAction = $moduleAction;
+
+        return $this;
+    }
+
+    public function getClass(): ?string
+    {
+        return $this->class;
+    }
+
+    public function setClass(string $class): static
+    {
+        $this->class = $class;
+
+        return $this;
+    }
+
+    public function getRelatedId(): ?int
+    {
+        return $this->relatedId;
+    }
+
+    public function setRelatedId(int $relatedId): static
+    {
+        $this->relatedId = $relatedId;
+
+        return $this;
+    }
+
+    public function getCoverage(): ?string
+    {
+        return $this->coverage;
+    }
+
+    public function setCoverage(string $coverage): static
+    {
+        $this->coverage = $coverage;
+
+        return $this;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    public function setModule(?Module $module): static
+    {
+        $this->module = $module;
+
+        return $this;
+    }
+
+    public function getAppliedToCompany(): ?Company
+    {
+        return $this->appliedToCompany;
+    }
+
+    public function setAppliedToCompany(?Company $appliedToCompany): static
+    {
+        $this->appliedToCompany = $appliedToCompany;
+
+        return $this;
+    }
+
+}

@@ -19,8 +19,11 @@ class ModuleConfigurationValue
     #[ORM\Column(nullable: true)]
     private ?int $relatedId = null;
 
-    #[ORM\Column]
-    private array $value = [];
+    #[ORM\Column(length: 255)]
+    private ?string $relatedClass = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $value = null;
 
     public function getId(): ?int
     {
@@ -51,12 +54,33 @@ class ModuleConfigurationValue
         return $this;
     }
 
-    public function getValue(): array
+
+    public function getRelatedClass(): ?string
     {
+        return $this->relatedClass;
+    }
+
+    public function setRelatedClass(string $relatedClass): static
+    {
+        $this->relatedClass = $relatedClass;
+
+        return $this;
+    }
+
+    public function getValue() 
+    {
+        if(count($this->value) == 0)
+        {
+            return null;
+        }
+        if(count($this->value) == 1)
+        {
+            return $this->value[0];
+        }
         return $this->value;
     }
 
-    public function setValue(array $value): static
+    public function setValue(?array $value): static
     {
         $this->value = $value;
 

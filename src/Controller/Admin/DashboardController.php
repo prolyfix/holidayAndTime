@@ -33,6 +33,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
+use Prolyfix\RssBundle\Entity\RssFeedEntry;
+
 
 class DashboardController extends AbstractDashboardController
 {
@@ -170,6 +172,18 @@ class DashboardController extends AbstractDashboardController
             yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
         }
         yield MenuItem::linkToCrud('widgets', 'fas fa-cog', WidgetUserPosition::class)->setAction(actionName: 'configureWidgetPositions');
+
+        $activeModules = $this->em->getRepository(ModuleConfigurationValue::class)->getActiveModules($this->getUser()->getCompany());
+        foreach ($activeModules as $activeModule) {
+            $moduleEntity = $activeModule->getModuleConfiguration()->getModule();
+            $moduleName = $moduleEntity->getClass();
+            $module = new ($moduleName);
+            $menu = $module::getMenuConfiguration();
+            foreach ($menu as $menuItem) {
+                yield $menuItem['route'];
+            }
+        }
+
     }
 
 

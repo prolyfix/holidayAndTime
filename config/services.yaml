@@ -75,6 +75,10 @@ services:
                 # these are the options required to define the entity listener
                 name: 'kernel.event_listener'
                 event: 'app.configure_widget_positions'
+    Prolyfix\RssBundle\Controller\:
+        resource: '../src/Prolyfix/RssBundle/src/Controller/*'
+    Prolyfix\RssBundle\Repository\:
+        resource: '../src/Prolyfix/RssBundle/src/Repository/*'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 parameters:

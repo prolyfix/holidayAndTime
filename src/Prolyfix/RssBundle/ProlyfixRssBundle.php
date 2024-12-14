@@ -1,25 +1,28 @@
 <?php
-namespace  App\Module;
+
+namespace App\Prolyfix\RssBundle;
 
 use App\Entity\Company;
 use App\Entity\Module;
-use App\Entity\Timesheet;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use Prolyfix\RssBundle\Entity\RssFeedList;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class TimesheetModule implements ModuleInterface
+class ProlyfixRssBundle extends AbstractBundle implements ModuleInterface
 {
+    const IS_MODULE = true;
     public static function getShortName(): string
     {
-        return 'TimesheetModule';
+        return 'RssBundle';
     }
     public static function getModuleName(): string
     {
-        return 'Timesheet';
+        return 'Rss';
     }
     public static function getModuleDescription(): string
     {
-        return 'Timesheet Module';
+        return 'Rss Module';
     }
     public static function getModuleType(): string
     {
@@ -28,18 +31,6 @@ class TimesheetModule implements ModuleInterface
     public static function getModuleConfiguration(): array
     {
         return [];
-    }
-
-    public static function getMenuConfiguration(): array
-    {
-        return [[
-            'name' => 'Timesheet',
-            'icon' => 'fa fa-clock-o',
-            'route' => MenuItem::linkToCrud('timesheet', 'fa fa-clock-o', Timesheet::class),
-            'order' => 1,
-            'parent' => 'Time Management',
-            'roles' => ['ROLE_USER'],
-        ]];
     }
 
     public static function getModuleRights(): array
@@ -55,8 +46,21 @@ class TimesheetModule implements ModuleInterface
         ];
     }
 
+    public static function getMenuConfiguration(): array
+    {
+        return [[
+            'name' => 'Rss',
+            'icon' => 'fa fa-rss',
+            'route' => MenuItem::linkToCrud('rss_feed_list', 'fa fa-rss', RssFeedList::class),
+            'order' => 1,
+            'parent' => 'Rss',
+            'roles' => ['ROLE_USER'],
+        ]];
+    }
+
     public static function getUserConfiguration(): array
     {
         return [];
     }
+
 }

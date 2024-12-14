@@ -28,13 +28,10 @@ class WidgetUserPositionCrudController extends AbstractCrudController
     public function configureWidgetPositions(WidgetWalker $widgetWalker, EventDispatcherInterface $eventDispatcher,EntityManagerInterface $em,  Security $security,  Twig $twig)
     {
         $availableWidgets = $widgetWalker->findWidgetClasses(__DIR__ . '/../../Widget');
-
         $newWidgetsFromBundles  = [];
-
         $event = new ModifiableArrayEvent($newWidgetsFromBundles);
         $eventDispatcher->dispatch($event, 'app.configure_widget_positions');
         $availableWidgetsFromBundle = $event->getData();
-
         $availableWidgets = array_merge($availableWidgets, $availableWidgetsFromBundle);
         foreach($availableWidgets as $widget) {
             if(!$widget->isForThisUserAvailable()) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace Prolyfix\RssBundle\Repository;
 
-use App\Entity\RssFeedList;
+use Prolyfix\RssBundle\Entity\RssFeedList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

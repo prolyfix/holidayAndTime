@@ -2,6 +2,8 @@
 
 namespace App\Utility;
 
+use App\Kernel;
+use App\Module\ModuleInterface;
 use App\Widget\WidgetInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,12 +13,13 @@ use ReflectionClass;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment as Twig;
 
-class WidgetWalker
+
+class ModuleWalker
 {
 
-    public function __construct(private EntityManagerInterface $em, private Security $security, private Twig $twig) {}
+    public function __construct(private EntityManagerInterface $em, private Security $security, private Kernel $kernel) {}
 
-    public function findWidgetClasses(string $directory): array
+    public function findModuleClasses(string $directory): array
     {
         $widgetClasses = [];
 
@@ -28,12 +31,19 @@ class WidgetWalker
         foreach ($iterator as $file) {
             if ($file->isFile() && $file->getExtension() === 'php') {
                 $className = $this->getClassNameFromFile($file->getPathname());
-                if ($className && $this->implementsWidgetInterface($className)) {
-                    $widgetClasses[] = new $className($this->em, $this->security, $this->twig);
+                if ($className && $this->implementsModuleInterface($className)) {
+                    $widgetClasses[$className::getShortName()] = $className;
                 }
             }
         }
 
+        $bundles = $this->kernel->getBundles();
+        foreach ($bundles as $bundle) {
+            if(in_array(ModuleInterface::class,class_implements($bundle)))
+            {
+                $widgetClasses[$bundle::getShortName()] = $bundle::class;
+            }
+        }
         return $widgetClasses;
     }
 
@@ -67,9 +77,9 @@ class WidgetWalker
         return $namespace && $className ? $namespace . '\\' . $className : null;
     }
 
-    public function implementsWidgetInterface(string $className): bool
+    private function implementsModuleInterface(string $className): bool
     {
         $reflectionClass = new ReflectionClass($className);
-        return $reflectionClass->implementsInterface(WidgetInterface::class);
+        return $reflectionClass->implementsInterface(ModuleInterface::class);
     }
 }

@@ -1,42 +1,55 @@
 {% extends '@EasyAdmin/page/content.html.twig' %}
+{% block content_title %}
+	{% trans %}
+	widgets
+	{% endtrans %}:
+{% endblock %}
 {% block page_content %}
 	<div class="container" id="widgetMain" data-controller="widget">
 		<div class="row">
-			<div class="col-3">
-				{% for widget in availableWidgets %}
-					{{ renderWidget(widget) | raw}}
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-3">
+								{% for widget in availableWidgets %}
+									{{ renderWidget(widget) | raw}}
 
-				{% endfor %}
-				<div class="card widget" style="" data-widget-target="card" id="widget_utilisateur" data-width="190%">
-					Utilisateurs
+								{% endfor %}
+								<div class="card widget" style="" data-widget-target="card" id="widget_utilisateur" data-width="190%">
+									Utilisateurs
+								</div>
+								<!-- Repeat this card block for each card -->
+							</div>
+							<div class="col-9">
+								<table id="widgetTable" style="height: 100%; width: 100%;">
+									<tbody>
+										<tr style="border : 1px dotted gray;">
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;width:25%;height:33%" data-row="1" data-column="1"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;width:25%" data-row="1" data-column="2"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;width:25%" data-row="1" data-column="3"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;width:25%" data-row="1" data-column="4"></td>
+										</tr>
+										<tr>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="2" data-column="1"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="2" data-column="2"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="2" data-column="3"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="2" data-column="4"></td>
+										</tr>
+										<tr>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="3" data-column="1"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="3" data-column="2"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="3" data-column="3"></td>
+											<td data-widget-target="widgetTable" style="border : 1px dotted gray;" data-row="3" data-column="4"></td>
+										</tr>
+										<!-- Repeat this row block for each row -->
+										<!-- Repeat this row block for each row -->
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
-				<!-- Repeat this card block for each card -->
-			</div>
-			<div class="col-9">
-				<table id="widgetTable">
-					<tbody>
-						<tr>
-							<td data-widget-target="widgetTable" data-row="1" data-column="1"></td>
-							<td data-widget-target="widgetTable" data-row="1" data-column="2"></td>
-							<td data-widget-target="widgetTable" data-row="1" data-column="3"></td>
-							<td data-widget-target="widgetTable" data-row="1" data-column="4"></td>
-						</tr>
-						<tr>
-							<td data-widget-target="widgetTable" data-row="2" data-column="1"></td>
-							<td data-widget-target="widgetTable" data-row="2" data-column="2"></td>
-							<td data-widget-target="widgetTable" data-row="2" data-column="3"></td>
-							<td data-widget-target="widgetTable" data-row="2" data-column="4"></td>
-						</tr>
-						<tr>
-							<td data-widget-target="widgetTable" data-row="3" data-column="1"></td>
-							<td data-widget-target="widgetTable" data-row="3" data-column="2"></td>
-							<td data-widget-target="widgetTable" data-row="3" data-column="3"></td>
-							<td data-widget-target="widgetTable" data-row="3" data-column="4"></td>
-						</tr>
-						<!-- Repeat this row block for each row -->
-						<!-- Repeat this row block for each row -->
-					</tbody>
-				</table>
 			</div>
 		</div>
 	</div>

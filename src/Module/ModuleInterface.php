@@ -1,5 +1,5 @@
 <?php
-namespace  App\Modules;
+namespace  App\Module;
 
 interface ModuleInterface
 {
@@ -8,4 +8,9 @@ interface ModuleInterface
     public static function getModuleDescription(): string;
     public static function getModuleType(): string;
     public static function getModuleConfiguration(): array;
+    public static function getModuleRights():array;
+
+    public static function getMenuConfiguration(): array;
+
+    public static function getUserConfiguration(): array;
 }

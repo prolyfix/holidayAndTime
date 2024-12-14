@@ -1,0 +1,5 @@
+easy_admin:
+    entities:
+      - Prolyfix\RssBundle\Entity\RssFeedEntry:
+        class: Prolyfix\RssBundle\Entity\RssFeedEntry
+        controller: Prolyfix\RssBundle\Controller\Admin\RssFeedEntryCrudController

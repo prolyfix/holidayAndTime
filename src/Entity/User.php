@@ -20,7 +20,7 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_MANAGER = 'ROLE_MANAGER';
     const ROLE_EMPLOYEE = 'ROLE_EMPLOYEE';
-    const ROLE_GAST = 'ROLE_GAST';
+    const ROLE_GAST = 'ROLE_GUEST';
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -906,7 +906,5 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
 
         return $this;
     }
-
-
 
 }

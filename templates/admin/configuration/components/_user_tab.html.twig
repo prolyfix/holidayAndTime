@@ -1,0 +1,8 @@
+{% for conf in userConf %}
+
+	<li class="nav-item" role="presentation">
+		<a href="#{{conf.route}}" data-bs-toggle="tab" aria-expanded="true" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
+			{{conf.name | trans()}}
+		</a>
+	</li>
+{% endfor %}

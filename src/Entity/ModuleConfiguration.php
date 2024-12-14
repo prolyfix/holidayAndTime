@@ -17,9 +17,6 @@ class ModuleConfiguration
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $module = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -29,14 +26,11 @@ class ModuleConfiguration
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, ModuleConfigurationValue>
-     */
     #[ORM\OneToMany(targetEntity: ModuleConfigurationValue::class, mappedBy: 'moduleConfiguration')]
     private Collection $moduleConfigurationValues;
 
-    #[ORM\Column(length: 255)]
-    private ?string $targetEntity = null;
+    #[ORM\ManyToOne(inversedBy: 'moduleConfigurations')]
+    private ?Module $module = null;
 
     public function __construct()
     {
@@ -48,17 +42,6 @@ class ModuleConfiguration
         return $this->id;
     }
 
-    public function getModule(): ?string
-    {
-        return $this->module;
-    }
-
-    public function setModule(string $module): static
-    {
-        $this->module = $module;
-
-        return $this;
-    }
 
     public function getType(): ?string
     {
@@ -126,14 +109,15 @@ class ModuleConfiguration
         return $this;
     }
 
-    public function getTargetEntity(): ?string
+
+    public function getModule(): ?Module
     {
-        return $this->targetEntity;
+        return $this->module;
     }
 
-    public function setTargetEntity(string $targetEntity): static
+    public function setModule(?Module $module): static
     {
-        $this->targetEntity = $targetEntity;
+        $this->module = $module;
 
         return $this;
     }

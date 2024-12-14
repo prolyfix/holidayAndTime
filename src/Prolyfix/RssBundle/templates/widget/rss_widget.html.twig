@@ -1,0 +1,6 @@
+{% extends 'widget/_skeleton.html.twig' %}
+{% block content %}
+    {% for entry in feedEntries %}
+        {{ entry.title }} <br/>
+    {% endfor %}
+{% endblock %}

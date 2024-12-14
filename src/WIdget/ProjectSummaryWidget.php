@@ -63,13 +63,7 @@ class ProjectSummaryWidget implements WidgetInterface {
     }
     public function isForThisUserAvailable(): bool {
         $user = $this->security->getUser();
-        if(count($user->getCommentableMembers()) > 0)
-            return true;
-        if($user->getCompany()!==null){
-           $hasProjectRight =  $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject', 'company' => $user->getCompany()]);
-           if( $hasProjectRight->getValue() == 1)
-                return true;
-        }
+        return true;
             
         return false;
     }

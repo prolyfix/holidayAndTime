@@ -1,0 +1,78 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+{% block content_title %}
+	{% trans %}
+	module.configuration
+	{% endtrans %}:
+	{{ module.shortName }}
+{% endblock %}
+{% block main %}
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<ul class="nav nav-tabs nav-bordered" role="tablist">
+						{% if is_granted('ROLE_ADMIN') %}
+							<li class="nav-item" role="presentation">
+								<a href="#home-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active" aria-selected="true" role="tab">
+									{% trans %}Allgemein{% endtrans %}
+								</a>
+							</li>
+							<li class="nav-item" role="presentation">
+								<a href="#profile-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
+									{% trans %}Rights{% endtrans %}
+								</a>
+							</li>
+						{% endif %}
+						{{generateUserTabs(module) | raw}}
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active show" id="home-b1" role="tabpanel">
+							<div class="row">
+								<div class="col-6">
+									<table class="table">
+										<tbody>
+											{% for value in moduleConfigurationValues %}
+												<tr>
+													<td>
+														{{value.moduleConfiguration.name}}
+													</td>
+													<td>
+														{{value.value}}
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+						</div>
+						<div class="tab-pane" id="profile-b1" role="tabpanel">
+							<div class="row">
+								<div class="col-6">
+									<table class="table">
+										<tbody>
+											{% for value in moduleRights %}
+												<tr>
+													<td>
+														{% for action in value.moduleAction %}
+															{{action}}
+														{% endfor %}
+													</td>
+													<td>
+														{{value.coverage}}
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

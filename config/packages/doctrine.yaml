@@ -22,6 +22,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            ProlyfixRssBundle:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Prolyfix/RssBundle/src/Entity'
+                prefix: 'Prolyfix\RssBundle\Entity'
+                alias: ProlyfixRssBundle                
 
 when@test:
     doctrine:

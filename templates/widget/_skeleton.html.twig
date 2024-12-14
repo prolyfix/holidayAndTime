@@ -1,9 +1,16 @@
 <div class="col-md-4">
 	<div class="card">
 		<div class="card-body">
-			<h5 class="card-title">{% block title %}{% endblock %}</h5>
-            {% block content %} {% endblock %}
-			
+			<div class="card-widgets">
+				<a href="javascript: void(0);" data-bs-toggle="reload">
+					<i class="mdi mdi-cog"></i>
+				</a>
+				<a href="javascript: void(0);" data-bs-toggle="remove">
+					<i class="mdi mdi-close"></i>
+				</a>
+			</div>
+			<h4 class="header-title mb-0">{% if title is defined %}{{title}}{% endif %}</h4>
+			{% block content %}{% endblock %}
 		</div>
 	</div>
 </div>

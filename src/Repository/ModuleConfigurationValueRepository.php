@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\ModuleConfigurationValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,28 +17,33 @@ class ModuleConfigurationValueRepository extends ServiceEntityRepository
         parent::__construct($registry, ModuleConfigurationValue::class);
     }
 
-//    /**
-//     * @return ModuleConfigurationValue[] Returns an array of ModuleConfigurationValue objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?ModuleConfigurationValue
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findFromModule($params)
+    {
+        return $this->createQueryBuilder('m')
+                ->join('m.moduleConfiguration','moduleConfiguration')
+                ->andWhere('m.relatedClass = :relatedClass')
+                ->andWhere('m.relatedId = :relatedId')
+                ->setParameter('relatedClass', $params['relatedClass'])
+                ->setParameter('relatedId', $params['relatedId'])
+                ->join('moduleConfiguration.module','module')
+                ->andWhere('module.id = :module')
+                ->setParameter('module', $params['moduleId'])
+                ->getQuery()
+                ->getResult()
+
+        ;
+    }
+
+    public function getActiveModules(Company $company)
+    {
+        $values = $this->createQueryBuilder('m')
+                    ->andWhere('m.relatedClass = :relatedClass')
+                    ->setParameter('relatedClass', Company::class)
+                    ->andWhere('m.relatedId = :relatedId')
+                    ->setParameter('relatedId', $company->getId())
+                    ->getQuery()
+                    ->getResult();
+        return $values;
+    }
 }
