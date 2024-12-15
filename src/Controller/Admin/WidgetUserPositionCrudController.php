@@ -33,6 +33,7 @@ class WidgetUserPositionCrudController extends AbstractCrudController
         $eventDispatcher->dispatch($event, 'app.configure_widget_positions');
         $availableWidgetsFromBundle = $event->getData();
         $availableWidgets = array_merge($availableWidgets, $availableWidgetsFromBundle);
+        dump($availableWidgets);
         foreach($availableWidgets as $widget) {
             if(!$widget->isForThisUserAvailable()) {
                 unset($availableWidgets[array_search($widget, $availableWidgets)]);
@@ -42,15 +43,4 @@ class WidgetUserPositionCrudController extends AbstractCrudController
             'availableWidgets' => $availableWidgets
         ]);
     }
-
-    /*
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
-    }
-    */
 }

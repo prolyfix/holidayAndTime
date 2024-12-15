@@ -1,0 +1,6 @@
+{% extends 'widget/_skeleton.html.twig' %}
+{% block content %}
+    {% for entry in notes %}
+        {{ entry.note }} <br/>
+    {% endfor %}
+{% endblock %}

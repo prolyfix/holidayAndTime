@@ -27,7 +27,13 @@ doctrine:
                 type: attribute
                 dir: '%kernel.project_dir%/src/Prolyfix/RssBundle/src/Entity'
                 prefix: 'Prolyfix\RssBundle\Entity'
-                alias: ProlyfixRssBundle                
+                alias: ProlyfixRssBundle           
+            ProlyfixNoteBundle:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Prolyfix/NoteBundle/src/Entity'
+                prefix: 'Prolyfix\NoteBundle\Entity'
+                alias: ProlyfixNoteBundle                          
 
 when@test:
     doctrine:

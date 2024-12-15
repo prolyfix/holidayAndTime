@@ -4,3 +4,4 @@ when@test:
 twig:
     paths:
         '%kernel.project_dir%/src/Prolyfix/RssBundle/templates': 'RssBundle'
+        '%kernel.project_dir%/src/Prolyfix/NoteBundle/templates': 'NoteBundle'
