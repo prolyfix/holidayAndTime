@@ -56,7 +56,7 @@ class NoteWidget implements WidgetInterface
 
     public function render(): string
     {
-        $notes = $this->em->getRepository(Note::class)->findBy([], ['publishedAt' => 'DESC'], 1);
+        $notes = $this->em->getRepository(Note::class)->findBy([], ['date' => 'DESC'], 1);
         return 	$this->twig->render('@NoteBundle/widget/note_widget.html.twig',[
             'title' => 'NoteWidget',
             'content' => 'NoteWidget content',

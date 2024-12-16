@@ -1,6 +1,10 @@
 {% extends 'widget/_skeleton.html.twig' %}
 {% block content %}
     {% for entry in notes %}
-        {{ entry.note }} <br/>
+        <div data-controller="note">
+            <div id="note"> {{ entry.note }} </div>
+
+            <br/>
+        </div>
     {% endfor %}
 {% endblock %}
