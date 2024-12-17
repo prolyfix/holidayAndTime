@@ -40,5 +40,10 @@ class ProjectModule implements ModuleInterface
     {
         return [];
     }
+
+    public static function getModuleAccess(): array
+    {
+        return [];
+    }
 }
 

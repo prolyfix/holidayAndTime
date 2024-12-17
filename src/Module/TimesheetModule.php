@@ -59,4 +59,9 @@ class TimesheetModule implements ModuleInterface
     {
         return [];
     }
+
+    public static function getModuleAccess(): array
+    {
+        return [];
+    }
 }

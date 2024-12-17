@@ -40,5 +40,9 @@ class TaskModule implements ModuleInterface
     {
         return [];
     }
+    public static function getModuleAccess(): array
+    {
+        return [];
+    }
 }
 

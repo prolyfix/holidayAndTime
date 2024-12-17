@@ -64,4 +64,9 @@ class ProlyfixNoteBundle extends AbstractBundle implements ModuleInterface
         return [];
     }
 
+    public static function getModuleAccess(): array
+    {
+        return [];
+    }
+
 }

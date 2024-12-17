@@ -34,10 +34,17 @@ class Module
     #[ORM\OneToMany(targetEntity: ModuleRight::class, mappedBy: 'module')]
     private Collection $moduleRights;
 
+    /**
+     * @var Collection<int, ModuleAccess>
+     */
+    #[ORM\OneToMany(targetEntity: ModuleAccess::class, mappedBy: 'module')]
+    private Collection $moduleAccesses;
+
     public function __construct()
     {
         $this->moduleConfigurations = new ArrayCollection();
         $this->moduleRights = new ArrayCollection();
+        $this->moduleAccesses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,6 +131,36 @@ class Module
             // set the owning side to null (unless already changed)
             if ($moduleRight->getModule() === $this) {
                 $moduleRight->setModule(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ModuleAccess>
+     */
+    public function getModuleAccesses(): Collection
+    {
+        return $this->moduleAccesses;
+    }
+
+    public function addModuleAccess(ModuleAccess $moduleAccess): static
+    {
+        if (!$this->moduleAccesses->contains($moduleAccess)) {
+            $this->moduleAccesses->add($moduleAccess);
+            $moduleAccess->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModuleAccess(ModuleAccess $moduleAccess): static
+    {
+        if ($this->moduleAccesses->removeElement($moduleAccess)) {
+            // set the owning side to null (unless already changed)
+            if ($moduleAccess->getModule() === $this) {
+                $moduleAccess->setModule(null);
             }
         }
 

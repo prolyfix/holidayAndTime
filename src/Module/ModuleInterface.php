@@ -10,6 +10,8 @@ interface ModuleInterface
     public static function getModuleConfiguration(): array;
     public static function getModuleRights():array;
 
+    public static function getModuleAccess(): array;
+
     public static function getMenuConfiguration(): array;
 
     public static function getUserConfiguration(): array;

@@ -17,12 +17,6 @@ class ModuleRight
     private array $moduleAction = [];
 
     #[ORM\Column(length: 255)]
-    private ?string $class = null;
-
-    #[ORM\Column]
-    private ?int $relatedId = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $coverage = null;
 
     #[ORM\ManyToOne(inversedBy: 'moduleRights')]
@@ -30,6 +24,9 @@ class ModuleRight
 
     #[ORM\ManyToOne(inversedBy: 'moduleRIghts')]
     private ?Company $appliedToCompany = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $role = null;
 
 
     public function getId(): ?int
@@ -45,30 +42,6 @@ class ModuleRight
     public function setModuleAction(array $moduleAction): static
     {
         $this->moduleAction = $moduleAction;
-
-        return $this;
-    }
-
-    public function getClass(): ?string
-    {
-        return $this->class;
-    }
-
-    public function setClass(string $class): static
-    {
-        $this->class = $class;
-
-        return $this;
-    }
-
-    public function getRelatedId(): ?int
-    {
-        return $this->relatedId;
-    }
-
-    public function setRelatedId(int $relatedId): static
-    {
-        $this->relatedId = $relatedId;
 
         return $this;
     }
@@ -105,6 +78,18 @@ class ModuleRight
     public function setAppliedToCompany(?Company $appliedToCompany): static
     {
         $this->appliedToCompany = $appliedToCompany;
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }

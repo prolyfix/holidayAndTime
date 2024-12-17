@@ -39,9 +39,8 @@ class ProlyfixRssBundle extends AbstractBundle implements ModuleInterface
             [
                 'module' => Module::class,
                 'module_action' => ['view', 'edit', 'delete', 'create', 'list'],
-                'class' => Company::class,
                 'coverage' => 'company',
-                
+                'roles' => 'ROLE_USER'
             ]
         ];
     }
@@ -59,6 +58,11 @@ class ProlyfixRssBundle extends AbstractBundle implements ModuleInterface
     }
 
     public static function getUserConfiguration(): array
+    {
+        return [];
+    }
+
+    public static function getModuleAccess(): array
     {
         return [];
     }
