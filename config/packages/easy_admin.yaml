@@ -3,3 +3,6 @@ easy_admin:
       - Prolyfix\RssBundle\Entity\RssFeedEntry:
         class: Prolyfix\RssBundle\Entity\RssFeedEntry
         controller: Prolyfix\RssBundle\Controller\Admin\RssFeedEntryCrudController
+      - Prolyfix\RssBundle\Entity\RssFeedList:
+        class: Prolyfix\RssBundle\Entity\RssFeedList
+        controller: Prolyfix\RssBundle\Controller\Admin\RssFeedListCrudController        

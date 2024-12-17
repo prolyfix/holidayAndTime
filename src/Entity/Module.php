@@ -28,11 +28,6 @@ class Module
     #[ORM\OneToMany(targetEntity: ModuleConfiguration::class, mappedBy: 'module')]
     private Collection $moduleConfigurations;
 
-    /**
-     * @var Collection<int, ModuleRight>
-     */
-    #[ORM\OneToMany(targetEntity: ModuleRight::class, mappedBy: 'module')]
-    private Collection $moduleRights;
 
     /**
      * @var Collection<int, ModuleAccess>
@@ -40,11 +35,17 @@ class Module
     #[ORM\OneToMany(targetEntity: ModuleAccess::class, mappedBy: 'module')]
     private Collection $moduleAccesses;
 
+    /**
+     * @var Collection<int, ModuleRight>
+     */
+    #[ORM\OneToMany(targetEntity: ModuleRight::class, mappedBy: 'module')]
+    private Collection $moduleRights;
+
     public function __construct()
     {
         $this->moduleConfigurations = new ArrayCollection();
-        $this->moduleRights = new ArrayCollection();
         $this->moduleAccesses = new ArrayCollection();
+        $this->moduleRights = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,36 +109,6 @@ class Module
     }
 
     /**
-     * @return Collection<int, ModuleRight>
-     */
-    public function getModuleRights(): Collection
-    {
-        return $this->moduleRights;
-    }
-
-    public function addModuleRight(ModuleRight $moduleRight): static
-    {
-        if (!$this->moduleRights->contains($moduleRight)) {
-            $this->moduleRights->add($moduleRight);
-            $moduleRight->setModule($this);
-        }
-
-        return $this;
-    }
-
-    public function removeModuleRight(ModuleRight $moduleRight): static
-    {
-        if ($this->moduleRights->removeElement($moduleRight)) {
-            // set the owning side to null (unless already changed)
-            if ($moduleRight->getModule() === $this) {
-                $moduleRight->setModule(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, ModuleAccess>
      */
     public function getModuleAccesses(): Collection
@@ -161,6 +132,36 @@ class Module
             // set the owning side to null (unless already changed)
             if ($moduleAccess->getModule() === $this) {
                 $moduleAccess->setModule(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ModuleRight>
+     */
+    public function getModuleRights(): Collection
+    {
+        return $this->moduleRights;
+    }
+
+    public function addModuleRight(ModuleRight $moduleRight): static
+    {
+        if (!$this->moduleRights->contains($moduleRight)) {
+            $this->moduleRights->add($moduleRight);
+            $moduleRight->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModuleRight(ModuleRight $moduleRight): static
+    {
+        if ($this->moduleRights->removeElement($moduleRight)) {
+            // set the owning side to null (unless already changed)
+            if ($moduleRight->getModule() === $this) {
+                $moduleRight->setModule(null);
             }
         }
 

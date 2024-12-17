@@ -2,13 +2,14 @@
 
 namespace Prolyfix\RssBundle\Entity;
 
+use App\Entity\TimeData;
 use Prolyfix\RssBundle\Repository\RssFeedListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RssFeedListRepository::class)]
-class RssFeedList
+class RssFeedList extends TimeData
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

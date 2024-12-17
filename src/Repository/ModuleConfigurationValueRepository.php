@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Company;
+use App\Entity\Module;
 use App\Entity\ModuleConfigurationValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -28,11 +29,30 @@ class ModuleConfigurationValueRepository extends ServiceEntityRepository
                 ->setParameter('relatedId', $params['relatedId'])
                 ->join('moduleConfiguration.module','module')
                 ->andWhere('module.id = :module')
-                ->setParameter('module', $params['moduleId'])
+                ->setParameter('module', $params['module'])
                 ->getQuery()
                 ->getResult()
 
         ;
+    }
+
+    public function hasModuleEnabled(Company $company, Module $module)
+    {
+        $values = $this->createQueryBuilder('m')
+                    ->andWhere('m.relatedClass = :relatedClass')
+                    ->setParameter('relatedClass', Company::class)
+                    ->andWhere('m.relatedId = :relatedId')
+                    ->setParameter('relatedId', $company->getId())
+                    ->join('m.moduleConfiguration', 'moduleConfiguration')
+                    ->andWhere('moduleConfiguration.module = :module')
+                    ->andWhere('moduleConfiguration.name = :name')
+                    ->andWhere('m.value = :value')
+                    ->setParameter('module', $module)
+                    ->setParameter('name', 'active')
+                    ->setParameter('value', '["1"]')
+                    ->getQuery()
+                    ->getResult();
+        return count($values) > 0;
     }
 
     public function getActiveModules(Company $company)

@@ -50,7 +50,6 @@ class RssRetrieveFeedCommand extends Command
             }
 
         }
-        dump($rssFeedEntry);
         $this->em->flush();
         $io->success('Feeds have been retrieved');
 

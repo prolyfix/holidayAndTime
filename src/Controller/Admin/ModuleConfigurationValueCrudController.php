@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Company;
 use App\Entity\Module;
+use App\Entity\ModuleAccess;
 use App\Entity\ModuleConfiguration;
 use App\Entity\ModuleConfigurationValue;
 use App\Entity\ModuleRight;
@@ -105,53 +106,63 @@ class ModuleConfigurationValueCrudController extends AbstractCrudController
         $moduleEntity = $entity->getModuleConfiguration()->getModule();
         $module = new ($moduleEntity->getClass());
         $moduleRights = $module::getModuleRights();
-
-        //verification de l'existence des droits pour ce module. Si inexistant: création
-        $moduleConfigurationValue = $em->getRepository(ModuleConfigurationValue::class)->findFromModule([
-            'moduleId' => $moduleEntity->getId(),
-            'relatedClass' => Company::class,
-            'relatedId' => $this->getUser()->getCompany()->getId()
-        ]);
-
-        $moduleRightsSaved = $em->getRepository(ModuleRight::class)->findFromModule($module::class, $this->getUser()->getCompany()->getId());
-        if(count($moduleRightsSaved) == 0 && count($moduleRights) > 0)
+        foreach($moduleRights as $moduleRight)
         {
-            foreach($moduleRights as $moduleRight)
-            {
-                $relatedId = null;
-                switch($moduleRight['class']){
-                    case Company::class:
-                        $relatedId = $this->getUser()->getCompany()->getId();
-                        break;
-                    case User::class:
-                        $relatedId = $this->getUser()->getId();
-                        break;
-                    case WorkingGroup::class:
-                        $relatedId = $this->getUser()->getWorkingGroup()->getId();
-                        break;
-                }
-
-
-                $right = new ModuleRight();
-                $right->setModule($moduleEntity);
-                $right->setModuleAction($moduleRight['module_action']);
-                $right->setClass($moduleRight['class']);
-                $right->setCoverage($moduleRight['coverage']);
-                $right->setRelatedId($relatedId);
-                $right->setAppliedToCompany($this->getUser()->getCompany());
-                $em->persist($right);
-            }
-            $em->flush();
+            $moduleRight->setAppliedToCompany($this->getUser()->getCompany());
+            $moduleRight->setModule($moduleEntity);
+            $em->persist($moduleRight);
         }
+        $em->flush();
 
         
-        $moduleRights = $em->getRepository(ModuleRight::class)->findFromModule($module::class, $this->getUser()->getCompany()->getId());
+        $moduleAccesses = $module::getModuleAccess();
+        foreach($moduleAccesses as $moduleAccess)
+        {
+            $em->persist($moduleAccess);
+        }
+        //temp: to be removed
+        $moduleAccess = (new ModuleAccess())
+            ->setModule($moduleEntity)
+            ->setTenantClass(Company::class)
+            ->setTenantId($this->getUser()->getCompany()->getId())
+
+            ;
+        $em->persist($moduleAccess);
+        $em->flush();
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $relatedClass = Company::class;
+            $relatedId = $this->getUser()->getCompany()->getId();
+        }
+        elseif($this->isGranted('ROLE_MANAGER')){
+            $relatedClass = WorkingGroup::class;
+            $relatedId = $this->getUser()->getWorkingGroup()->getId();
+        }
+        elseif($this->isGranted('ROLE_USER')){
+            $relatedClass = User::class;
+            $relatedId = $this->getUser()->getId();
+        }
+
+        $moduleConfigurationValue = $em->getRepository(ModuleConfigurationValue::class)->findFromModule([
+            'module'        => $moduleEntity,
+            'relatedClass'  => $relatedClass,
+            'relatedId'     => $relatedId,
+        ]);
+
+        $moduleAccess = $em->getRepository(ModuleAccess::class)->findBy([
+            'module' => $moduleEntity,
+            'tenantClass' => $relatedClass,
+            'tenantId' => $relatedId
+        ]);
+
         return $this->render('admin/configuration/showModuleConfiguration.html.twig',[
             'page_title'=>'Configuration',
             'content_title'=>'Configuration',
             'moduleConfigurationValues'=>$moduleConfigurationValue,
             'moduleRights'=>$moduleRights,
-            'module'=>$module
+            'module'=>$module,
+            'moduleAccess'=>$moduleAccess
+
         ]);
 
 

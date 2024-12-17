@@ -13,20 +13,25 @@
 					<ul class="nav nav-tabs nav-bordered" role="tablist">
 						{% if is_granted('ROLE_ADMIN') %}
 							<li class="nav-item" role="presentation">
-								<a href="#home-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link active" aria-selected="true" role="tab">
+								<a href="#home" data-bs-toggle="tab" aria-expanded="false" class="nav-link active" aria-selected="true" role="tab">
 									{% trans %}Allgemein{% endtrans %}
 								</a>
 							</li>
 							<li class="nav-item" role="presentation">
-								<a href="#profile-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
+								<a href="#right" data-bs-toggle="tab" aria-expanded="true" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
 									{% trans %}Rights{% endtrans %}
 								</a>
 							</li>
+							<li class="nav-item" role="presentation">
+								<a href="#access" data-bs-toggle="tab" aria-expanded="true" class="nav-link" aria-selected="false" role="tab" tabindex="-1">
+									{% trans %}Access{% endtrans %}
+								</a>
+							</li>							
 						{% endif %}
 						{{generateUserTabs(module) | raw}}
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane active show" id="home-b1" role="tabpanel">
+						<div class="tab-pane active show" id="home" role="tabpanel">
 							<div class="row">
 								<div class="col-6">
 									<table class="table">
@@ -47,7 +52,7 @@
 							</div>
 
 						</div>
-						<div class="tab-pane" id="profile-b1" role="tabpanel">
+						<div class="tab-pane" id="right" role="tabpanel">
 							<div class="row">
 								<div class="col-6">
 									<table class="table">
@@ -56,8 +61,11 @@
 												<tr>
 													<td>
 														{% for action in value.moduleAction %}
-															{{action}}
+															{{action | trans() }} | 
 														{% endfor %}
+													</td>
+													<td>
+														{{value.entityClass}}
 													</td>
 													<td>
 														{{value.coverage}}
@@ -69,6 +77,17 @@
 								</div>
 							</div>
 						</div>
+						<div class="tab-pane" id="access" role="tabpanel">
+							<div class="row">
+								<div class="col-6">
+									<ul>
+										{% for value in moduleAccess %}
+											<li> {{value.tenantClass}} : {{value.tenantId}} </li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+						</div>						
 					</div>
 				</div>
 			</div>

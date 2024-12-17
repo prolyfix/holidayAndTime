@@ -34,7 +34,6 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Prolyfix/NoteBundle/src/Entity'
                 prefix: 'Prolyfix\NoteBundle\Entity'
                 alias: ProlyfixNoteBundle                          
-
 when@test:
     doctrine:
         dbal:

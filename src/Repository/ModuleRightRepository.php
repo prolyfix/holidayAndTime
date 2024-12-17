@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Module;
 use App\Entity\ModuleRight;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,28 +30,25 @@ class ModuleRightRepository extends ServiceEntityRepository
 
         ;
     }
-    //    /**
-    //     * @return ModuleRight[] Returns an array of ModuleRight objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('m.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?ModuleRight
-    //    {
-    //        return $this->createQueryBuilder('m')
-    //            ->andWhere('m.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getModuleRightsForUserAndTable(Module $module, $entityClass,User $user, string $action = 'list')
+
+    {
+        $qb = $this->createQueryBuilder('m')
+                ->join('m.module','module')
+                ->andWhere('module.id = :module')
+                ->setParameter('module', $module)
+                ->andWhere('m.entityClass = :entityClass')
+                ->setParameter('entityClass', $entityClass)
+                ->andWhere('m.appliedToCompany = :appliedToCompany')
+                ->setParameter('appliedToCompany', $user->getCompany())
+                ->andWhere('m.role = :role')
+                ->setParameter('role', $user->getRoles()[0])
+                ->andWhere('m.moduleAction like :action')
+                ->setParameter('action', '%'.$action.'%')
+                ->getQuery()
+                ->getResult();
+
+        return $qb;
+    }
 }

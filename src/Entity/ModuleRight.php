@@ -19,14 +19,18 @@ class ModuleRight
     #[ORM\Column(length: 255)]
     private ?string $coverage = null;
 
-    #[ORM\ManyToOne(inversedBy: 'moduleRights')]
-    private ?Module $module = null;
 
     #[ORM\ManyToOne(inversedBy: 'moduleRIghts')]
     private ?Company $appliedToCompany = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $role = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $entityClass = null;
+
+    #[ORM\ManyToOne(inversedBy: 'moduleRights')]
+    private ?Module $module = null;
 
 
     public function getId(): ?int
@@ -58,17 +62,6 @@ class ModuleRight
         return $this;
     }
 
-    public function getModule(): ?Module
-    {
-        return $this->module;
-    }
-
-    public function setModule(?Module $module): static
-    {
-        $this->module = $module;
-
-        return $this;
-    }
 
     public function getAppliedToCompany(): ?Company
     {
@@ -90,6 +83,30 @@ class ModuleRight
     public function setRole(?string $role): static
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getEntityClass(): ?string
+    {
+        return $this->entityClass;
+    }
+
+    public function setEntityClass(?string $entityClass): static
+    {
+        $this->entityClass = $entityClass;
+
+        return $this;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    public function setModule(?Module $module): static
+    {
+        $this->module = $module;
 
         return $this;
     }

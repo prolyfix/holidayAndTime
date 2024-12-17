@@ -2,7 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
+use App\Entity\Module;
 use App\Entity\ModuleAccess;
+use App\Entity\User;
+use App\Entity\WorkingGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +20,31 @@ class ModuleAccessRepository extends ServiceEntityRepository
         parent::__construct($registry, ModuleAccess::class);
     }
 
-//    /**
-//     * @return ModuleAccess[] Returns an array of ModuleAccess objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function hasUserAccessToModule(User $user, Module $module):bool
+    {
+        $qb = $this->createQueryBuilder('m')
+                    ->andWhere('m.tenantClass = :tenantUser and m.tenantId = :tenantUserId')
+                    ->orWhere('m.tenantClass = :tenantCompany and m.tenantId = :tenantCompanyId')
+                    ->setParameter('tenantUser', User::class)
+                    ->setParameter('tenantUserId', $user->getId())
+                    ->setParameter('tenantCompany', Company::class)
+                    ->setParameter('tenantCompanyId', $user->getCompany()->getId())
+                    ->andWhere('m.module = :module')
+                    ->setParameter('module', $module);
+        
+        if($user->getWorkingGroup() !== null)
+        {
+            $qb->orWhere('m.tenantClass = :tenantWorkingGroup and m.tenantId = :tenantWorkingGroupId')
+                ->setParameter('tenantWorkingGroup', WorkingGroup::class)
+                ->setParameter('tenantWorkingGroupId', $user->getWorkingGroup()->getId());
+        }
+                    
+        $values = $qb->getQuery()
+                    ->getResult();
 
-//    public function findOneBySomeField($value): ?ModuleAccess
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+
+        return count($values) > 0;
+    }
+
 }

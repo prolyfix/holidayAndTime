@@ -109,81 +109,87 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+        $menuItems = [];
+
         if ($this->getUser()->getCompany() !== null) {
-            yield MenuItem::section('HR',icon: 'fas fa-users');
-            yield MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class)->setAction('viewYear');
-            yield MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
+            $menuItems['hr'][] = MenuItem::section('HR', icon: 'fas fa-users');
+            $menuItems['hr'][] = MenuItem::linkToCrud('Calendar', 'fas fa-calendar', Calendar::class)->setAction('viewYear');
+            $menuItems['hr'][] = MenuItem::linkToRoute('Holiday Requests', 'fas fa-route', 'admin_holiday_request', ['parameter' => 'value']);
             if ($this->getUser()->isHasTimesheet() || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-                yield MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
+                $menuItems['hr'][] = MenuItem::linkToCrud('Timesheet', 'fas fa-hourglass', Timesheet::class);
             }
             if ($this->isGranted('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-                yield MenuItem::section('Benutzern',icon: 'fas fa-user');
-                yield MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
-                yield MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
+                $menuItems['hr'][] = MenuItem::section('Benutzern', icon: 'fas fa-user');
+                $menuItems['hr'][] = MenuItem::linkToCrud('Users', 'fas fa-user', User::class);
+                $menuItems['hr'][] = MenuItem::linkToCrud('Working Group', 'fas fa-users', WorkingGroup::class);
             }
         }
         //$projectRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasProject', 'company' => $this->getUser()->getCompany()]);
         //$taskRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasTask', 'company' => $this->getUser()->getCompany()]);
         $projectRight = $taskRight = null;
         if ($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN') || $taskRight && $taskRight->getValue() == 1) {
-            yield MenuItem::section('Projects','fas fa-diagram-project');
+            $menuItems['project'][] = MenuItem::section('Projects', 'fas fa-diagram-project');
         }
         $belongsToProject = false;
         if ($this->getUser()->getCommentableMembers()->count() > 0) {
             $belongsToProject = true;
         }
         if ($projectRight && $projectRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN' || $belongsToProject)) {
-            yield MenuItem::linkToCrud('Projects', 'fas fa-project', Project::class);
+            $menuItems['project'][] =  MenuItem::linkToCrud('Projects', 'fas fa-project', Project::class);
         }
 
         if ($taskRight && $taskRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::linkToCrud('Task', 'fas fa-check', Task::class)->setQueryParameter('filters[status]', "new");
+            $menuItems['project'][] =  MenuItem::linkToCrud('Task', 'fas fa-check', Task::class)->setQueryParameter('filters[status]', "new");
         }
 
         if ($this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
+            $menuItems['properties'][] =  MenuItem::linkToCrud('Customers', 'fas fa-house', Company::class);
         }
         $companyRight = null;
         //$companyRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasCRM', 'company' => $this->getUser()->getCompany()]);
-
+       
         if ($companyRight && $companyRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::section('CRM','fas fa-address-book');
-            yield MenuItem::linkToCrud('Medias', 'fas fa-photo-film', Media::class);
-            yield MenuItem::linkToCrud('Contact', 'fas fa-address-book', Contact::class);
-            yield MenuItem::linkToCrud('ThirdParty', 'fas fa-handshake', ThirdParty::class);
-            yield MenuItem::linkToCrud('Appointments', 'fas fa-calendar', Appointment::class);
+            $menuItems['crm'][] = MenuItem::section('CRM', 'fas fa-address-book');
+            $menuItems['crm'][] =  MenuItem::linkToCrud('Medias', 'fas fa-photo-film', Media::class);
+            $menuItems['crm'][] =  MenuItem::linkToCrud('Contact', 'fas fa-address-book', Contact::class);
+            $menuItems['crm'][] =  MenuItem::linkToCrud('ThirdParty', 'fas fa-handshake', ThirdParty::class);
+            $menuItems['crm'][] =  MenuItem::linkToCrud('Appointments', 'fas fa-calendar', Appointment::class);
         }
         //$weekPlanningRight = $this->em->getRepository(Configuration::class)->findOneBy(['name' => 'hasWeekplan']);
         $weekPlanningRight = null;
 
-        if ($this->getUser()->getCompany()!==null && ($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'))) {
-            yield MenuItem::section('Weekplanning','fas fa-calendar-week');
-            yield MenuItem::linkToCrud('Room', 'fas fa-people-roof', Room::class);
-            yield MenuItem::linkToCrud('Week Planning', 'fas fa-ruler', Weekplan::class);
+        if ($this->getUser()->getCompany() !== null && ($weekPlanningRight && $weekPlanningRight->getValue() == 1 || $this->getUser()->hasRole('ROLE_SUPER_ADMIN'))) {
+            $menuItems['weekPlanning'][] =  MenuItem::section('Weekplanning', 'fas fa-calendar-week');
+            $menuItems['weekPlanning'][] =   MenuItem::linkToCrud('Room', 'fas fa-people-roof', Room::class);
+            $menuItems['weekPlanning'][] =   MenuItem::linkToCrud('Week Planning', 'fas fa-ruler', Weekplan::class);
         }
         if ($this->isGranted('ROLE_ADMIN') || $this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::section('Configuration','fas fa-cog');
-            yield MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
-            yield MenuItem::linkToCrud('properties', 'fas fa-cog', ModuleConfigurationValue::class)->setAction('showConfiguration');
-            yield MenuItem::linkToCrud('tags', 'fas fa-cog', Tag::class)->setAction('index');
+            $menuItems['configuration'][] =  MenuItem::section('Configuration', 'fas fa-cog');
+            $menuItems['configuration'][] =   MenuItem::linkToCrud('Type of Absence', 'fas fa-plane', TypeOfAbsence::class);
+            $menuItems['configuration'][] =   MenuItem::linkToCrud('properties', 'fas fa-cog', ModuleConfigurationValue::class)->setAction('showConfiguration');
+            $menuItems['configuration'][] =    MenuItem::linkToCrud('tags', 'fas fa-cog', Tag::class)->setAction('index');
         }
         if ($this->getUser()->hasRole('ROLE_SUPER_ADMIN')) {
-            yield MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
+            $menuItems['configuration'][] = MenuItem::linkToCrud('HelpContent', 'fas fa-user', HelpContent::class);
         }
-        yield MenuItem::linkToCrud('widgets', 'fas fa-cog', WidgetUserPosition::class)->setAction(actionName: 'configureWidgetPositions');
-
+        $menuItems['configuration'][] = MenuItem::linkToCrud('widgets', 'fas fa-cog', WidgetUserPosition::class)->setAction(actionName: 'configureWidgetPositions');
         $activeModules = $this->em->getRepository(ModuleConfigurationValue::class)->getActiveModules($this->getUser()->getCompany());
         foreach ($activeModules as $activeModule) {
             $moduleEntity = $activeModule->getModuleConfiguration()->getModule();
             $moduleName = $moduleEntity->getClass();
             $module = new ($moduleName);
+           
             $menu = $module::getMenuConfiguration();
-            foreach ($menu as $menuItem) {
-                yield $menuItem['route'];
-            }
+           
+            $menuItems = array_merge($menuItems, $menu);
         }
-
+        dump($menuItems);
+        foreach ($menuItems as $key => $subMenuItems) {
+            foreach($subMenuItems as $subMenuItem) {
+                yield $subMenuItem;
+            }
+            
+        }
     }
 
 

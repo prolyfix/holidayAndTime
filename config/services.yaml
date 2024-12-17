@@ -50,13 +50,13 @@ services:
                 name: 'doctrine.orm.entity_listener'
                 event: 'preUpdate'
                 entity: 'App\Entity\UserWeekdayProperty'    
-    App\EventListener\CommentableListener:
+    App\EventListener\TimeDataListener:
         tags:
             -
                 # these are the options required to define the entity listener
                 name: 'doctrine.orm.entity_listener'
                 event: 'prePersist'
-                entity: 'App\Entity\Commentable'
+                entity: 'App\Entity\TimeData'
 
     App\EventListener\ContactListener:
         tags:

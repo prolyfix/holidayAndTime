@@ -4,6 +4,7 @@ namespace App\Prolyfix\NoteBundle;
 
 use App\Entity\Company;
 use App\Entity\Module;
+use App\Entity\ModuleRight;
 use App\Entity\User;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -38,24 +39,18 @@ class ProlyfixNoteBundle extends AbstractBundle implements ModuleInterface
     public static function getModuleRights(): array
     {
         return [
-            [
-                'module' => Module::class,
-                'module_action' => ['view', 'edit', 'delete', 'create', 'list'],
-                'class' => Company::class,
-                'coverage' => 'user',
-            ]
+            (new ModuleRight())
+                ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
+                ->setCoverage('user')
+                ->setRole('ROLE_USER')
+                ->setEntityClass(Note::class),
         ];
     }
 
     public static function getMenuConfiguration(): array
     {
-        return [[
-            'name' => 'Notes',
-            'icon' => 'fa fa-rss',
-            'route' => MenuItem::linkToCrud('note_list', 'fa fa-rss', Note::class),
-            'order' => 1,
-            'parent' => 'Notes',
-            'roles' => ['ROLE_USER'],
+        return ['miscalleanous' => [
+            MenuItem::linkToCrud('Note List', 'fas fa-list', Note::class),
         ]];
     }
 

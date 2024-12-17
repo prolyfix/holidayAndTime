@@ -1,11 +1,9 @@
 <?php
 namespace App\Manager;
 
-use App\Event\ModifiableArrayEvent;
 use App\Kernel;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConfigurationUpdater
 {

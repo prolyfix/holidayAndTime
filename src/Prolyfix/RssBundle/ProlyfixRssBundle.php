@@ -4,8 +4,10 @@ namespace App\Prolyfix\RssBundle;
 
 use App\Entity\Company;
 use App\Entity\Module;
+use App\Entity\ModuleRight;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use Prolyfix\RssBundle\Entity\RssFeedEntry;
 use Prolyfix\RssBundle\Entity\RssFeedList;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
@@ -36,24 +38,23 @@ class ProlyfixRssBundle extends AbstractBundle implements ModuleInterface
     public static function getModuleRights(): array
     {
         return [
-            [
-                'module' => Module::class,
-                'module_action' => ['view', 'edit', 'delete', 'create', 'list'],
-                'coverage' => 'company',
-                'roles' => 'ROLE_USER'
-            ]
+            (new ModuleRight())
+                ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
+                ->setCoverage('user')
+                ->setRole('ROLE_USER')
+                ->setEntityClass(RssFeedList::class),
+            (new ModuleRight())
+                ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
+                ->setCoverage('company')
+                ->setRole('ROLE_ADMIN')
+                ->setEntityClass(RssFeedEntry::class),
         ];
     }
 
     public static function getMenuConfiguration(): array
     {
-        return [[
-            'name' => 'Rss',
-            'icon' => 'fa fa-rss',
-            'route' => MenuItem::linkToCrud('rss_feed_list', 'fa fa-rss', RssFeedList::class),
-            'order' => 1,
-            'parent' => 'Rss',
-            'roles' => ['ROLE_USER'],
+        return ['miscalleanouss' => [
+            MenuItem::linkToCrud('Rss Feed List', 'fas fa-list', RssFeedList::class),
         ]];
     }
 

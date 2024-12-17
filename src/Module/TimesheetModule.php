@@ -32,14 +32,11 @@ class TimesheetModule implements ModuleInterface
 
     public static function getMenuConfiguration(): array
     {
-        return [[
-            'name' => 'Timesheet',
-            'icon' => 'fa fa-clock-o',
-            'route' => MenuItem::linkToCrud('timesheet', 'fa fa-clock-o', Timesheet::class),
-            'order' => 1,
-            'parent' => 'Time Management',
-            'roles' => ['ROLE_USER'],
-        ]];
+        return ['timesheet'=>[
+                MenuItem::section('Timesheet', 'fas fa-clock'),
+                MenuItem::linkToCrud('List', 'fas fa-list', Timesheet::class),
+            ]
+        ];
     }
 
     public static function getModuleRights(): array

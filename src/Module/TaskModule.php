@@ -7,16 +7,16 @@ class TaskModule implements ModuleInterface
 {
     public static function getShortName(): string
     {
-        return 'project';
+        return 'task';
     }
 
     public static function getModuleName(): string
     {
-        return 'Project Module';
+        return 'Task Module';
     }
     public static function getModuleDescription(): string
     {
-        return 'Project Module';
+        return 'Task Module';
     }
     public static function getModuleType(): string
     {
