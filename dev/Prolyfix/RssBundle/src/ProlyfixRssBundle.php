@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Prolyfix\RssBundle;
+namespace Prolyfix\RssBundle;
 
 use App\Entity\Company;
 use App\Entity\Module;

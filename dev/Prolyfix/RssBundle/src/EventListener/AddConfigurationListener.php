@@ -2,7 +2,7 @@
 namespace Prolyfix\RssBundle\EventListener;
 
 use App\Event\ModifiableArrayEvent;
-use App\Prolyfix\RssBundle\RssBundle;
+use Prolyfix\RssBundle\ProlyfixRssBundle;
 use Doctrine\ORM\EntityManagerInterface;
 use Prolyfix\RssBundle\Widget\RssWidget;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -17,7 +17,7 @@ class AddConfigurationListener
     public function onAppConfigureWidgetPositions(ModifiableArrayEvent $event)
     {
         $availableConfigurations = $event->getData();
-        $availableConfigurations[] = RssBundle::class;
+        $availableConfigurations[] = ProlyfixRssBundle::class;
         $event->setData($availableConfigurations);
     }
 }

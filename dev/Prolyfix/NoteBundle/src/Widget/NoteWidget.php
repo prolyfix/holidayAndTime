@@ -1,11 +1,9 @@
 <?php 
-namespace Prolyfix\RssBundle\Widget;
+namespace Prolyfix\NoteBundle\Widget;
 
 use App\Widget\WidgetInterface;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Prolyfix\NoteBundle\Entity\Note;
-use Prolyfix\RssBundle\Entity\RssFeedEntry;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment as Twig;
 

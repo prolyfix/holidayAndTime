@@ -3,8 +3,7 @@ namespace Prolyfix\NoteBundle\EventListener;
 
 use App\Event\ModifiableArrayEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use Prolyfix\RssBundle\Widget\NoteWidget;
-use Prolyfix\RssBundle\Widget\RssWidget;
+use Prolyfix\NoteBundle\Widget\NoteWidget;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment as Twig;
 

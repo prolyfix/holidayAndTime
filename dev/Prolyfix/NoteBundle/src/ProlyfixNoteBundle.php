@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Prolyfix\NoteBundle;
+namespace Prolyfix\NoteBundle;
 
-use App\Entity\Company;
-use App\Entity\Module;
 use App\Entity\ModuleRight;
-use App\Entity\User;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use Prolyfix\NoteBundle\Entity\Note;
-use Prolyfix\RssBundle\Entity\RssFeedList;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 class ProlyfixNoteBundle extends AbstractBundle implements ModuleInterface
