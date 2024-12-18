@@ -1,18 +1,22 @@
 <?php
-namespace  App\Module;
+
+namespace App\Prolyfix\RssBundle;
 
 use App\Entity\Company;
 use App\Entity\Module;
 use App\Entity\ModuleRight;
-use App\Entity\Timesheet;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use Prolyfix\RssBundle\Entity\RssFeedEntry;
+use Prolyfix\RssBundle\Entity\RssFeedList;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class TimesheetModule implements ModuleInterface
+class ProlyfixTimesheetBundle extends AbstractBundle implements ModuleInterface
 {
+    const IS_MODULE = true;
     public static function getShortName(): string
     {
-        return 'TimesheetModule';
+        return 'TimesheetBundle';
     }
     public static function getModuleName(): string
     {
@@ -31,15 +35,6 @@ class TimesheetModule implements ModuleInterface
         return [];
     }
 
-    public static function getMenuConfiguration(): array
-    {
-        return ['timesheet'=>[
-                MenuItem::section('Timesheet', 'fas fa-clock'),
-                MenuItem::linkToCrud('List', 'fas fa-list', Timesheet::class),
-            ]
-        ];
-    }
-
     public static function getModuleRights(): array
     {
         return [
@@ -47,9 +42,20 @@ class TimesheetModule implements ModuleInterface
                 ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
                 ->setCoverage('user')
                 ->setRole('ROLE_USER')
-                ->setEntityClass(Timesheet::class),
-                
+                ->setEntityClass(RssFeedList::class),
+            (new ModuleRight())
+                ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
+                ->setCoverage('company')
+                ->setRole('ROLE_ADMIN')
+                ->setEntityClass(RssFeedEntry::class),
         ];
+    }
+
+    public static function getMenuConfiguration(): array
+    {
+        return ['miscalleanouss' => [
+            MenuItem::linkToCrud('Rss Feed List', 'fas fa-list', RssFeedList::class),
+        ]];
     }
 
     public static function getUserConfiguration(): array
@@ -61,4 +67,5 @@ class TimesheetModule implements ModuleInterface
     {
         return [];
     }
+
 }

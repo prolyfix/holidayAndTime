@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace Prolyfix\TimesheetBundle\Entity;
 
+use App\Entity\TimeData;
 use App\Repository\TimesheetRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
