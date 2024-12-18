@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Commentable;
 use App\Entity\Room;
-use App\Entity\Timesheet;
+use Prolyfix\TimesheetBundle\Entity\Timesheet;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace Prolyfix\TimesheetBundle\Entity;
 
 use App\Repository\UserWeekdayPropertyRepository;
 use Doctrine\DBAL\Types\Types;

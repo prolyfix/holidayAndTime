@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Prolyfix\RssBundle;
+namespace Prolyfix\RssBundle;
 
-use App\Entity\Company;
-use App\Entity\Module;
 use App\Entity\ModuleRight;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;

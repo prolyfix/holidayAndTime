@@ -5,7 +5,7 @@ namespace App\Controller\Admin\Trait;
 use App\Entity\Comment;
 use App\Entity\Commentable;
 use App\Entity\Media;
-use App\Entity\Timesheet;
+use Prolyfix\TimesheetBundle\Entity\Timesheet;
 use App\Form\CommentType;
 use App\Form\MediaType;
 use App\Form\TimesheetType;

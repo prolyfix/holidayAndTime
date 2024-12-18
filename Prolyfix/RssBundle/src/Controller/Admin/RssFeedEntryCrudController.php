@@ -1,7 +1,7 @@
 <?php
 
 namespace Prolyfix\RssBundle\Controller\Admin;
-
+            
 use Prolyfix\RssBundle\Entity\RssFeedEntry;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 

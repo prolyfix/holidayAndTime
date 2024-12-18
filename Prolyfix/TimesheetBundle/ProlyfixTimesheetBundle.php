@@ -1,31 +1,31 @@
 <?php
 
-namespace App\Prolyfix\NoteBundle;
+namespace Prolyfix\TimesheetBundle;
 
 use App\Entity\Company;
 use App\Entity\Module;
 use App\Entity\ModuleRight;
-use App\Entity\User;
 use App\Module\ModuleInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use Prolyfix\NoteBundle\Entity\Note;
+use Prolyfix\RssBundle\Entity\RssFeedEntry;
 use Prolyfix\RssBundle\Entity\RssFeedList;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
-
-class ProlyfixNoteBundle extends AbstractBundle implements ModuleInterface
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+class ProlyfixTimesheetBundle extends AbstractBundle implements ModuleInterface
 {
     const IS_MODULE = true;
     public static function getShortName(): string
     {
-        return 'NoteBundle';
+        return 'TimesheetBundle';
     }
     public static function getModuleName(): string
     {
-        return 'Note';
+        return 'Timesheet';
     }
     public static function getModuleDescription(): string
     {
-        return 'Note Module';
+        return 'Timesheet Module';
     }
     public static function getModuleType(): string
     {
@@ -43,14 +43,19 @@ class ProlyfixNoteBundle extends AbstractBundle implements ModuleInterface
                 ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
                 ->setCoverage('user')
                 ->setRole('ROLE_USER')
-                ->setEntityClass(Note::class),
+                ->setEntityClass(RssFeedList::class),
+            (new ModuleRight())
+                ->setModuleAction(['list', 'show', 'edit', 'new', 'delete'])
+                ->setCoverage('company')
+                ->setRole('ROLE_ADMIN')
+                ->setEntityClass(RssFeedEntry::class),
         ];
     }
 
     public static function getMenuConfiguration(): array
     {
-        return ['miscalleanous' => [
-            MenuItem::linkToCrud('Note List', 'fas fa-list', Note::class),
+        return ['miscalleanouss' => [
+            MenuItem::linkToCrud('Rss Feed List', 'fas fa-list', RssFeedList::class),
         ]];
     }
 
@@ -63,5 +68,8 @@ class ProlyfixNoteBundle extends AbstractBundle implements ModuleInterface
     {
         return [];
     }
+
+
+
 
 }

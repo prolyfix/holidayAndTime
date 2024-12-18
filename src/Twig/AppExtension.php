@@ -7,7 +7,7 @@ use App\Entity\Project;
 use App\Entity\User;
 use App\Entity\WidgetUserPosition;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Polyfill\Intl\Icu\DateFormat\MonthTransformer;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;

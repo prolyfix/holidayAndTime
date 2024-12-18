@@ -5,7 +5,7 @@ use App\Entity\Configuration;
 use App\Entity\Project;
 use App\Widget\WidgetInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment as Twig;
 
 

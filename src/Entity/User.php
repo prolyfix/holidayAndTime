@@ -12,6 +12,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Prolyfix\TimesheetBundle\Entity\UserSchedule;
+use Prolyfix\TimesheetBundle\Entity\UserWeekdayProperty;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -58,9 +60,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OneToMany(targetEntity: Calendar::class, mappedBy: 'user')]
     private Collection $calendars;
 
-    #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'user')]
-    private Collection $timesheets;
-
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable : true)]
     private ?\DateTimeInterface $startDate = null;
 
@@ -90,12 +89,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
 
     #[ORM\ManyToOne(inversedBy: 'users', cascade: ["persist"])]
     private ?Company $company = null;
-
-    /**
-     * @var Collection<int, UserSchedule>
-     */
-    #[ORM\OneToMany(targetEntity: UserSchedule::class, mappedBy: 'user', cascade: ["persist"])]
-    private Collection $userSchedules;
 
     #[ORM\Column(nullable: true)]
     private ?bool $emailInteraction = null;
@@ -161,7 +154,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         $this->users = new ArrayCollection();
         $this->userProperties = new ArrayCollection();
         $this->calendars = new ArrayCollection();
-        $this->timesheets = new ArrayCollection();
         $this->issues = new ArrayCollection();
         $this->userSchedules = new ArrayCollection();
         $timestamp = strtotime('next Monday');
@@ -384,36 +376,6 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * @return Collection<int, Timesheet>
-     */
-    public function getTimesheets(): Collection
-    {
-        return $this->timesheets;
-    }
-
-    public function addTimesheet(Timesheet $timesheet): static
-    {
-        if (!$this->timesheets->contains($timesheet)) {
-            $this->timesheets->add($timesheet);
-            $timesheet->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTimesheet(Timesheet $timesheet): static
-    {
-        if ($this->timesheets->removeElement($timesheet)) {
-            // set the owning side to null (unless already changed)
-            if ($timesheet->getUser() === $this) {
-                $timesheet->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getStartDate(): ?\DateTimeInterface
     {
         return $this->startDate;
@@ -580,39 +542,10 @@ class User extends Commentable implements UserInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserSchedule>
-     */
-    public function getUserSchedules(): Collection
-    {
-        return $this->userSchedules;
-    }
-
-    public function addUserSchedule(UserSchedule $userSchedule): static
-    {
-        if (!$this->userSchedules->contains($userSchedule)) {
-            $this->userSchedules->add($userSchedule);
-            $userSchedule->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserSchedule(UserSchedule $userSchedule): static
-    {
-        if ($this->userSchedules->removeElement($userSchedule)) {
-            // set the owning side to null (unless already changed)
-            if ($userSchedule->getUser() === $this) {
-                $userSchedule->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getRightUserWeekdayProperties(DateTime $dateTime): iterable
     {
-        $userSchedules = $this->getUserSchedules();
+        //$userSchedules = $this->getUserSchedules();
+        $userSchedules = [];
         $finalChoosen = [];
         $intervalInDays = 10000000000000;
         foreach($userSchedules as $userSchedule){

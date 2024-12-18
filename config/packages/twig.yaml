@@ -3,5 +3,5 @@ when@test:
         strict_variables: true  
 twig:
     paths:
-        '%kernel.project_dir%/src/Prolyfix/RssBundle/templates': 'RssBundle'
-        '%kernel.project_dir%/src/Prolyfix/NoteBundle/templates': 'NoteBundle'
+        '%kernel.project_dir%/Prolyfix/RssBundle/templates': 'RssBundle'
+        '%kernel.project_dir%/Prolyfix/NoteBundle/templates': 'NoteBundle'

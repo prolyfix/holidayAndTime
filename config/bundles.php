@@ -23,6 +23,8 @@ return [
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Symfonycasts\SassBundle\SymfonycastsSassBundle::class => ['all' => true],
     Symfony\UX\Dropzone\DropzoneBundle::class => ['all' => true],
-    App\Prolyfix\RssBundle\ProlyfixRssBundle::class => ['all' => true],
-    App\Prolyfix\NoteBundle\ProlyfixNoteBundle::class => ['all' => true],
+    Prolyfix\RssBundle\ProlyfixRssBundle::class => ['all' => true],
+    Prolyfix\NoteBundle\ProlyfixNoteBundle::class => ['all' => true],
+    Prolyfix\TimesheetBundle\ProlyfixTimesheetBundle::class => ['all' => true],
+    Symfony\UX\TwigComponent\TwigComponentBundle::class => ['all' => true],
 ];

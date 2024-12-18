@@ -2,7 +2,7 @@
         namespace App\Widget;
         use App\Entity\Timesheet;
         use Doctrine\ORM\EntityManagerInterface;
-        use Symfony\Component\Security\Core\Security;
+        use Symfony\Bundle\SecurityBundle\Security;
         use Twig\Environment as Twig;
 
 

@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment as Twig;
 
 class WidgetWalker

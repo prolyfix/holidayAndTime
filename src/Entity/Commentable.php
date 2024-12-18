@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Prolyfix\TimesheetBundle\Entity\Timesheet;
+use Prolyfix\TimesheetBundle\Entity\UserSchedule;
 
 #[ORM\Entity(repositoryClass: CommentableRepository::class)]
 #[InheritanceType('JOINED')]
@@ -19,7 +21,6 @@ use Doctrine\ORM\Mapping\DiscriminatorMap;
     'user' => User::class, 
     'location' => Location::class, 
     'calendar' => Calendar::class, 
-    'userSchedule' => UserSchedule::class, 
     'project' => Project::class,
     'workingGroup' => WorkingGroup::class,
     'task' => Task::class])]  
@@ -43,11 +44,7 @@ abstract class Commentable extends TimeData
     private Collection $media;
 
 
-    /**
-     * @var Collection<int, Timesheet>
-     */
-    #[ORM\OneToMany(targetEntity: Timesheet::class, mappedBy: 'relatedCommentable')]
-    private Collection $relatedTimesheets;
+
 
     /**
      * @var Collection<int, Tag>
@@ -65,7 +62,7 @@ abstract class Commentable extends TimeData
     {
         $this->comments = new ArrayCollection();
         $this->media = new ArrayCollection();
-        $this->relatedTimesheets = new ArrayCollection();
+        
         parent::__construct();
         $this->tags = new ArrayCollection();
         $this->members = new ArrayCollection();
@@ -138,35 +135,6 @@ abstract class Commentable extends TimeData
     }
 
 
-    /**
-     * @return Collection<int, Timesheet>
-     */
-    public function getRelatedTimesheets(): Collection
-    {
-        return $this->relatedTimesheets;
-    }
-
-    public function addRelatedTimesheet(Timesheet $relatedTimesheet): static
-    {
-        if (!$this->relatedTimesheets->contains($relatedTimesheet)) {
-            $this->relatedTimesheets->add($relatedTimesheet);
-            $relatedTimesheet->setRelatedCommentable($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRelatedTimesheet(Timesheet $relatedTimesheet): static
-    {
-        if ($this->relatedTimesheets->removeElement($relatedTimesheet)) {
-            // set the owning side to null (unless already changed)
-            if ($relatedTimesheet->getRelatedCommentable() === $this) {
-                $relatedTimesheet->setRelatedCommentable(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Tag>

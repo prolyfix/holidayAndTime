@@ -76,9 +76,9 @@ services:
                 name: 'kernel.event_listener'
                 event: 'app.configure_widget_positions'
     Prolyfix\RssBundle\Controller\:
-        resource: '../src/Prolyfix/RssBundle/src/Controller/*'
+        resource: '..\Prolyfix\RssBundle\src\Controller\*'
     Prolyfix\RssBundle\Repository\:
-        resource: '../src/Prolyfix/RssBundle/src/Repository/*'
+        resource: '..\Prolyfix\RssBundle\src\Repository\*'
     Prolyfix\NoteBundle\EventListener\AddWidgetNoteListener:
         tags:
             -
@@ -86,9 +86,9 @@ services:
                 name: 'kernel.event_listener'
                 event: 'app.configure_widget_positions'        
     Prolyfix\NoteBundle\Controller\:
-        resource: '../src/Prolyfix/NoteBundle/src/Controller/*'
+        resource: '..\Prolyfix\NoteBundle\src\Controller\*'
     Prolyfix\NoteBundle\Repository\:
-        resource: '../src/Prolyfix/NoteBundle/src/Repository/*'        
+        resource: '..\Prolyfix\NoteBundle\src\Repository\*'        
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 parameters:

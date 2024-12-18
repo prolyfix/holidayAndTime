@@ -16,6 +16,12 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
+            ProlyfixTimesheetBundle:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/Prolyfix/TimesheetBundle/src/Entity'
+                prefix: 'Prolyfix\TimesheetBundle\Entity'
+                alias: ProlyfixTimesheetBundle                
             App:
                 type: attribute
                 is_bundle: false
@@ -25,15 +31,16 @@ doctrine:
             ProlyfixRssBundle:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Prolyfix/RssBundle/src/Entity'
+                dir: '%kernel.project_dir%/Prolyfix/RssBundle/src/Entity'
                 prefix: 'Prolyfix\RssBundle\Entity'
                 alias: ProlyfixRssBundle           
             ProlyfixNoteBundle:
                 is_bundle: false
                 type: attribute
-                dir: '%kernel.project_dir%/src/Prolyfix/NoteBundle/src/Entity'
+                dir: '%kernel.project_dir%/Prolyfix/NoteBundle/src/Entity'
                 prefix: 'Prolyfix\NoteBundle\Entity'
-                alias: ProlyfixNoteBundle                          
+                alias: ProlyfixNoteBundle     
+                                   
 when@test:
     doctrine:
         dbal:

@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Timesheet;
+use Prolyfix\TimesheetBundle\Entity\Timesheet;
 use App\Entity\User;
 use App\Form\ConsumeTimeType;
 use App\Form\TimesheetType;

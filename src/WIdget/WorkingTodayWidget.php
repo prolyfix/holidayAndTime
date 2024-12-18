@@ -3,7 +3,7 @@ namespace App\Widget;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Twig\Environment as Twig;
 
 class WorkingTodayWidget implements WidgetInterface
