@@ -6,6 +6,7 @@ use App\Entity\Company;
 use App\Entity\Module;
 use App\Entity\ModuleRight;
 use App\Module\ModuleInterface;
+use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -58,16 +59,9 @@ class ProlyfixTimesheetBundle extends AbstractBundle implements ModuleInterface
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         $container->import('../../../../config/services.yaml');
-
-        // Load YAML or XML configuration files (optional)
-        // $loader->load('services.yaml');
-
-        // Register controllers manually
         $controllerNamespace = 'Prolyfix\\TimesheetBundle\\Controller\\';
         $resourceDir = dirname(__DIR__).'/src/Controller';
-
         $finder = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($resourceDir));
-
         foreach ($finder as $file) {
             if ($file->isFile() && str_ends_with($file->getFilename(), '.php')) {
                 $className = $controllerNamespace.str_replace(
@@ -75,7 +69,6 @@ class ProlyfixTimesheetBundle extends AbstractBundle implements ModuleInterface
                     ['\\', ''],
                     substr($file->getPathname(), strlen($resourceDir) + 1)
                 );
-
                 // Define each controller as a service
                 $container->services()
                     ->set($className, $className)
@@ -86,9 +79,10 @@ class ProlyfixTimesheetBundle extends AbstractBundle implements ModuleInterface
                     ->autowire(true)
                     ->autoconfigure(true)
                     ;
-
             }
         }
+
+
     }
 
 

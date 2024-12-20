@@ -33,7 +33,13 @@ doctrine:
                 type: attribute
                 dir: '%kernel.project_dir%/dev/Prolyfix/NoteBundle/src/Entity'
                 prefix: 'Prolyfix\NoteBundle\Entity'
-                alias: ProlyfixNoteBundle                          
+                alias: ProlyfixNoteBundle        
+            ProlyfixTimesheetBundle:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/dev/Prolyfix/TimesheetBundle/src/Entity'
+                prefix: 'Prolyfix\TimesheetBundle\Entity'
+                alias: ProlyfixTimesheetBundle                                     
 when@test:
     doctrine:
         dbal:

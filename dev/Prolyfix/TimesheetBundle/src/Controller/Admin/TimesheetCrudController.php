@@ -2,7 +2,7 @@
 
 namespace Prolyfix\TimesheetBundle\Controller\Admin;
 
-use App\Entity\Timesheet;
+use App\Controller\Admin\BaseCrudController;
 use App\Entity\User;
 use App\Form\ConsumeTimeType;
 use App\Form\TimesheetType;
@@ -29,13 +29,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Prolyfix\TimesheetBundle\Entity\Timesheet;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-class TimesheetCrudController extends AbstractCrudController
+class TimesheetCrudController extends BaseCrudController
 {
     public function __construct(private EntityManagerInterface $em, private AdminUrlGenerator $adminUrlGenerator)
     {}

@@ -79,6 +79,8 @@ services:
         resource: '../dev/Prolyfix/RssBundle/src/Controller/*'
     Prolyfix\RssBundle\Repository\:
         resource: '../dev/Prolyfix/RssBundle/src/Repository/*'
+    Prolyfix\TimesheetBundle\Repository\:
+        resource: '../dev/Prolyfix/TimesheetBundle/src/Repository/*'        
     Prolyfix\NoteBundle\EventListener\AddWidgetNoteListener:
         tags:
             -

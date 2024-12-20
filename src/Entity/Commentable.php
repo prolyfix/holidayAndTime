@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Prolyfix\TimesheetBundle\Entity\Timesheet;
 
 #[ORM\Entity(repositoryClass: CommentableRepository::class)]
 #[InheritanceType('JOINED')]
