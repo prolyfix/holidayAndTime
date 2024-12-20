@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Module;
+
 
 use App\Repository\ModuleConfigurationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
